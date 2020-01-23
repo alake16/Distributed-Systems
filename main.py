@@ -3,14 +3,14 @@ from time import sleep
 
 
 class Parser:
-    def __init__(self, document_name=None, type='xml'):
+    def __init__(self, document_name=None, file_type='xml'):
         """
         :param document_name --> XML file name
         :param type --> Type of file we are trying to parse
         :return: None
         """
         self.document_name = document_name
-        self.type = type
+        self.type = file_type
 
     def OpenXMLDoc(self):
         try:
@@ -27,7 +27,7 @@ class Parser:
 if __name__ == '__main__':
     # To start, we will create a class that will handle all of our parsing tools
     # We should continue to add upon this class for our own convenience and flexibility
-    parser = Parser(document_name='xml_test.xml', type='xml')
+    parser = Parser(document_name='xml_test.xml', file_type='xml')
     exam = parser.OpenXMLDoc()  # Feeding our file into bs4 for XML parsing
     all_questions_on_exam = exam.find_all('Question') # Finding all tags in our xml doc named 'Question & Answer'
     all_answers_on_exam = exam.find_all('Answer') # Returned: XML style output
