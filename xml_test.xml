@@ -1,0 +1,37 @@
+<Exam>
+    <Question type="Short Response">
+        What does OOP stand for?
+        <Answer type="Short Response">
+            "Object Oriented programming"
+        </Answer>
+    </Question>
+    <Question type="Multiple Choice">
+        Select one the following:
+        A) Python is a programming language
+        B) Computers were invented a year ago
+        C) Einstein was a Computer Scientist
+        D) Dinosaurs are still alive in the 20th century
+        <Answer type="Multiple Choice">
+            A
+        </Answer>
+    </Question>
+    <Question type="True/False">
+        Computer Science involves having access to some sort of technology
+        <Answer type="True/False">
+            True
+        </Answer>
+    </Question>
+    <Question type="Fill-Blank">
+        "Python is _!"
+        <Answer type="Fill-Blank">
+            Cool
+        </Answer>
+    </Question>
+</Exam>
+
+
+
+
+
+
+
