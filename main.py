@@ -1,3 +1,7 @@
+import gevent.monkey
+gevent.monkey.patch_all()
+from flask import Flask, render_template, request
+from flask_socketio import SocketIO, join_room, emit, send
 from bs4 import BeautifulSoup
 from time import sleep
 
