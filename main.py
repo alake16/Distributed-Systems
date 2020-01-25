@@ -5,6 +5,10 @@ from flask_socketio import SocketIO, join_room, emit, send
 from bs4 import BeautifulSoup
 from time import sleep
 
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app)
+
 
 class Parser:
     def __init__(self, document_name=None, file_type='xml'):
