@@ -1,6 +1,8 @@
 from __future__ import print_function
 import lxml
+import Serializer
 from lxml import etree
+
 
 
 #TODO: The validator needs work.
@@ -38,9 +40,25 @@ def isProperlyFormattedXML():
 
 
 def consumeNewQuestions():
+
+    #Two lists for holding questions and their corresponding answers
+    questions = []
+    answers = []
+
     #Wait for input indefinitely
     while(True):
         newQuestion = input("enter a new question!: ")
+
+        if(newQuestion == '#Done'):
+            print('Termination signal received.')
+            break
+
+        newAnswer = input("enter the answer: ")
         print('new question is: ' + newQuestion)
-        #response = isProperlyFormattedXML()
-        #print(response)
+        print('new answer is: ' + newAnswer)
+        
+        #store the question and answer
+        questions.append(newQuestion)
+        answers.append(newAnswer)
+    
+    Serializer.generateSerializedOutputFile(questions, answers)
