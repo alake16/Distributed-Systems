@@ -4,6 +4,7 @@ from enum import Enum
 import string
 import itertools
 import re
+from Serializer import generateQuestionAnswerEntry
 
 # TODO DRY
 # TODO Redo the implementation and design. I think the main idea is that we want to eventually allow users
@@ -30,6 +31,7 @@ class DirectorOfCreation(ABC):
         MATCHING = 2
         SHORT_ANSWER = 3
         FILL_IN_THE_BLANK = 4
+        PLAINTEXT = 5
 
     def __init__(self, type_of_builder, builder=None):
         if builder is None:
@@ -84,8 +86,20 @@ class CLIDirectorOfCreation(DirectorOfCreation):
             print("You have selected to create a short_answer question!\n\n")
             return self.create_short_answer_question()
         elif type_of_question == DirectorOfCreation.QuestionType.FILL_IN_THE_BLANK:
-            print("You have selected to create a fill in the blank question!")
+            print("You have selected to create a fill in the blank question!\n\n")
             return self.create_fill_in_the_blank_question()
+        elif type_of_question == DirectorOfCreation.QuestionType.PLAINTEXT:
+            print("You have selected to create a plaintext question!\n\n")
+            return self.create_plain_text_question()
+
+    def create_plain_text_question(self):
+        print("Please enter question text including newline characters, tabs, spaces, etc")
+        question_text = input()
+        print("Please enter the answer to your question:")
+        answer_text = input()
+        question_answer = generateQuestionAnswerEntry(question_text, answer_text)
+        plain_text_question = etree.fromstring(question_answer.strip())
+        return plain_text_question
 
     # TODO change the way that an answer is verified from the user. Ideally, we would want to point at parent elements.
     # TODO change finished input to be something more robust
