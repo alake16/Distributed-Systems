@@ -1,6 +1,9 @@
 from bs4 import BeautifulSoup
 from time import sleep
 
+import threading
+
+import consumer
 
 class Parser:
     def __init__(self, document_name=None, file_type='xml'):
@@ -29,6 +32,7 @@ if __name__ == '__main__':
     # We should continue to add upon this class for our own convenience and flexibility
     parser = Parser(document_name='xml_test.xml', file_type='xml')
     exam = parser.OpenXMLDoc()  # Feeding our file into bs4 for XML parsing
+
     all_questions_on_exam = exam.find_all('Question') # Finding all tags in our xml doc named 'Question & Answer'
     all_answers_on_exam = exam.find_all('Answer') # Returned: XML style output
 
@@ -41,3 +45,7 @@ if __name__ == '__main__':
         print("Question# {}\n{}\nANSWER: {}".format(question_num, question_as_text, answer_as_text))
         print("----------------")
         sleep(1)
+
+    #start a new thread for consuming new questions
+    t1 = threading.Thread(target=consumer.consumeNewQuestions)
+    t1.start()
