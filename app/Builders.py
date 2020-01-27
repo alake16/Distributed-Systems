@@ -3,7 +3,6 @@ from lxml import etree
 from enum import Enum
 import string
 import itertools
-import copy
 from typing import Dict
 from Questions import MultipleChoiceQuestion, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
 from Serializer import generateQuestionAnswerEntry

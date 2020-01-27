@@ -30,11 +30,11 @@ class CommandLineApplication:
         self.__greet_user()
         option = self.__select_option()
         if option == CommandLineApplication.Options.CREATE_A_QUIZ:
-            quiz = etree.Element('quiz')
+            quiz = []
             user_wants_to_make_a_question = True
             while user_wants_to_make_a_question:
                 question_creator = CLIDirectorOfCreation('question')
-                question = question_creator.make_a_simple_question()
+                question = question_creator.make_a_simple_question(return_xml=False)
                 quiz.append(question)
                 print("\n")
                 answer = ''
@@ -43,7 +43,6 @@ class CommandLineApplication:
                     answer = input()
                 if answer == 'no':
                     user_wants_to_make_a_question = False
-            print(etree.tostring(quiz))
         elif option == CommandLineApplication.Options.TAKE_A_QUIZ:
             pass
 
