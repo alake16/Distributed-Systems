@@ -21,6 +21,7 @@ class MultipleChoiceQuestion(Question):
         self.prompt = prompt
         self.choices = choices
         self.answer = answer
+        self.responses = {"A": 0, "B": 0, "C": 0, "D": 0}
 
     def quiz_view(self):
         prompt_string_wrapped = textwrap.fill(self.prompt)
