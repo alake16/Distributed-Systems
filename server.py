@@ -1,26 +1,45 @@
-from flask import Flask, escape, request
+from flask import Flask, escape, request, jsonify
+from app.Questions import Question, MultipleChoiceQuestion, MatchingQuestion
 
 app = Flask(__name__)
 
-multChoiceQuestionResponses = {
-	'A':0,
-	'B':0,
-	'C':0,
-	'D':0
-}
+activeMultipleChoiceQuestion = None
+activeMatchingQuestion = None
 
 @app.route('/')
-def hello():
+def welcome():
     name = request.args.get("name", "World")
     print("hello")
-    return f'Hello, {escape(name)}!'
+    return f'Welcome to Quiz API v1!'
 
-@app.route('/recordResponse/<questionType>/<response>', methods=['GET', 'POST'])
-def recordResponse(questionType, response):
-	if questionType == "multChoice":
-		multChoiceQuestionResponses[response] += 1
-	# elif questionType == "trueFalse":
+@app.route('/activateQuestion', methods=['POST'])
+def activateQuestion():
+	data = request.json
+	if data["questionType"] == "multChoice":
+		global activeMultipleChoiceQuestion
+		activeMultipleChoiceQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"], answer=data["answer"])
+	else:
+		global activeMatchingQuestion
+		activeMatchingQuestion = MatchingQuestion(prompt=data["prompt"], left_choices=data["leftChoices"], right_choices=data["rightChoices"], answer=data["answer"])
+	return jsonify(data)
 
-	# else:
+@app.route('/deactivateQuestion', methods=['POST'])
+def deactivateQuestion():
+	global activeMultipleChoiceQuestion
+	global activeMatchingQuestion
+	questionType = ""
+	if activeMultipleChoiceQuestion:
+		activeMultipleChoiceQuestion = None
+		return f'Multiple Choice Question Deactivated!'
+	elif activeMatchingQuestion:
+		activeMatchingQuestion = None
+		questionType = "Matching Question Deactivated!"
+	return f'No Question Was Active!'
 
-	return f'{escape(questionType)}'
+@app.route('/recordResponse', methods=['POST'])
+def recordResponse():
+	global activeMultipleChoiceQuestion
+	if activeMultipleChoiceQuestion:
+		activeMultipleChoiceQuestion.responses[request.json["response"]] += 1
+		return jsonify(activeMultipleChoiceQuestion.responses)
+	return f'No Active Question!'
