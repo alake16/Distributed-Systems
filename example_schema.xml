@@ -21,7 +21,7 @@
       </left_to_right>
     </answer>
   </question>
-  <question type="short answer question">
+  <question type="short_answer_question">
     <prompt>Who is the greatest?</prompt>
     <answer>Nobody knows</answer>
   </question>
