@@ -23,15 +23,25 @@ def activateQuestion():
 		activeMatchingQuestion = MatchingQuestion(prompt=data["prompt"], left_choices=data["leftChoices"], right_choices=data["rightChoices"], answer=data["answer"])
 	return jsonify(data)
 
+@app.route('/fetchResponses', methods=['GET'])
+def fetchResponses():
+	global activeMultipleChoiceQuestion
+	global activeMatchingQuestion
+	if activeMultipleChoiceQuestion is not None:
+		return activeMultipleChoiceQuestion.responses
+	elif activeMatchingQuestion is not None:
+		return activeMatchingQuestion.responses
+	return f'No Active Question!'
+
 @app.route('/deactivateQuestion', methods=['POST'])
 def deactivateQuestion():
 	global activeMultipleChoiceQuestion
 	global activeMatchingQuestion
 	questionType = ""
-	if activeMultipleChoiceQuestion:
+	if activeMultipleChoiceQuestion is not None:
 		activeMultipleChoiceQuestion = None
 		return f'Multiple Choice Question Deactivated!'
-	elif activeMatchingQuestion:
+	elif activeMatchingQuestion is not None:
 		activeMatchingQuestion = None
 		questionType = "Matching Question Deactivated!"
 	return f'No Question Was Active!'
