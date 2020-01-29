@@ -1,0 +1,41 @@
+<quiz>
+  <question type="multiple choice">
+    <prompt>Who is the dog?</prompt> 
+    <choice choice_key="a">Michael</choice>
+    <choice choice_key="b">jordan</choice>
+    <answer>a</answer>
+  </question>
+  <question type="matching">\
+    <left_choice choice_key="a">Dkog</left_choice>
+    <left_choice choice_key="b">Cat</left_choice>
+    <right_choice choice_key="c">Mike </right_choice>
+    <right_choice choice_key="d">Jordan</right_choice>
+    <answer>
+      <left_to_right>
+        <left>a</left>
+        <right>c</right>
+      </left_to_right>
+      <left_to_right>\n      
+        <left>b</left>
+        <right>d</right>
+      </left_to_right>
+    </answer>
+  </question>
+  <question type="short_answer_question">
+    <prompt>Who is the greatest?</prompt>
+    <answer>Nobody knows</answer>
+  </question>
+  <question type="fill_in_the_blank">
+    <before_blank></before_blank>
+    <blank>____</blank>
+    <after_blank>is the best</after_blank>
+    <answer>Mike</answer>
+</quiz>
+
+<!--
+Need to implement the following
+<question type="true_false">
+  <prompt>Michael is the best</prompt>
+  <answer>True</answer>
+</question>
+--> 
