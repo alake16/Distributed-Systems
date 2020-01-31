@@ -36,9 +36,11 @@ class Question(ABC):
             return ShortAnswerQuestion(**json_as_dictionary)
         elif question_type == 'fill_in_the_blank':
             return FillInTheBlankQuestion(**json_as_dictionary)
+        else:
+            raise ValueError("This question type is not supported: {}".format(question_type))
+
 
 class MultipleChoiceQuestion(Question):
-
     """
     Represents a Multiple Choice Question object.
     """
@@ -82,7 +84,7 @@ class MultipleChoiceQuestion(Question):
 class MatchingQuestion(Question):
 
     def __init__(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str],
-                 answer_mapping: Dict[str, str], responses: List[Tuple[str, str]]):
+                 answer_mapping: Dict[str, str], responses: List[Dict[str, str]] = None):
         """
 
         :param prompt: The prompt for the multiple choice question
@@ -107,10 +109,10 @@ class MatchingQuestion(Question):
                            'right_choices': self.right_choices, 'answer_mapping': self.answer_mapping,
                            'responses': self.responses})
 
-    def add_response(self, response: Tuple[str, str]):
+    def add_response(self, response: Dict[str, str]):
         """
         Adds a response(a mapping of a answer choice on the left to an answer choice on the right)
-        :param response: A tuple object that consists of objects on the left mapping to objects on the right.
+        :param response: A dictionary object that consists of objects on the left mapping to objects on the right.
         :return: None
         """
         left_key_in_choices = response[0] in self.left_choices
@@ -125,6 +127,7 @@ class ShortAnswerQuestion(Question):
     """
     A question where a user is given a prompt and is allowed to answer with text input.
     """
+
     def __init__(self, prompt: str, answer: str, responses: List[str] = None):
         """
         :param prompt: The prompt for the question
@@ -191,10 +194,3 @@ class FillInTheBlankQuestion(Question):
         """
 
         self.responses.append(response)
-
-if __name__ == '__main__':
-    string_object = '{"prompt": "Who is the dog", "choices": {"A": "Micahel", "B": "Dog"}, "answer": "A", "type": "multiple_choice"}'
-    question = Question.create_a_question_from_json_string(string_object)
-    print(question.prompt)
-    print(question.choices)
-    print(question.answer)
