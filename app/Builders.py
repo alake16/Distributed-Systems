@@ -5,7 +5,6 @@ import string
 import itertools
 from typing import Dict
 from Questions import MultipleChoiceQuestion, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
-from Serializer import generateQuestionAnswerEntry
 
 # TODO DRY
 # TODO Redo the implementation and design. I think the main idea is that we want to eventually allow users
@@ -84,15 +83,6 @@ class CLIDirectorOfCreation(DirectorOfCreation):
         elif type_of_question == QuestionType.PLAINTEXT:
             print("You have selected to create a plaintext question!\n\n")
             return self.create_plain_text_question(return_xml)
-
-    def create_plain_text_question(self, return_xml=True):
-        print("Please enter question text including newline characters, tabs, spaces, etc")
-        question_text = input()
-        print("Please enter the answer to your question:")
-        answer_text = input()
-        question_answer = generateQuestionAnswerEntry(question_text, answer_text)
-        plain_text_question = etree.fromstring(question_answer.strip())
-        return plain_text_question
 
     def _get_multiple_choice_data(self):
         print("Please enter the prompt for your multiple choice question:")
