@@ -1,14 +1,23 @@
 from typing import Dict, Tuple, List
 import textwrap
 import itertools
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
 import json
+import uuid
+from StorageHandler import write_to_file
 
 
 # The use of the dataclass decorator really simplifies the implementation.
 class Question(ABC):
 
-    @abstractmethod
+    # TODO make this generator 100% unique.
+    def __init__(self, id=None):
+        if id is None:
+            self.id = str(uuid.uuid4())
+        else:
+            self.id = id
+        pass
+
     def jsonify(self):
         pass
 
@@ -45,13 +54,14 @@ class MultipleChoiceQuestion(Question):
     Represents a Multiple Choice Question object.
     """
 
-    def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: Dict[str, int] = None):
+    def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: Dict[str, int] = None, id=None):
         """
         :param prompt: The prompt for the multiple choice question
         :param choices: Dictionary with the answer choice keys and their prompts
         :param answer: A key in the above dictionary(i.e. a, b, c, d)
         :param responses: A dictionary that keeps track of the responses on this object(i.e. {A: 0, B: 3, C:2, D:4}
         """
+        super().__init__(id)
         self.prompt = prompt
         self.choices = choices
         self.answer = answer
@@ -77,14 +87,15 @@ class MultipleChoiceQuestion(Question):
         :return: The JSON representation of this object.
         """
         return json.dumps(
-            {'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices, 'answer': self.answer,
-             'responses': self.response})
+            {'uuid': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
+             'answer': self.answer,
+             'responses': self.responses})
 
 
 class MatchingQuestion(Question):
 
     def __init__(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str],
-                 answer_mapping: Dict[str, str], responses: List[Dict[str, str]] = None):
+                 answer_mapping: Dict[str, str], responses: List[Dict[str, str]] = None, id=None):
         """
 
         :param prompt: The prompt for the multiple choice question
@@ -93,6 +104,7 @@ class MatchingQuestion(Question):
         :param answer_mapping: A mapping consisting of keys that are answer choices on the left with values that are answer choices on the right.
         :param responses: A list of tuples which themselves are mappings of answer choices on the left to answer choices on the right.
         """
+        super().__init__(id)
         self.prompt = prompt
         self.left_choices = left_choices
         self.right_choices = right_choices
@@ -105,9 +117,10 @@ class MatchingQuestion(Question):
         Gives a JSON string representation of the object.
         :return: A JSON string representing the object.
         """
-        return json.dumps({'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
-                           'right_choices': self.right_choices, 'answer_mapping': self.answer_mapping,
-                           'responses': self.responses})
+        return json.dumps(
+            {'uuid': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
+             'right_choices': self.right_choices, 'answer_mapping': self.answer_mapping,
+             'responses': self.responses})
 
     def add_response(self, response: Dict[str, str]):
         """
@@ -128,12 +141,13 @@ class ShortAnswerQuestion(Question):
     A question where a user is given a prompt and is allowed to answer with text input.
     """
 
-    def __init__(self, prompt: str, answer: str, responses: List[str] = None):
+    def __init__(self, prompt: str, answer: str, responses: List[str] = None, id=None):
         """
         :param prompt: The prompt for the question
         :param answer: The answer to the question.
         :param responses: A list of string responses received on this object to the question.
         """
+        super().__init__(id)
         self.prompt = prompt
         self.answer = answer
         if responses is None:
@@ -146,7 +160,7 @@ class ShortAnswerQuestion(Question):
         Returns a JSON string representation of the object.
         :return: A JSON string representation of the object.
         """
-        return json.dumps({'type': 'short_answer_question', 'prompt': self.prompt,
+        return json.dumps({'uuid': self.id, 'type': 'short_answer_question', 'prompt': self.prompt,
                            'answer': self.answer, 'responses': self.responses})
 
     def add_response(self, response):
@@ -163,7 +177,8 @@ class FillInTheBlankQuestion(Question):
     A question where a user is given a blank in a prompt and is required to fill it out
     """
 
-    def __init__(self, before_prompt: str, after_prompt: str, correct_answer: str, responses: List[str] = None):
+    def __init__(self, before_prompt: str, after_prompt: str, correct_answer: str, responses: List[str] = None,
+                 id=None):
         """
 
         :param before_prompt: The text before the blank
@@ -171,6 +186,7 @@ class FillInTheBlankQuestion(Question):
         :param correct_answer: The correct answer to the question
         :param responses: A list of text responses to the question
         """
+        super().__init__(id)
         self.before_prompt = before_prompt
         self.after_prompt = after_prompt
         self.answer = correct_answer
@@ -182,7 +198,7 @@ class FillInTheBlankQuestion(Question):
         Returns a JSON string representation of the object.
         :return: A JSON string representation of the the object.
         """
-        return json.dumps({'type': 'fill_in_the_blank', 'before': self.before_prompt,
+        return json.dumps({'uuid': self.id, 'type': 'fill_in_the_blank', 'before': self.before_prompt,
                            'after': self.after_prompt, 'answer': self.answer,
                            'responses': self.responses})
 
@@ -194,3 +210,44 @@ class FillInTheBlankQuestion(Question):
         """
 
         self.responses.append(response)
+
+
+# Essentially all questions ever generated should be unique. This should come from a resource that is context aware.
+# This should be decoupled from the storage(or not needed by the storage). Quiz id's should be unique as well. This
+# logic will need to thought out a little more. I can see issues with deleting quizzes but still needing to keep them
+# alive when there's a reference to it in client Code. Essentially, this could become an issue on the client side?
+
+class Quiz:
+
+    # I did not initialize with an empty list because doing so will result in the same list object being passed to all
+    # new objects.
+    def __init__(self, name: str, questions: List[Question] = None, id=None):
+        self.name = name
+        if questions is None:
+            self.questions = []
+        if id is None:
+            self.id = str(uuid.uuid4())
+        else:
+            self.id = id
+
+    def add_question_to_quiz(self, question: Question):
+        if not isinstance(question, Question):
+            raise ValueError("Only questions can be added to the instance variable questions!")
+        self.questions.append(question)
+
+    def get_question(self, question_id):
+        return self.questions[question_id]
+
+    def jsonify(self):
+        return json.dumps(
+            {'uuid': self.id, 'name': self.name, 'questions': [json.loads(question.jsonify()) for question in self.questions]})
+
+
+if __name__ == '__main__':
+    quiz = Quiz("Brian's First Quiz")
+    multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?", choices={"A": 'Mike', "B": 'Domingo'},
+                                                      answer='A')
+    quiz.add_question_to_quiz(multiple_choice_question)
+    quiz.get_question(0).add_response('A')
+    quiz.get_question(0).add_response('B')
+    write_to_file(quiz.jsonify(), 'test.json')
