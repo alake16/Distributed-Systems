@@ -4,7 +4,8 @@ import itertools
 from abc import ABC, abstractmethod, abstractproperty
 import json
 import uuid
-from StorageHandler import write_to_file
+from StorageHandler import write_to_file, load_file_as_json
+import copy
 
 
 # The use of the dataclass decorator really simplifies the implementation.
@@ -26,13 +27,18 @@ class Question(ABC):
         pass
 
     @staticmethod
-    def create_a_question_from_json_string(json_string):
+    def create_a_question_from_json(json_representation):
         """
         Factory method to create a Question Object dynamically at runtime.
-        :param json_string: The JSON object as a string
+        :param json_representation: The JSON object as a string
         :return: A Question Object representing the type of question in the json_string
         """
-        json_as_dictionary = json.loads(json_string)
+        if isinstance(json_representation, str):
+            json_as_dictionary = json.loads(json_representation)
+        elif isinstance(json_representation, dict):
+            json_as_dictionary = json_representation
+        else:
+            raise ValueError("The json representation must either be a string or a dictionary")
         question_type = json_as_dictionary.get('type')
         json_as_dictionary.pop('type')
         if question_type is None:
@@ -67,6 +73,8 @@ class MultipleChoiceQuestion(Question):
         self.answer = answer
         if responses is None:
             self.responses = {choice: 0 for choice in choices}
+        else:
+            self.responses = responses
         if not (all(key in self.choices.keys() for key in self.responses.keys())):
             raise ValueError("Not all of the responses are reflected in the answer choices")
 
@@ -87,7 +95,7 @@ class MultipleChoiceQuestion(Question):
         :return: The JSON representation of this object.
         """
         return json.dumps(
-            {'uuid': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
+            {'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
              'answer': self.answer,
              'responses': self.responses})
 
@@ -118,7 +126,7 @@ class MatchingQuestion(Question):
         :return: A JSON string representing the object.
         """
         return json.dumps(
-            {'uuid': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
+            {'id': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
              'right_choices': self.right_choices, 'answer_mapping': self.answer_mapping,
              'responses': self.responses})
 
@@ -160,7 +168,7 @@ class ShortAnswerQuestion(Question):
         Returns a JSON string representation of the object.
         :return: A JSON string representation of the object.
         """
-        return json.dumps({'uuid': self.id, 'type': 'short_answer_question', 'prompt': self.prompt,
+        return json.dumps({'id': self.id, 'type': 'short_answer_question', 'prompt': self.prompt,
                            'answer': self.answer, 'responses': self.responses})
 
     def add_response(self, response):
@@ -198,7 +206,7 @@ class FillInTheBlankQuestion(Question):
         Returns a JSON string representation of the object.
         :return: A JSON string representation of the the object.
         """
-        return json.dumps({'uuid': self.id, 'type': 'fill_in_the_blank', 'before': self.before_prompt,
+        return json.dumps({'id': self.id, 'type': 'fill_in_the_blank', 'before': self.before_prompt,
                            'after': self.after_prompt, 'answer': self.answer,
                            'responses': self.responses})
 
@@ -221,10 +229,18 @@ class Quiz:
 
     # I did not initialize with an empty list because doing so will result in the same list object being passed to all
     # new objects.
+
+    @staticmethod
+    # TODO find a way to ensure multiple of the same quiz are not loaded.
+    def load_quiz_from_json(json_object):
+        return Quiz(json_object['name'], questions=[Question.create_a_question_from_json(question) for question in json_object['questions']], id=json_object['id'])
+
     def __init__(self, name: str, questions: List[Question] = None, id=None):
         self.name = name
         if questions is None:
             self.questions = []
+        else:
+            self.questions = questions
         if id is None:
             self.id = str(uuid.uuid4())
         else:
@@ -240,7 +256,7 @@ class Quiz:
 
     def jsonify(self):
         return json.dumps(
-            {'uuid': self.id, 'name': self.name, 'questions': [json.loads(question.jsonify()) for question in self.questions]})
+            {'id': self.id, 'name': self.name, 'questions': [json.loads(question.jsonify()) for question in self.questions]})
 
 
 if __name__ == '__main__':
@@ -248,6 +264,9 @@ if __name__ == '__main__':
     multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?", choices={"A": 'Mike', "B": 'Domingo'},
                                                       answer='A')
     quiz.add_question_to_quiz(multiple_choice_question)
-    quiz.get_question(0).add_response('A')
-    quiz.get_question(0).add_response('B')
     write_to_file(quiz.jsonify(), 'test.json')
+    quiz = Quiz.load_quiz_from_json((load_file_as_json('test.json')))
+    first_question = quiz.get_question(0)
+    first_question.add_response('A')
+    first_question.add_response('B')
+    write_to_file(quiz.jsonify(), 'taken_quiz.json')
