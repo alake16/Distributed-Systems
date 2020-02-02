@@ -1,8 +1,7 @@
 import copy
 from typing import List, Dict
 from enum import Enum
-from Builders import CLIDirectorOfCreation, XMLQuizBuilder
-from lxml import etree
+from Builders import CLIDirectorOfCreation
 
 class CommandLineApplication:
 
@@ -33,8 +32,8 @@ class CommandLineApplication:
             quiz = []
             user_wants_to_make_a_question = True
             while user_wants_to_make_a_question:
-                question_creator = CLIDirectorOfCreation('question')
-                question = question_creator.make_a_simple_question(return_xml=False)
+                question_creator = CLIDirectorOfCreation()
+                question = question_creator.make_a_simple_question()
                 quiz.append(question)
                 print("\n")
                 answer = ''
