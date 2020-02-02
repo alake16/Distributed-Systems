@@ -1,9 +1,10 @@
-from Questions import MultipleChoiceQuestion, Question
+from Questions import MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
 from typing import List
 import uuid
 import Questions
 from StorageHandler import write_to_file, load_file_as_json
 import json
+from Response import MultipleChoiceResponse, MatchingResponse, ShortAnswerResponse, FillInTheBlankResponse
 
 
 class Quiz:
@@ -40,7 +41,7 @@ class Quiz:
     def jsonify(self):
         return json.dumps(
             {'id': self.id, 'name': self.name,
-             'questions': [json.loads(question.jsonify()) for question in self.questions]})
+             'questions': [json.loads(question.jsonify()) for question in self.questions]}, indent=4)
 
 
 if __name__ == '__main__':
@@ -48,9 +49,24 @@ if __name__ == '__main__':
     multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?", choices={"A": 'Mike', "B": 'Domingo'},
                                                       answer='A')
     quiz.add_question_to_quiz(multiple_choice_question)
-    write_to_file(quiz.jsonify(), 'test.json')
-    quiz = Quiz.load_quiz_from_json((load_file_as_json('test.json')))
+    matching_question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'}, right_choices = {'C': 'Ike', 'D': 'Mike'}, answer_mapping = {'A': 'C', 'B': 'D'})
+    quiz.add_question_to_quiz(matching_question)
+    short_answer_question = ShortAnswerQuestion(prompt="Who is the best?", answer='YOU')
+    quiz.add_question_to_quiz(short_answer_question)
+    fill_in_the_blank_question = FillInTheBlankQuestion(before_prompt="", after_prompt="are the best", answer='YOU')
+    quiz.add_question_to_quiz(fill_in_the_blank_question)
+    write_to_file(quiz.jsonify(), 'untaken_quiz.json')
+    quiz = Quiz.load_quiz_from_json((load_file_as_json('untaken_quiz.json')))
     first_question = quiz.get_question(0)
-    first_question.add_response('A')
-    first_question.add_response('B')
+    response = MultipleChoiceResponse('B', '1345125', 'Brian')
+    first_question.add_response(response)
+    second_question = quiz.get_question(1)
+    response_question_two = MatchingResponse({'A': 'C', 'B': 'D'}, 1345125, 'Brian')
+    second_question.add_response(response_question_two)
+    third_question = quiz.get_question(2)
+    response_question_three = ShortAnswerResponse("YOU", 1345125, 'Brian')
+    third_question.add_response(response_question_three)
+    fourth_question = quiz.get_question(3)
+    response_question_four = FillInTheBlankResponse("YOU", 1345125, 'Brian')
+    fourth_question.add_response(response_question_four)
     write_to_file(quiz.jsonify(), 'taken_quiz.json')
