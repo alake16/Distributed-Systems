@@ -12,3 +12,5 @@ Vismark Juarez (https://github.com/VismarkJuarez)
 Brian Dehlinger (https://github.com/BrianDehlinger)
 Daniel Palacios (https://github.com/ddpalacios)
 Andrew Lake (https://github.com/alake16)
+
+Mobile-side Android Application Repository: https://github.com/VismarkJuarez/Distributed-Systems-Mobile
