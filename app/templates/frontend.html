@@ -4,15 +4,48 @@
 <head>
 <h1>Hello CS Students!</h1>
 </head>
-<body>
+<body onload="connect()">
 
                 <p>Enter A Text: <span id = "list"> </span></p>
-                <input id="range" type="text"></input>
+                <input id="range" type="text"/>
                 <input type="submit" id="submit_data"  value="Enter">
                 <hr>
-<script></script>
 </body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+<script>
+   function connect (){
+   document.getElementById("submit_data").onclick = function (){
+   alert("Clicked!")
+   var text=document.getElementById("range").value
+
+   var socket = io.connect('http://127.0.0.1:5000/',{secure:true});
+
+    socket.on('connect', function(){
+     socket.emit('reciever', text) //sending data to python
+      socket.on('cord', function(mes1,mes2){  //retrieving data from python (response)
+      console.log(mes1, mes2);
+        });
 
 
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   }
+}
+
+</script>
 
 </html>
