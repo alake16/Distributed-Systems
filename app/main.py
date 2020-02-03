@@ -14,9 +14,10 @@ socketio = SocketIO(app)
 def index():
     return render_template('frontend.html')
 
-@socketio.on('message')
+@socketio.on('reciever')
 def handle_message(message):
     print("Recieved message: "+ message)
+    emit('cord', ("Message", "Sent!"))
 
 class Parser:
     def __init__(self, document_name=None, file_type='xml'):
@@ -41,7 +42,7 @@ class Parser:
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    socketio.run(app,debug=True)
     # To start, we will create a class that will handle all of our parsing tools
     # # We should continue to add upon this class for our own convenience and flexibility
     # parser = Parser(document_name='xml_test.xml', file_type='xml')
