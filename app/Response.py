@@ -73,7 +73,7 @@ class MatchingResponse(Response):
 
 class ShortAnswerResponse(Response):
 
-    def __init__(self, user_id: int, nickname: str, short_answer: str):
+    def __init__(self, short_answer: str, user_id: int, nickname: str):
         super().__init__(user_id, nickname)
         self.type = 'short_answer'
         self.short_answer = short_answer
@@ -85,7 +85,7 @@ class ShortAnswerResponse(Response):
 
 class FillInTheBlankResponse(Response):
 
-    def __init__(self, user_id: int, nickname: str, blank_answer: str):
+    def __init__(self, blank_answer: str, user_id: int, nickname: str):
         super().__init__(user_id, nickname)
         self.type = 'fill_in_the_blank'
         self.blank_answer = blank_answer
