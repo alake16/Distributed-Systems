@@ -1,9 +1,9 @@
 {
-    "id": "3687ba75-a15b-4e5f-bd60-449752984e74",
+    "id": "0165f3d4-a78a-40a0-b4b5-72d681a444d9",
     "name": "Brian's First Quiz",
     "questions": [
         {
-            "id": "2eae242f-dd48-42d5-a15a-ab56c13bbcf7",
+            "id": "8285f7ef-a7b5-4b13-988a-4c6f0883e4d4",
             "type": "multiple_choice",
             "prompt": "Who is the best?",
             "choices": {
@@ -21,7 +21,7 @@
             ]
         },
         {
-            "id": "77117e0e-7048-413b-ac6e-deb9693a07f8",
+            "id": "bf7ff413-3c14-4d46-84d2-e49b8b83961f",
             "type": "matching",
             "prompt": "Match the following questions",
             "left_choices": {
@@ -32,7 +32,7 @@
                 "C": "Ike",
                 "D": "Mike"
             },
-            "answer_mapping": {
+            "answer": {
                 "A": "C",
                 "B": "D"
             },
@@ -49,7 +49,7 @@
             ]
         },
         {
-            "id": "46c648da-87c6-4996-9664-cc1dcf13484d",
+            "id": "238628b6-c359-4267-b770-50625b5a075c",
             "type": "short_answer",
             "prompt": "Who is the best?",
             "answer": "YOU",
@@ -63,7 +63,7 @@
             ]
         },
         {
-            "id": "67ea7446-ecdc-4984-93c9-50f0688611cf",
+            "id": "8ad43dd4-9446-4077-9ac1-ff4df26b99a8",
             "type": "fill_in_the_blank",
             "before_prompt": "",
             "after_prompt": "are the best",

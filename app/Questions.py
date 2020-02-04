@@ -6,13 +6,13 @@ import json
 import uuid
 import copy
 from Response import Response
+import functools
 
 
 # The use of the dataclass decorator really simplifies the implementation.
 class Question(ABC):
 
-    # TODO make this generator 100% unique.
-    def __init__(self, id=None, responses: List[Dict] = None):
+    def __init__(self, id=None, responses: List[Response] = None):
         if id is None:
             self.id = str(uuid.uuid4())
         else:
@@ -25,10 +25,21 @@ class Question(ABC):
             for response_object in response_objects:
                 self.add_response(response_object)
 
-    def jsonify(self):
-        pass
+    @abstractproperty
+    def json_data(self) -> Dict:
+        return {}
 
-    def get_type(self):
+    def jsonify(self, student_view=False) -> str:
+        """
+        Returns a JSON string representation of the object.
+        :return: A JSON string representation of the object.
+        """
+        json_to_return = self.json_data
+        if student_view is True:
+            json_to_return.pop('answer')
+        return json.dumps(json_to_return)
+
+    def get_type(self) -> str:
         return self.type
 
     @staticmethod
@@ -75,7 +86,7 @@ class MultipleChoiceQuestion(Question):
     Represents a Multiple Choice Question object.
     """
 
-    def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: List[Dict] = None, id=None):
+    def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: List[Response] = None, id=None):
         """
         :param prompt: The prompt for the multiple choice question
         :param choices: Dictionary with the answer choice keys and their prompts
@@ -88,27 +99,23 @@ class MultipleChoiceQuestion(Question):
         self.choices = choices
         self.answer = answer
 
+    @property
+    def json_data(self) -> Dict:
+        return {'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
+                'answer': self.answer,
+                'responses': [response.json_data for response in self.responses]}
+
     def validate_response(self, response: Response):
-        response_json = response.jsonify()
+        response_json = response.json_data
         choice = response_json['choice']
         if choice not in self.choices.keys():
             raise ValueError("Response choice not reflected in question choices")
-
-    def jsonify(self):
-        """
-        Returns the JSON representation of this object.
-        :return: The JSON representation of this object.
-        """
-        return json.dumps(
-            {'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
-             'answer': self.answer,
-             'responses': [response.jsonify() for response in self.responses]})
 
 
 class MatchingQuestion(Question):
 
     def __init__(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str],
-                 answer_mapping: Dict[str, str], responses: List[Response] = None, id=None):
+                 answer: Dict[str, str], responses: List[Response] = None, id=None):
         """
 
         :param prompt: The prompt for the multiple choice question
@@ -122,24 +129,21 @@ class MatchingQuestion(Question):
         self.prompt = prompt
         self.left_choices = left_choices
         self.right_choices = right_choices
-        self.answer_mapping = answer_mapping
+        self.answer = answer
 
     def validate_response(self, response: Response):
-        response_json = response.jsonify()
+        response_json = response.json_data
         left = response_json['answer_mapping'].keys()
         right = response_json['answer_mapping'].values()
         if len(left) != len(right):
             raise ValueError("There are a different number of left and right choices")
 
-    def jsonify(self):
-        """
-        Gives a JSON string representation of the object.
-        :return: A JSON string representing the object.
-        """
-        return json.dumps(
-            {'id': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
-             'right_choices': self.right_choices, 'answer_mapping': self.answer_mapping,
-             'responses': [response.jsonify() for response in self.responses]})
+    @property
+    def json_data(self) -> Dict:
+        return {'id': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
+                'right_choices': self.right_choices, 'answer': self.answer,
+                'responses': [response.json_data for response in self.responses]}
+
 
 class ShortAnswerQuestion(Question):
     """
@@ -158,17 +162,13 @@ class ShortAnswerQuestion(Question):
         self.answer = answer
 
     def validate_response(self, response: Response):
-        response_json = response.jsonify()
+        response_json = response.json_data
         pass
 
-    def jsonify(self):
-        """
-        Returns a JSON string representation of the object.
-        :return: A JSON string representation of the object.
-        """
-        return json.dumps({'id': self.id, 'type': 'short_answer', 'prompt': self.prompt,
-                           'answer': self.answer, 'responses': [response.jsonify() for response in self.responses]})
-
+    @property
+    def json_data(self) -> Dict:
+        return {'type': 'short_answer', 'prompt': self.prompt,
+                'answer': self.answer, 'responses': [response.json_data for response in self.responses]}
 
 
 class FillInTheBlankQuestion(Question):
@@ -194,17 +194,14 @@ class FillInTheBlankQuestion(Question):
             self.responses = []
 
     def validate_response(self, response: Response):
-        response_json = response.jsonify()
+        response_json = response.json_data
         pass
 
-    def jsonify(self):
-        """
-        Returns a JSON string representation of the object.
-        :return: A JSON string representation of the the object.
-        """
-        return json.dumps({'id': self.id, 'type': 'fill_in_the_blank', 'before_prompt': self.before_prompt,
-                           'after_prompt': self.after_prompt, 'answer': self.answer,
-                           'responses': [response.jsonify() for response in self.responses]})
+    @property
+    def json_data(self) -> Dict:
+        return {'id': self.id, 'type': 'fill_in_the_blank', 'before_prompt': self.before_prompt,
+                'after_prompt': self.after_prompt, 'answer': self.answer,
+                'responses': [response.json_data for response in self.responses]}
 
 # Essentially all questions ever generated should be unique. This should come from a resource that is context aware.
 # This should be decoupled from the storage(or not needed by the storage). Quiz id's should be unique as well. This

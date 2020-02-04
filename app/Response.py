@@ -1,6 +1,7 @@
 import json
 from typing import Dict, Tuple, List
 from abc import ABC, abstractmethod, abstractproperty
+import inspect
 
 
 class Response(ABC):
@@ -8,7 +9,7 @@ class Response(ABC):
     Represents a Users response to a Question. Users should have a unique user_id and a nickname
     """
 
-    def __init__(self, user_id, nickname):
+    def __init__(self, user_id: int, nickname: str):
         self.user_id = user_id
         self.nickname = nickname
 
@@ -40,9 +41,12 @@ class Response(ABC):
         else:
             raise ValueError("This response type is not supported: {}".format(question_type))
 
-    @abstractmethod
+    @abstractproperty
+    def json_data(self):
+        return
+
     def jsonify(self):
-        pass
+        return json.dumps(self.json_data)
 
     def get_type(self):
         return self.type
@@ -55,7 +59,8 @@ class MultipleChoiceResponse(Response):
         self.type = 'multiple_choice'
         self.choice = choice
 
-    def jsonify(self):
+    @property
+    def json_data(self):
         return {'type': self.type, 'choice': self.choice, 'user_id': self.user_id, 'nickname': self.nickname}
 
 
@@ -66,7 +71,8 @@ class MatchingResponse(Response):
         self.type = 'matching'
         self.answer_mapping = answer_mapping
 
-    def jsonify(self):
+    @property
+    def json_data(self):
         return {'type': self.type, 'answer_mapping': self.answer_mapping, 'user_id': self.user_id,
                 'nickname': self.nickname}
 
@@ -78,7 +84,8 @@ class ShortAnswerResponse(Response):
         self.type = 'short_answer'
         self.short_answer = short_answer
 
-    def jsonify(self):
+    @property
+    def json_data(self):
         return {'type': self.type, 'short_answer': self.short_answer, 'user_id': self.user_id,
                 'nickname': self.nickname}
 
@@ -90,6 +97,7 @@ class FillInTheBlankResponse(Response):
         self.type = 'fill_in_the_blank'
         self.blank_answer = blank_answer
 
-    def jsonify(self):
+    @property
+    def json_data(self):
         return {'type': self.type, 'blank_answer': self.blank_answer, 'user_id': self.user_id,
                 'nickname': self.nickname}
