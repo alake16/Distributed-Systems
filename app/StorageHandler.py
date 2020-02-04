@@ -1,12 +1,22 @@
 import json
+import os
 
 
 # The intention of this method of storage handling is to keep things dead simple in the beginning
-# before committing to a particular method of storage.
+# before committing to a particular method of storage.g
 # MongoDB and document databases are added complexity. But designing a schema too early might constrain
 # us. If we go ahead and make this dead simple functionality. We can build out later.
 
 # This is prototype code.
+
+def initialize(directory='quizzes'):
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+        os.mkdir(directory + '/untaken')
+        os.mkdir(directory + '/taken')
+        return
+    else:
+        return
 
 def write_to_file(json_string_object, file_path):
     with open(file_path, 'w') as outfile:
@@ -14,9 +24,12 @@ def write_to_file(json_string_object, file_path):
 
 
 def load_file_as_json(file_path):
-    with open(file_path, 'r') as infile:
-        json_object = json.loads(infile.read())
-    return json_object
+    try:
+        with open(file_path, 'r') as infile:
+            json_object = json.loads(infile.read())
+        return json_object
+    except FileNotFoundError:
+        raise FileNotFoundError("File was not found")
 
 # Questions File -> Storage bank for questions/answer json objects(Just append questions here if they don't exist)
 # Quiz Directory -> Quiz References Questions File -> A quiz is essentially a concrete object representing something

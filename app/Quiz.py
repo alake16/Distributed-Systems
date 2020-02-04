@@ -1,10 +1,10 @@
 import json
 import uuid
 import copy
-from typing import List
+from typing import List, Dict
 import Questions
 from Questions import MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
-from StorageHandler import write_to_file, load_file_as_json
+from StorageHandler import write_to_file, load_file_as_json, initialize
 from Response import MultipleChoiceResponse, MatchingResponse, ShortAnswerResponse, FillInTheBlankResponse
 
 
@@ -59,6 +59,22 @@ class Quiz:
         else:
             return json.dumps(self.json_data, indent=4)
 
+    @staticmethod
+    def write_quiz(quiz_object, taken: bool):
+        initialize()
+        if not taken:
+            return write_to_file(quiz_object.jsonify(), 'quizzes/untaken/' + quiz_object.name)
+        else:
+            return write_to_file(quiz_object.jsonify(), 'quizzes/taken/' + quiz_object.name)
+
+    @staticmethod
+    def load_quiz(name_of_quiz: str, taken) -> Dict:
+        initialize()
+        if taken:
+            return Quiz.load_taken_quiz_from_json(load_file_as_json('quizzes/taken/' + name_of_quiz))
+        else:
+            return Quiz.load_untaken_quiz_from_json(load_file_as_json('quizzes/untaken/' + name_of_quiz))
+
 
 if __name__ == '__main__':
     quiz = Quiz("Brian's First Quiz")
@@ -77,8 +93,8 @@ if __name__ == '__main__':
     quiz.add_question_to_quiz(short_answer_question)
     fill_in_the_blank_question = FillInTheBlankQuestion(before_prompt="", after_prompt="are the best", answer='YOU')
     quiz.add_question_to_quiz(fill_in_the_blank_question)
-    write_to_file(quiz.jsonify(student_view=False), 'untaken_quiz.json')
-    quiz = Quiz.load_untaken_quiz_from_json((load_file_as_json('untaken_quiz.json')))
+    Quiz.write_quiz(quiz, taken=False)
+    quiz = Quiz.load_quiz("Brian's First Quiz", taken=False)
     first_question = quiz.get_question(0)
     # Template should display this question and show the proper input prompt!
     # Goal: Do just one type of question to keep it very simple.
@@ -94,4 +110,4 @@ if __name__ == '__main__':
     fourth_question = quiz.get_question(3)
     response_question_four = FillInTheBlankResponse("YOU", 1345125, 'Brian')
     fourth_question.add_response(response_question_four)
-    write_to_file(quiz.jsonify(), 'taken_quiz.json')
+    Quiz.write_quiz(quiz, taken=True)
