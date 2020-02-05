@@ -69,6 +69,8 @@ class Question(ABC):
             raise ValueError("This question type is not supported: {}".format(question_type))
 
     def add_response(self, response: Response):
+        if not isinstance(response, Response):
+            raise ValueError("Only Response objects are allowed")
         if response.get_type() != self.get_type():
             raise ValueError("Invalid response type: {} for a question of type: {}")
         self.validate_response(response)
