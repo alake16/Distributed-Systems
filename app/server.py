@@ -11,18 +11,27 @@ def welcome():
     name = request.args.get("name", "World")
     return f'Welcome to Quiz API v1!'
 
-@app.route('/activateQuestion', methods=['POST'])
+@app.route('/activateQuestion', methods=['POST', 'GET'])
 def activateQuestion():
 	global activeMultipleChoiceQuestion
 	global activeMatchingQuestion
-	if activeMultipleChoiceQuestion is not None or activeMatchingQuestion is not None:
-		return f'There is Already an Active Question!'
-	data = request.json
-	if data["type"] == "multiple_choice":
-		activeMultipleChoiceQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"], answer=data["answer"])
+
+	if request.method == 'POST':
+		if activeMultipleChoiceQuestion is not None or activeMatchingQuestion is not None:
+			return f'There is Already an Active Question!'
+		data = request.json
+		if data["type"] == "multiple_choice":
+			activeMultipleChoiceQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"], answer=data["answer"])
+		else:
+			activeMatchingQuestion = MatchingQuestion(prompt=data["prompt"], left_choices=data["leftChoices"], right_choices=data["rightChoices"], answer_mapping=data["answerMapping"])
+		return jsonify(data)
+
 	else:
-		activeMatchingQuestion = MatchingQuestion(prompt=data["prompt"], left_choices=data["leftChoices"], right_choices=data["rightChoices"], answer_mapping=data["answerMapping"])
-	return jsonify(data)
+		if activeMultipleChoiceQuestion is not None:
+			return activeMultipleChoiceQuestion.jsonify()
+		elif activeMatchingQuestion is not None:
+			return activeMatchingQuestion.jsonfiy()
+
 
 @app.route('/fetchResponses', methods=['GET'])
 def fetchResponses():
@@ -39,10 +48,11 @@ def deactivateQuestion():
 	global activeMultipleChoiceQuestion
 	global activeMatchingQuestion
 	if activeMultipleChoiceQuestion is not None:
-		responses = activeMultipleChoiceQuestion.response
+		responses = activeMultipleChoiceQuestion.responses
 		activeMultipleChoiceQuestion = None
-		return f'Multiple Choice Question Deactivated!'
+		return jsonify(responses)
 	if activeMatchingQuestion is not None:
+		responses = activeMatchingQuestion.responses
 		activeMatchingQuestion = None
 		return f'Matching Question Deactivated!'
 	return f'No Question Was Active!'
