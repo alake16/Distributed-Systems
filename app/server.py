@@ -18,7 +18,7 @@ def activateQuestion():
 	if activeMultipleChoiceQuestion is not None or activeMatchingQuestion is not None:
 		return f'There is Already an Active Question!'
 	data = request.json
-	if data["questionType"] == "multChoice":
+	if data["type"] == "multiple_choice":
 		activeMultipleChoiceQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"], answer=data["answer"])
 	else:
 		activeMatchingQuestion = MatchingQuestion(prompt=data["prompt"], left_choices=data["leftChoices"], right_choices=data["rightChoices"], answer_mapping=data["answerMapping"])
@@ -29,9 +29,9 @@ def fetchResponses():
 	global activeMultipleChoiceQuestion
 	global activeMatchingQuestion
 	if activeMultipleChoiceQuestion is not None:
-		return activeMultipleChoiceQuestion.response
+		return jsonify(activeMultipleChoiceQuestion.responses)
 	elif activeMatchingQuestion is not None:
-		return activeMatchingQuestion.response
+		return jsonify(activeMatchingQuestion.responses)
 	return f'No Active Question!'
 
 @app.route('/deactivateQuestion', methods=['POST'])
@@ -51,6 +51,6 @@ def deactivateQuestion():
 def recordResponse():
 	global activeMultipleChoiceQuestion
 	if activeMultipleChoiceQuestion:
-		activeMultipleChoiceQuestion.response[request.json["response"]] += 1
-		return jsonify(activeMultipleChoiceQuestion.response)
+		activeMultipleChoiceQuestion.responses.append(request.json)
+		return jsonify(request.json)
 	return f'No Active Question!'

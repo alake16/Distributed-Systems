@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod, abstractproperty
 import json
 import uuid
 import copy
-from Response import Response
+from app.Response import Response
 
 
 # The use of the dataclass decorator really simplifies the implementation.
