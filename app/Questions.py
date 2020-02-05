@@ -1,12 +1,10 @@
 from typing import Dict, Tuple, List
-import textwrap
 import itertools
 from abc import ABC, abstractmethod, abstractproperty
 import json
 import uuid
 import copy
 from Response import Response
-import functools
 
 
 # The use of the dataclass decorator really simplifies the implementation.
@@ -18,9 +16,9 @@ class Question(ABC):
         else:
             self.id = id
         if responses is None:
-            self.responses = []
+            self._responses = []
         else:
-            self.responses = []
+            self._responses = []
             response_objects = [Response.create_a_response_from_json(response) for response in responses]
             for response_object in response_objects:
                 self.add_response(response_object)
@@ -74,11 +72,14 @@ class Question(ABC):
         if response.get_type() != self.get_type():
             raise ValueError("Invalid response type: {} for a question of type: {}")
         self.validate_response(response)
-        self.responses.append(response)
+        self._responses.append(response)
 
     @abstractmethod
     def validate_response(self, response: Response):
         pass
+
+    def get_responses(self):
+        return self.responses
 
 
 class MultipleChoiceQuestion(Question):
@@ -103,7 +104,7 @@ class MultipleChoiceQuestion(Question):
     def json_data(self) -> Dict:
         return {'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
                 'answer': self.answer,
-                'responses': [response.json_data for response in self.responses]}
+                'responses': [response.json_data for response in self._responses]}
 
     def validate_response(self, response: Response):
         response_json = response.json_data
@@ -142,7 +143,7 @@ class MatchingQuestion(Question):
     def json_data(self) -> Dict:
         return {'id': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
                 'right_choices': self.right_choices, 'answer': self.answer,
-                'responses': [response.json_data for response in self.responses]}
+                'responses': [response.json_data for response in self._responses]}
 
 
 class ShortAnswerQuestion(Question):
@@ -167,8 +168,8 @@ class ShortAnswerQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'type': 'short_answer', 'prompt': self.prompt,
-                'answer': self.answer, 'responses': [response.json_data for response in self.responses]}
+        return {'id': self.id,  'type': 'short_answer', 'prompt': self.prompt,
+                'answer': self.answer, 'responses': [response.json_data for response in self._responses]}
 
 
 class FillInTheBlankQuestion(Question):
@@ -176,7 +177,7 @@ class FillInTheBlankQuestion(Question):
     A question where a user is given a blank in a prompt and is required to fill it out
     """
 
-    def __init__(self, before_prompt: str, after_prompt: str, answer: str, responses: List[str] = None,
+    def __init__(self, before_prompt: str, after_prompt: str, answer: str, responses: List[Response] = None,
                  id=None):
         """
 
@@ -185,13 +186,11 @@ class FillInTheBlankQuestion(Question):
         :param correct_answer: The correct answer to the question
         :param responses: A list of text responses to the question
         """
-        super().__init__(id)
+        super().__init__(id, responses)
         self.type = 'fill_in_the_blank'
         self.before_prompt = before_prompt
         self.after_prompt = after_prompt
         self.answer = answer
-        if responses is None:
-            self.responses = []
 
     def validate_response(self, response: Response):
         response_json = response.json_data
@@ -201,7 +200,7 @@ class FillInTheBlankQuestion(Question):
     def json_data(self) -> Dict:
         return {'id': self.id, 'type': 'fill_in_the_blank', 'before_prompt': self.before_prompt,
                 'after_prompt': self.after_prompt, 'answer': self.answer,
-                'responses': [response.json_data for response in self.responses]}
+                'responses': [response.json_data for response in self._responses]}
 
 # Essentially all questions ever generated should be unique. This should come from a resource that is context aware.
 # This should be decoupled from the storage(or not needed by the storage). Quiz id's should be unique as well. This
