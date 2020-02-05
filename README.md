@@ -1,8 +1,16 @@
 # Distributed-Systems
+Creating a standalone program to model the creation of quiz questions and the tracking of answers from multiple users. Questions are modeled in XML format for persistent storage. The Flask framework is used to manage communications between the front and back ends of our project.
 
-**Phase 1 Requirements:** 
+# Development Server Operation
+To deploy the quiz responses server, run the following command from the `app` directory:
+```bash
+env FLASK_APP=server.py flask run
+```
 
-“Create a standalone program to model the creation of quiz questions and answers. Questions must not be hard-coded in any way, shape, or form. You are strongly encouraged to use XML or JSON to model the questions and answers. You’ll build a simple program to parse the questions and render them one at a time for a user response. For Phase 1, questions may be true/false, multiple choice, fill in the blank(s), matching (e.g. items on the left to items on the right), etc. You may write your code in any language.”
+# Contributors
+Vismark Juarez (https://github.com/VismarkJuarez)
+Brian Dehlinger (https://github.com/BrianDehlinger)
+Daniel Palacios (https://github.com/ddpalacios)
+Andrew Lake (https://github.com/alake16)
 
 Mobile-side Android Application Repository: https://github.com/VismarkJuarez/Distributed-Systems-Mobile
-

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod, abstractproperty
 import json
 import uuid
 import copy
-from Response import Response
+from app.Response import Response
 
 
 # The use of the dataclass decorator really simplifies the implementation.
@@ -26,6 +26,7 @@ class Question(ABC):
     @abstractproperty
     def json_data(self) -> Dict:
         return {}
+
 
     def jsonify(self, student_view=False) -> str:
         """
