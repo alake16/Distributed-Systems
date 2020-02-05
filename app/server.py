@@ -1,10 +1,10 @@
 from flask import Flask, escape, request, jsonify
 from app.Questions import Question, MultipleChoiceQuestion, MatchingQuestion
+from app.Response import Response, MultipleChoiceResponse
 
 app = Flask(__name__)
 
-activeMultipleChoiceQuestion = None
-activeMatchingQuestion = None
+activeQuestion = None
 
 @app.route('/')
 def welcome():
@@ -13,54 +13,50 @@ def welcome():
 
 @app.route('/activateQuestion', methods=['POST', 'GET'])
 def activateQuestion():
-	global activeMultipleChoiceQuestion
-	global activeMatchingQuestion
+	global activeQuestion
 
 	if request.method == 'POST':
-		if activeMultipleChoiceQuestion is not None or activeMatchingQuestion is not None:
+		if isinstance(activeQuestion, Question):
 			return f'There is Already an Active Question!'
 		data = request.json
 		if data["type"] == "multiple_choice":
-			activeMultipleChoiceQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"], answer=data["answer"])
+			activeQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"], answer=data["answer"])
 		else:
-			activeMatchingQuestion = MatchingQuestion(prompt=data["prompt"], left_choices=data["leftChoices"], right_choices=data["rightChoices"], answer_mapping=data["answerMapping"])
-		return jsonify(data)
+			activeQuestion = MatchingQuestion(prompt=data["prompt"], left_choices=data["leftChoices"], right_choices=data["rightChoices"], answer_mapping=data["answerMapping"])
+		return activeQuestion.jsonify(), 200, {'Content-Type': 'application/json'}
 
 	else:
-		if activeMultipleChoiceQuestion is not None:
-			return activeMultipleChoiceQuestion.jsonify()
-		elif activeMatchingQuestion is not None:
-			return activeMatchingQuestion.jsonfiy()
+		if activeQuestion is not None:
+			return activeQuestion.jsonify(), 200, {'Content-Type': 'application/json'}
+		else:
+			return f'No Question Active!'
 
 
 @app.route('/fetchResponses', methods=['GET'])
 def fetchResponses():
-	global activeMultipleChoiceQuestion
-	global activeMatchingQuestion
-	if activeMultipleChoiceQuestion is not None:
-		return jsonify(activeMultipleChoiceQuestion.responses)
-	elif activeMatchingQuestion is not None:
-		return jsonify(activeMatchingQuestion.responses)
+	global activeQuestion
+	if activeQuestion is not None:
+		responses = []
+		for response in activeQuestion.responses:
+			responses.append(response.jsonify())
+		return jsonify(responses)
 	return f'No Active Question!'
 
 @app.route('/deactivateQuestion', methods=['POST'])
 def deactivateQuestion():
-	global activeMultipleChoiceQuestion
-	global activeMatchingQuestion
-	if activeMultipleChoiceQuestion is not None:
-		responses = activeMultipleChoiceQuestion.responses
-		activeMultipleChoiceQuestion = None
-		return jsonify(responses)
-	if activeMatchingQuestion is not None:
-		responses = activeMatchingQuestion.responses
-		activeMatchingQuestion = None
-		return f'Matching Question Deactivated!'
-	return f'No Question Was Active!'
+	global activeQuestion
+	if activeQuestion is not None:
+		responses = activeQuestion.responses
+		responses = fetchResponses()
+		activeQuestion = None
+		return responses
+	return f'No Active Question!'
 
 @app.route('/recordResponse', methods=['POST'])
 def recordResponse():
-	global activeMultipleChoiceQuestion
-	if activeMultipleChoiceQuestion:
-		activeMultipleChoiceQuestion.responses.append(request.json)
-		return jsonify(request.json)
+	global activeQuestion
+	if isinstance(activeQuestion, MultipleChoiceQuestion):
+		data = request.json
+		activeQuestion.add_response(MultipleChoiceResponse(user_id=data["user_id"], nickname=data["nickname"], choice=data["choice"]))
+		return jsonify(data)
 	return f'No Active Question!'
