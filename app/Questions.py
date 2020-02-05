@@ -26,7 +26,10 @@ class Question(ABC):
                 self.add_response(response_object)
 
     def jsonify(self):
-        pass
+        object_dict = dict()
+        for attr, value in self.__dict__.iteritems():
+            object_dict[attr] = value
+        return json.dumps(object_dict)
 
     def get_type(self):
         return self.type
