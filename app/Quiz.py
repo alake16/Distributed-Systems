@@ -1,12 +1,12 @@
 import json
 import uuid
 import copy
-from typing import List, Dict
-import Questions
+from typing import List
 from Questions import MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
 from StorageHandler import write_to_file, load_file_as_json, initialize
 from Response import MultipleChoiceResponse, MatchingResponse, ShortAnswerResponse, FillInTheBlankResponse
 from JSONHandler import ProjectJSONEncoder
+
 
 class Quiz:
 
@@ -14,15 +14,9 @@ class Quiz:
     # new objects.
 
     @staticmethod
-    def load_untaken_quiz_from_json(json_object):
+    def load_quiz_from_json(json_object):
         return Quiz(json_object['name'],
                     questions=[Question.create_a_question_from_json(question) for question in json_object['questions']],
-                    id=json_object['id'])
-
-    @staticmethod
-    def load_taken_quiz_from_json(json_object):
-        return Quiz(json_object['name'],
-                    questions=json_object['questions'],
                     id=json_object['id'])
 
     def __init__(self, name: str, questions: List[Question] = None, id=None):
@@ -47,7 +41,7 @@ class Quiz:
     @property
     def json_data(self):
         questions = [question for question in self.questions]
-        return {'id': self.id, 'name': self.name,
+        return {'kind': 'quiz', 'id': self.id, 'name': self.name,
                 'questions': questions}
 
     def jsonify(self, student_view=False):
@@ -71,9 +65,9 @@ class Quiz:
     def load_quiz(name_of_quiz: str, taken):
         initialize()
         if taken:
-            return Quiz.load_taken_quiz_from_json(load_file_as_json('quizzes/taken/' + name_of_quiz))
+            return Quiz.load_quiz_from_json(load_file_as_json('quizzes/taken/' + name_of_quiz))
         else:
-            return Quiz.load_untaken_quiz_from_json(load_file_as_json('quizzes/untaken/' + name_of_quiz))
+            return Quiz.load_quiz_from_json(load_file_as_json('quizzes/untaken/' + name_of_quiz))
 
 
 if __name__ == '__main__':

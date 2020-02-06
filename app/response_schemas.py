@@ -1,6 +1,7 @@
 multiple_choice_response_schema = {
     "type": "object",
     "properties": {
+        'kind': {"type": "string"},
         "type": {"type": "string"},
         "choice": {"type": "string"},
         "user_id": {"type": "string"},
@@ -11,6 +12,7 @@ multiple_choice_response_schema = {
 matching_response_schema = {
     "type": "object",
     "properties": {
+        'kind': {"type": "string"},
         "type": {"type": "string"},
         "answer_mapping": {"type": "object"},
         "user_id": {"type": "string"},
@@ -21,6 +23,7 @@ matching_response_schema = {
 short_answer_response_schema = {
     "type": "object",
     "properties": {
+        'kind': {"type": "string"},
         "type": {"type": "string"},
         "short_answer": {"type": "string"},
         "user_id": {"type": "string"},
@@ -31,6 +34,7 @@ short_answer_response_schema = {
 fill_in_the_blank_response_schema = {
     "type": "object",
     "properties": {
+        'kind': {"type": "string"},
         "type": {"type": "string"},
         "blank_answer": {"type": "string"},
         "user_id": {"type": "string"},

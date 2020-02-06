@@ -1,9 +1,11 @@
+from typing import Dict
 from flask import Flask, request, jsonify
 from flask import Response as flaskResponse
 from Questions import Question, MultipleChoiceQuestion, MatchingQuestion
 from Response import Response, MultipleChoiceResponse
 import json
 from JSONHandler import ProjectJSONEncoder
+
 
 app = Flask(__name__)
 

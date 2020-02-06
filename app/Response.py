@@ -41,7 +41,8 @@ class Response(ABC):
         else:
             raise ValueError("This response type is not supported: {}".format(question_type))
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def json_data(self):
         return
 
@@ -61,7 +62,7 @@ class MultipleChoiceResponse(Response):
 
     @property
     def json_data(self):
-        return {'type': self.type, 'choice': self.choice, 'user_id': self.user_id, 'nickname': self.nickname}
+        return {'kind': 'response', 'type': self.type, 'choice': self.choice, 'user_id': self.user_id, 'nickname': self.nickname}
 
 
 class MatchingResponse(Response):
@@ -73,7 +74,7 @@ class MatchingResponse(Response):
 
     @property
     def json_data(self):
-        return {'type': self.type, 'answer_mapping': self.answer_mapping, 'user_id': self.user_id,
+        return {'kind': 'response', 'type': self.type, 'answer_mapping': self.answer_mapping, 'user_id': self.user_id,
                 'nickname': self.nickname}
 
 
@@ -86,7 +87,7 @@ class ShortAnswerResponse(Response):
 
     @property
     def json_data(self):
-        return {'type': self.type, 'short_answer': self.short_answer, 'user_id': self.user_id,
+        return {'kind': 'response', 'type': self.type, 'short_answer': self.short_answer, 'user_id': self.user_id,
                 'nickname': self.nickname}
 
 
@@ -99,5 +100,5 @@ class FillInTheBlankResponse(Response):
 
     @property
     def json_data(self):
-        return {'type': self.type, 'blank_answer': self.blank_answer, 'user_id': self.user_id,
+        return {'kind': 'response', 'type': self.type, 'blank_answer': self.blank_answer, 'user_id': self.user_id,
                 'nickname': self.nickname}

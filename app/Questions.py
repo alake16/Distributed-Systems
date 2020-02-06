@@ -1,15 +1,12 @@
 import json
 import uuid
-import copy
-import itertools
 from jsonschema import validate
 from typing import Dict, Tuple, List
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from Response import Response
 from response_schemas import fill_in_the_blank_response_schema, matching_response_schema, \
     multiple_choice_response_schema, short_answer_response_schema
 from JSONHandler import ProjectJSONEncoder
-
 
 # The use of the dataclass decorator really simplifies the implementation.
 class Question(ABC):
@@ -50,6 +47,7 @@ class Question(ABC):
             raise ValueError("The json representation must either be a string or a dictionary")
         question_type = json_as_dictionary.get('type')
         json_as_dictionary.pop('type')
+        json_as_dictionary.pop('kind')
         if question_type is None:
             raise ValueError("The value passed to create_a_question_from_json must be question and have a type")
         if question_type == 'multiple_choice':
@@ -104,7 +102,7 @@ class MultipleChoiceQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
+        return {'kind': 'question', 'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
                 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
 
@@ -150,7 +148,7 @@ class MatchingQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'id': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
+        return {'kind': 'question', 'id': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
                 'right_choices': self.right_choices, 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
 
@@ -178,7 +176,7 @@ class ShortAnswerQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'id': self.id, 'type': 'short_answer', 'prompt': self.prompt,
+        return {'kind': 'question', 'id': self.id, 'type': 'short_answer', 'prompt': self.prompt,
                 'answer': self.answer, 'responses': [response.json_data for response in self._responses]}
 
 
@@ -209,7 +207,7 @@ class FillInTheBlankQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'id': self.id, 'type': 'fill_in_the_blank', 'before_prompt': self.before_prompt,
+        return {'kind': 'question', 'id': self.id, 'type': 'fill_in_the_blank', 'before_prompt': self.before_prompt,
                 'after_prompt': self.after_prompt, 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
 
