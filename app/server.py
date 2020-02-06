@@ -1,6 +1,8 @@
-from flask import Flask, escape, request, jsonify
+from flask import Flask, request, jsonify
+from flask import Response as flaskResponse
 from app.Questions import Question, MultipleChoiceQuestion, MatchingQuestion
 from app.Response import Response, MultipleChoiceResponse
+import json
 
 app = Flask(__name__)
 
@@ -37,9 +39,9 @@ def fetchResponses():
 	global activeQuestion
 	if activeQuestion is not None:
 		responses = []
-		for response in activeQuestion.responses:
+		for response in activeQuestion.get_responses():
 			responses.append(response.jsonify())
-		return jsonify(responses)
+		return flaskResponse(json.dumps(responses),  mimetype='application/json')
 	return f'No Active Question!'
 
 @app.route('/deactivateQuestion', methods=['POST'])
