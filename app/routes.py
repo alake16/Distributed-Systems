@@ -19,7 +19,7 @@ def taker():
 
 # Quiz Taker Landing Page
 @app.route('/player/<sessionID>')
-def taker(sessionID):
+def takerSession(sessionID):
 	# do something with a session ID
     return render_template("taker.html", title="Taker")
 
