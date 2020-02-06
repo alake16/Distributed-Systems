@@ -109,15 +109,15 @@ if __name__ == '__main__':
     first_question.add_response(response)
     second_question = quiz.get_question(1)
 
-    response_question_two = MatchingResponse({'A': 'C', 'B': 'D'}, 1345125, 'Brian')
+    response_question_two = MatchingResponse({'A': 'C', 'B': 'D'}, '1345125', 'Brian')
     second_question.add_response(response_question_two)
 
     third_question = quiz.get_question(2)
-    response_question_three = ShortAnswerResponse("YOU", 1345125, 'Brian')
+    response_question_three = ShortAnswerResponse("YOU", '1345125', 'Brian')
     third_question.add_response(response_question_three)
 
     fourth_question = quiz.get_question(3)
-    response_question_four = FillInTheBlankResponse("YOU", 1345125, 'Brian')
+    response_question_four = FillInTheBlankResponse("YOU", '1345125', 'Brian')
     fourth_question.add_response(response_question_four)
 
     Quiz.write_quiz(quiz, taken=True)

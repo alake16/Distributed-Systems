@@ -5,7 +5,7 @@ import itertools
 from jsonschema import validate
 from typing import Dict, Tuple, List
 from abc import ABC, abstractmethod, abstractproperty
-from app.Response import Response
+from Response import Response
 from response_schemas import fill_in_the_blank_response_schema, matching_response_schema, \
     multiple_choice_response_schema, short_answer_response_schema
 
