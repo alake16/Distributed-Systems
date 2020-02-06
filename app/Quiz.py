@@ -6,7 +6,7 @@ import Questions
 from Questions import MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
 from StorageHandler import write_to_file, load_file_as_json, initialize
 from Response import MultipleChoiceResponse, MatchingResponse, ShortAnswerResponse, FillInTheBlankResponse
-
+from JSONHandler import ProjectJSONEncoder
 
 class Quiz:
 
@@ -46,7 +46,7 @@ class Quiz:
 
     @property
     def json_data(self):
-        questions = [question.json_data for question in self.questions]
+        questions = [question for question in self.questions]
         return {'id': self.id, 'name': self.name,
                 'questions': questions}
 
@@ -55,9 +55,9 @@ class Quiz:
             json_data = copy.deepcopy(self.json_data)
             for question in json_data['questions']:
                 question['answer'] = []
-            return json.dumps(json_data, indent=4)
+            return json.dumps(json_data, indent=4, cls=ProjectJSONEncoder)
         else:
-            return json.dumps(self.json_data, indent=4)
+            return json.dumps(self.json_data, indent=4, cls=ProjectJSONEncoder)
 
     @staticmethod
     def write_quiz(quiz_object, taken: bool):
@@ -68,7 +68,7 @@ class Quiz:
             return write_to_file(quiz_object.jsonify(), 'quizzes/taken/' + quiz_object.name)
 
     @staticmethod
-    def load_quiz(name_of_quiz: str, taken) -> Dict:
+    def load_quiz(name_of_quiz: str, taken):
         initialize()
         if taken:
             return Quiz.load_taken_quiz_from_json(load_file_as_json('quizzes/taken/' + name_of_quiz))
