@@ -1,28 +1,19 @@
 import json
 import uuid
-from jsonschema import validate
-from typing import Dict, Tuple, List
+from typing import Dict, List
 from abc import ABC, abstractmethod
 from Response import Response
-from response_schemas import fill_in_the_blank_response_schema, matching_response_schema, \
-    multiple_choice_response_schema, short_answer_response_schema
-from JSONHandler import ProjectJSONEncoder
 
-# The use of the dataclass decorator really simplifies the implementation.
+
 class Question(ABC):
 
-    def __init__(self, id=None, responses: List[Response] = None):
+    def __init__(self, id=None, responses: List[Response] = None, type: str = None):
+        self.type = type
         if id is None:
             self.id = str(uuid.uuid4())
         else:
             self.id = id
-        if responses is None:
-            self._responses = []
-        else:
-            self._responses = []
-            response_objects = [Response.create_a_response_from_json(response) for response in responses]
-            for response_object in response_objects:
-                self.add_response(response_object)
+        self._responses = []
 
     @property
     @abstractmethod
@@ -69,10 +60,11 @@ class Question(ABC):
         self.validate_response(response)
         self._responses.append(response)
 
-    def _ensure_json_meets_schema(self, response_as_dictionary: Dict):
-        type_of_schema = self.get_type()
-        schema_name = type_of_schema + '_response_schema'
-        validate(instance=response_as_dictionary, schema=globals()[schema_name])
+    def _initialize_responses(self, responses: List[Response]):
+        if responses is not None:
+            response_objects = [Response.create_a_response_from_json(response) for response in responses]
+            for response_object in response_objects:
+                self.add_response(response_object)
 
     @abstractmethod
     def validate_response(self, response: Response):
@@ -94,21 +86,21 @@ class MultipleChoiceQuestion(Question):
         :param answer: A key in the above dictionary(i.e. a, b, c, d)
         :param responses: A dictionary that keeps track of the responses on this object(i.e. {A: 0, B: 3, C:2, D:4}
         """
-        super().__init__(id, responses)
-        self.type = 'multiple_choice'
+        super().__init__(id, responses, 'multiple_choice')
         self.prompt = prompt
         self.choices = choices
         self.answer = answer
+        self._initialize_responses(responses)
 
     @property
     def json_data(self) -> Dict:
-        return {'kind': 'question', 'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt, 'choices': self.choices,
+        return {'kind': 'question', 'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt,
+                'choices': self.choices,
                 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        self._ensure_json_meets_schema(response_json)
         choice = response_json['choice']
         if choice not in self.choices.keys():
             raise ValueError("Response choice not reflected in question choices")
@@ -126,8 +118,7 @@ class MatchingQuestion(Question):
         :param answer_mapping: A mapping consisting of keys that are answer choices on the left with values that are answer choices on the right.
         :param responses: A list of tuples which themselves are mappings of answer choices on the left to answer choices on the right.
         """
-        super().__init__(id, responses)
-        self.type = 'matching'
+        super().__init__(id, responses, 'matching')
         self.prompt = prompt
         self.left_choices = left_choices
         self.right_choices = right_choices
@@ -135,7 +126,6 @@ class MatchingQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        self._ensure_json_meets_schema(response_json)
         left = response_json['answer_mapping'].keys()
         right = response_json['answer_mapping'].values()
         if len(left) != len(right):
@@ -148,7 +138,8 @@ class MatchingQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'kind': 'question', 'id': self.id, 'type': "matching", 'prompt': self.prompt, 'left_choices': self.left_choices,
+        return {'kind': 'question', 'id': self.id, 'type': "matching", 'prompt': self.prompt,
+                'left_choices': self.left_choices,
                 'right_choices': self.right_choices, 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
 
@@ -164,14 +155,12 @@ class ShortAnswerQuestion(Question):
         :param answer: The answer to the question.
         :param responses: A list of string responses received on this object to the question.
         """
-        super().__init__(id, responses)
-        self.type = 'short_answer'
+        super().__init__(id, responses, 'short_answer')
         self.prompt = prompt
         self.answer = answer
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        self._ensure_json_meets_schema(response_json)
         return
 
     @property
@@ -194,15 +183,13 @@ class FillInTheBlankQuestion(Question):
         :param correct_answer: The correct answer to the question
         :param responses: A list of text responses to the question
         """
-        super().__init__(id, responses)
-        self.type = 'fill_in_the_blank'
+        super().__init__(id, responses, 'fill_in_the_blank')
         self.before_prompt = before_prompt
         self.after_prompt = after_prompt
         self.answer = answer
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        self._ensure_json_meets_schema(response_json)
         return
 
     @property

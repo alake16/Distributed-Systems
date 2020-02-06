@@ -1,7 +1,9 @@
 import json
-from typing import Dict, Tuple, List
-from abc import ABC, abstractmethod, abstractproperty
-import inspect
+from typing import Dict
+from abc import ABC, abstractmethod
+from response_schemas import multiple_choice_response_schema, matching_response_schema, short_answer_response_schema, \
+    fill_in_the_blank_response_schema
+from jsonschema import validate
 
 
 class Response(ABC):
@@ -9,7 +11,8 @@ class Response(ABC):
     Represents a Users response to a Question. Users should have a unique user_id and a nickname
     """
 
-    def __init__(self, user_id: int, nickname: str):
+    def __init__(self, user_id: int, nickname: str, type: str):
+        self.type = type
         self.user_id = user_id
         self.nickname = nickname
 
@@ -17,37 +20,35 @@ class Response(ABC):
     def create_a_response_from_json(json_representation):
         """
         Factory method to create a Response Object dynamically at runtime.
-        :param json_representation: The JSON object as a string or dictionary
+        :param json_representation: The JSON object a dictionary
         :return: A Response Object representing the type of question in the json_string
         """
-        if isinstance(json_representation, str):
-            json_as_dictionary = json.loads(json_representation)
-        elif isinstance(json_representation, dict):
-            json_as_dictionary = json_representation
-        else:
-            raise ValueError("The json representation must either be a string or a dictionary")
-        response_type = json_as_dictionary.get('type')
-        json_as_dictionary.pop('type')
+        if not isinstance(json_representation, dict):
+            raise ValueError("The json representation must be a dictionary")
+        if 'type' not in json_representation:
+            raise ValueError("The json representation must have a type")
+        response_type = json_representation.get('type')
+        schema_name = response_type + '_response_schema'
+        validate(instance=json_representation, schema=globals()[schema_name])
+        json_representation.pop('type')
+        json_representation.pop('kind')
         if response_type is None:
             raise ValueError("The value passed to create_a_response_from_json must be question and have a type")
-        if question_type == 'multiple_choice':
-            return MultipleChoiceResponse(**json_as_dictionary)
-        elif question_type == 'matching':
-            return MatchingResponse(**json_as_dictionary)
-        elif question_type == 'short_answer':
-            return ShortAnswerResponse(**json_as_dictionary)
-        elif question_type == 'fill_in_the_blank':
-            return FillInTheBlankResponse(**json_as_dictionary)
+        if response_type == 'multiple_choice':
+            return MultipleChoiceResponse(**json_representation)
+        elif response_type == 'matching':
+            return MatchingResponse(**json_representation)
+        elif response_type == 'short_answer':
+            return ShortAnswerResponse(**json_representation)
+        elif response_type == 'fill_in_the_blank':
+            return FillInTheBlankResponse(**json_representation)
         else:
-            raise ValueError("This response type is not supported: {}".format(question_type))
+            raise ValueError("This response type is not supported: {}".format(response_type))
 
     @property
     @abstractmethod
     def json_data(self):
         return
-
-    def jsonify(self):
-        return json.dumps(self.json_data)
 
     def get_type(self):
         return self.type
@@ -56,20 +57,19 @@ class Response(ABC):
 class MultipleChoiceResponse(Response):
 
     def __init__(self, choice: str, user_id: int, nickname: str):
-        super().__init__(user_id, nickname)
-        self.type = 'multiple_choice'
+        super().__init__(user_id, nickname, 'multiple_choice')
         self.choice = choice
 
     @property
     def json_data(self):
-        return {'kind': 'response', 'type': self.type, 'choice': self.choice, 'user_id': self.user_id, 'nickname': self.nickname}
+        return {'kind': 'response', 'type': self.type, 'choice': self.choice, 'user_id': self.user_id,
+                'nickname': self.nickname}
 
 
 class MatchingResponse(Response):
 
     def __init__(self, answer_mapping: Dict[str, str], user_id: int, nickname: str):
-        super().__init__(user_id, nickname)
-        self.type = 'matching'
+        super().__init__(user_id, nickname, 'matching')
         self.answer_mapping = answer_mapping
 
     @property
@@ -81,8 +81,7 @@ class MatchingResponse(Response):
 class ShortAnswerResponse(Response):
 
     def __init__(self, short_answer: str, user_id: int, nickname: str):
-        super().__init__(user_id, nickname)
-        self.type = 'short_answer'
+        super().__init__(user_id, nickname, 'short_answer')
         self.short_answer = short_answer
 
     @property
@@ -94,8 +93,7 @@ class ShortAnswerResponse(Response):
 class FillInTheBlankResponse(Response):
 
     def __init__(self, blank_answer: str, user_id: int, nickname: str):
-        super().__init__(user_id, nickname)
-        self.type = 'fill_in_the_blank'
+        super().__init__(user_id, nickname, 'fill_in_the_blank')
         self.blank_answer = blank_answer
 
     @property

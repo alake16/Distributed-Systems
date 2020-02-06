@@ -1,6 +1,5 @@
 import json
 import uuid
-import copy
 from typing import List
 from Questions import MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
 from StorageHandler import write_to_file, load_file_as_json, initialize
@@ -44,22 +43,15 @@ class Quiz:
         return {'kind': 'quiz', 'id': self.id, 'name': self.name,
                 'questions': questions}
 
-    def jsonify(self, student_view=False):
-        if student_view is True:
-            json_data = copy.deepcopy(self.json_data)
-            for question in json_data['questions']:
-                question['answer'] = []
-            return json.dumps(json_data, indent=4, cls=ProjectJSONEncoder)
-        else:
-            return json.dumps(self.json_data, indent=4, cls=ProjectJSONEncoder)
-
     @staticmethod
     def write_quiz(quiz_object, taken: bool):
         initialize()
         if not taken:
-            return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4), 'quizzes/untaken/' + quiz_object.name)
+            return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4),
+                                 'quizzes/untaken/' + quiz_object.name)
         else:
-            return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4), 'quizzes/taken/' + quiz_object.name)
+            return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4),
+                                 'quizzes/taken/' + quiz_object.name)
 
     @staticmethod
     def load_quiz(name_of_quiz: str, taken):
@@ -115,3 +107,6 @@ if __name__ == '__main__':
     fourth_question.add_response(response_question_four)
 
     Quiz.write_quiz(quiz, taken=True)
+    quiz = Quiz.load_quiz("Brian's First Quiz", taken=True)
+    print(json.dumps(quiz, cls=ProjectJSONEncoder))
+

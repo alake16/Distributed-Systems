@@ -3,7 +3,8 @@ from enum import Enum
 import string
 import itertools
 from typing import Dict
-from Questions import MultipleChoiceQuestion, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
+from Questions import MultipleChoiceQuestion, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion, Question
+
 
 # TODO DRY
 # TODO Redo the implementation and design. I think the main idea is that we want to eventually allow users
@@ -21,14 +22,6 @@ def alphabet_generator():
         for t in itertools.product(string.ascii_lowercase, repeat=n):
             yield ''.join(t)
 
-class QuestionType(Enum):
-
-    MULTIPLE_CHOICE = 1
-    MATCHING = 2
-    SHORT_ANSWER = 3
-    FILL_IN_THE_BLANK = 4
-    PLAINTEXT = 5
-
 
 class DirectorOfCreation(ABC):
 
@@ -38,7 +31,8 @@ class DirectorOfCreation(ABC):
     def get_multiple_choice_question_object(self, prompt: str, choices: Dict[str, str], correct_answer: str):
         return MultipleChoiceQuestion(prompt, choices, correct_answer)
 
-    def get_matching_question_object(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str], correct_mapping: Dict[str, str]):
+    def get_matching_question_object(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str],
+                                     correct_mapping: Dict[str, str]):
         return MatchingQuestion(prompt, left_choices, right_choices, correct_mapping)
 
     def get_short_answer_question_object(self, prompt: str, correct_answer: str):
@@ -49,12 +43,13 @@ class DirectorOfCreation(ABC):
 
 
 class CLIDirectorOfCreation(DirectorOfCreation):
-     
+
     def __init__(self):
         super().__init__()
 
     def __get_type_of_question_from_user(self):
-        option_string = "\nPlease select one of the following types of questions: \n\n" + "\n".join([member.name + ": \t" + str(member._value_) for name, member in QuestionType.__members__.items()]) + '\n'
+        option_string = "\nPlease select one of the following types of questions: \n\n" + "\n".join(
+            [member.name + ": \t" + str(member._value_) for name, member in QuestionType.__members__.items()]) + '\n'
         option_input = input(option_string)
         while option_input not in [str(member._value_) for name, member in QuestionType.__members__.items()]:
             option_input = input(option_string)
@@ -139,7 +134,7 @@ class CLIDirectorOfCreation(DirectorOfCreation):
                     choice_prompt = None
                     continue
                 else:
-                     break
+                    break
             right_choices[choice_key] = choice_prompt
             choice_key = next(answer_choice_generator)
         answer_mapping = {}
@@ -168,11 +163,3 @@ class CLIDirectorOfCreation(DirectorOfCreation):
         print("What is the answer to your question?")
         answer = input()
         return FillInTheBlankQuestion(before_blank, after_blank, answer)
-
-
-
-
-
-
-
-
