@@ -82,7 +82,7 @@ class Question(ABC):
         pass
 
     def get_responses(self):
-        return self.responses
+        return self._responses
 
 
 class MultipleChoiceQuestion(Question):
