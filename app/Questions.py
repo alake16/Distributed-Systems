@@ -8,6 +8,7 @@ from abc import ABC, abstractmethod, abstractproperty
 from Response import Response
 from response_schemas import fill_in_the_blank_response_schema, matching_response_schema, \
     multiple_choice_response_schema, short_answer_response_schema
+from JSONHandler import ProjectJSONEncoder
 
 
 # The use of the dataclass decorator really simplifies the implementation.
@@ -26,19 +27,10 @@ class Question(ABC):
             for response_object in response_objects:
                 self.add_response(response_object)
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def json_data(self) -> Dict:
         return {}
-
-    def jsonify(self, student_view=False) -> str:
-        """
-        Returns a JSON string representation of the object.
-        :return: A JSON string representation of the object.
-        """
-        json_to_return = self.json_data
-        if student_view is True:
-            json_to_return.pop('answer')
-        return json.dumps(json_to_return)
 
     def get_type(self) -> str:
         return self.type

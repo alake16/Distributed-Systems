@@ -63,9 +63,9 @@ class Quiz:
     def write_quiz(quiz_object, taken: bool):
         initialize()
         if not taken:
-            return write_to_file(quiz_object.jsonify(), 'quizzes/untaken/' + quiz_object.name)
+            return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4), 'quizzes/untaken/' + quiz_object.name)
         else:
-            return write_to_file(quiz_object.jsonify(), 'quizzes/taken/' + quiz_object.name)
+            return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4), 'quizzes/taken/' + quiz_object.name)
 
     @staticmethod
     def load_quiz(name_of_quiz: str, taken):
