@@ -1,10 +1,13 @@
-from typing import Dict, Tuple, List
-import itertools
-from abc import ABC, abstractmethod, abstractproperty
 import json
 import uuid
 import copy
+import itertools
+from jsonschema import validate
+from typing import Dict, Tuple, List
+from abc import ABC, abstractmethod, abstractproperty
 from app.Response import Response
+from response_schemas import fill_in_the_blank_response_schema, matching_response_schema, \
+    multiple_choice_response_schema, short_answer_response_schema
 
 
 # The use of the dataclass decorator really simplifies the implementation.
@@ -26,7 +29,6 @@ class Question(ABC):
     @abstractproperty
     def json_data(self) -> Dict:
         return {}
-
 
     def jsonify(self, student_view=False) -> str:
         """
@@ -77,6 +79,11 @@ class Question(ABC):
         self.validate_response(response)
         self._responses.append(response)
 
+    def _ensure_json_meets_schema(self, response_as_dictionary: Dict):
+        type_of_schema = self.get_type()
+        schema_name = type_of_schema + '_response_schema'
+        validate(instance=response_as_dictionary, schema=globals()[schema_name])
+
     @abstractmethod
     def validate_response(self, response: Response):
         pass
@@ -111,6 +118,7 @@ class MultipleChoiceQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
+        self._ensure_json_meets_schema(response_json)
         choice = response_json['choice']
         if choice not in self.choices.keys():
             raise ValueError("Response choice not reflected in question choices")
@@ -137,10 +145,16 @@ class MatchingQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
+        self._ensure_json_meets_schema(response_json)
         left = response_json['answer_mapping'].keys()
         right = response_json['answer_mapping'].values()
         if len(left) != len(right):
             raise ValueError("There are a different number of left and right choices")
+        if not all([left_choice in self.left_choices for left_choice in left]) and all(
+                [right_choice in self.right_choices for right_choice in right]):
+            raise ValueError("Left choices and/or right_choices for this question object does not contain the key's "
+                             "specified in the response")
+        return
 
     @property
     def json_data(self) -> Dict:
@@ -167,11 +181,12 @@ class ShortAnswerQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        pass
+        self._ensure_json_meets_schema(response_json)
+        return
 
     @property
     def json_data(self) -> Dict:
-        return {'id': self.id,  'type': 'short_answer', 'prompt': self.prompt,
+        return {'id': self.id, 'type': 'short_answer', 'prompt': self.prompt,
                 'answer': self.answer, 'responses': [response.json_data for response in self._responses]}
 
 
@@ -197,7 +212,8 @@ class FillInTheBlankQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        pass
+        self._ensure_json_meets_schema(response_json)
+        return
 
     @property
     def json_data(self) -> Dict:
