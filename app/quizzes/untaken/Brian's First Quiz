@@ -1,0 +1,55 @@
+{
+    "kind": "quiz",
+    "id": "f5348d08-39fc-47c7-9b10-ea71ca120c7a",
+    "name": "Brian's First Quiz",
+    "questions": [
+        {
+            "kind": "question",
+            "id": "009f1d3f-bab6-4d3d-844d-432adca0401e",
+            "type": "multiple_choice",
+            "prompt": "Who is the best?",
+            "choices": {
+                "A": "Mike",
+                "B": "Domingo"
+            },
+            "answer": "A",
+            "responses": []
+        },
+        {
+            "kind": "question",
+            "id": "217df531-dd77-42c5-9a53-c21d8decfd37",
+            "type": "matching",
+            "prompt": "Match the following questions",
+            "left_choices": {
+                "A": "Mike",
+                "B": "Ike"
+            },
+            "right_choices": {
+                "C": "Ike",
+                "D": "Mike"
+            },
+            "answer": {
+                "A": "C",
+                "B": "D"
+            },
+            "responses": []
+        },
+        {
+            "kind": "question",
+            "id": "220ef016-468d-47b7-bf5b-c226414d3574",
+            "type": "short_answer",
+            "prompt": "Who is the best?",
+            "answer": "YOU",
+            "responses": []
+        },
+        {
+            "kind": "question",
+            "id": "f0914cc5-8a31-48e3-acd5-80206e695dee",
+            "type": "fill_in_the_blank",
+            "before_prompt": "",
+            "after_prompt": "are the best",
+            "answer": "YOU",
+            "responses": []
+        }
+    ]
+}
