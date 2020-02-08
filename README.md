@@ -7,6 +7,12 @@ To deploy the quiz responses server, run the following command from the `app` di
 env FLASK_APP=server.py flask run
 ```
 
+# Unit tests
+To run the unit tests you can use the Makefile
+```bash
+make test
+```
+
 # Contributors
 Vismark Juarez (https://github.com/VismarkJuarez)
 Brian Dehlinger (https://github.com/BrianDehlinger)
