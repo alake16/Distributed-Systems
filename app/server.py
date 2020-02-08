@@ -60,6 +60,18 @@ def deactivateQuestion():
         return responses
     return f'No Active Question!'
 
+'''
+Implement a method that allows us to track each incoming
+response for each answer
+
+'''
+@app.route('/trackResponse', methods=['POST'])
+def trackResponse():
+    global activeQuestion
+    if activeQuestion is not None:
+        pass
+
+
 
 @app.route('/recordResponse', methods=['POST'])
 def recordResponse():
