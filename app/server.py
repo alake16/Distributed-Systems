@@ -70,3 +70,5 @@ def recordResponse():
             MultipleChoiceResponse(user_id=data["user_id"], nickname=data["nickname"], choice=data["choice"]))
         return jsonify(data)
     return f'No Active Question!'
+
+
