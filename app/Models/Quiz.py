@@ -1,10 +1,10 @@
 import json
 import uuid
 from typing import List
-from Questions import MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
-from StorageHandler import write_to_file, load_file_as_json, initialize
-from Response import MultipleChoiceResponse, MatchingResponse, ShortAnswerResponse, FillInTheBlankResponse
-from JSONHandler import ProjectJSONEncoder
+from app.Models.Questions import Question, MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
+from app.StorageHandler import write_to_file, load_file_as_json, initialize
+from app.Models.Response import Response, MultipleChoiceResponse, MatchingResponse, ShortAnswerResponse, FillInTheBlankResponse
+from app.JSONHandler import ProjectJSONEncoder
 
 
 class Quiz:
@@ -15,7 +15,7 @@ class Quiz:
     @staticmethod
     def load_quiz_from_json(json_object):
         return Quiz(json_object['name'],
-                    questions=[Question.create_a_question_from_json(question) for question in json_object['questions']],
+                    questions=[Question.create_a_question(question) for question in json_object['questions']],
                     id=json_object['id'])
 
     def __init__(self, name: str, questions: List[Question] = None, id=None):
@@ -61,6 +61,14 @@ class Quiz:
         else:
             return Quiz.load_quiz_from_json(load_file_as_json('quizzes/untaken/' + name_of_quiz))
 
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.__dict__ == other.__dict__
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 
 if __name__ == '__main__':
     quiz = Quiz("Brian's First Quiz")
@@ -82,14 +90,7 @@ if __name__ == '__main__':
     Quiz.write_quiz(quiz, taken=False)
 
     quiz = Quiz.load_quiz("Brian's First Quiz", taken=False)
-    '''
-    for question in quiz.questions:
-        responses = question.listen_for_responses()
-        
-    or flask renders the questions -> 
-    asynchronously send restricted responses(based on interface) to a Topic(Kafka Topic for example) -> Validation logic where?
-    Then it consumes from the topic. 
-    '''
+
     first_question = quiz.get_question(0)
     response = MultipleChoiceResponse('B', '1345125', 'Brian')
     first_question.add_response(response)

@@ -1,19 +1,20 @@
 import json
 import uuid
+import copy
 from typing import Dict, List
 from abc import ABC, abstractmethod
-from Response import Response
+from app.Models.Response import Response
 
 
 class Question(ABC):
 
-    def __init__(self, id=None, responses: List[Response] = None, type: str = None):
+    def __init__(self, object_id=None, responses: List[Response] = None, type: str = None):
         self.type = type
-        if id is None:
+        if object_id is None:
             self.id = str(uuid.uuid4())
         else:
             self.id = id
-        self._responses = []
+        self._responses: List[Response] = []
 
     @property
     @abstractmethod
@@ -24,18 +25,23 @@ class Question(ABC):
         return self.type
 
     @staticmethod
-    def create_a_question_from_json(json_representation):
+    def create_a_question(question_representation):
         """
         Factory method to create a Question Object dynamically at runtime.
-        :param json_representation: The JSON object as a string or dictionary
+        :param question_representation: The JSON object as a dictionary.
         :return: A Question Object representing the type of question in the json_string
         """
-        if isinstance(json_representation, str):
-            json_as_dictionary = json.loads(json_representation)
-        elif isinstance(json_representation, dict):
-            json_as_dictionary = json_representation
+        question_representation = copy.deepcopy(question_representation)
+        if isinstance(question_representation, Question):
+            return question_representation
+        if isinstance(question_representation, dict):
+            json_as_dictionary = question_representation
+            del question_representation
+        elif isinstance(question_representation, str):
+            json_as_dictionary = json.loads(question_representation)
+            del question_representation
         else:
-            raise ValueError("The json representation must either be a string or a dictionary")
+            raise TypeError("The json representation must be a dictionary")
         question_type = json_as_dictionary.get('type')
         json_as_dictionary.pop('type')
         json_as_dictionary.pop('kind')
@@ -60,9 +66,10 @@ class Question(ABC):
         self.validate_response(response)
         self._responses.append(response)
 
-    def _initialize_responses(self, responses: List[Response]):
-        if responses is not None:
-            response_objects = [Response.create_a_response_from_json(response) for response in responses]
+    def _initialize_responses(self, responses: List[Dict or Response]):
+        if responses is not None and len(responses) > 0:
+            response_objects = [Response.create_a_response(response) if isinstance(response, dict) else response for
+                                response in responses]
             for response_object in response_objects:
                 self.add_response(response_object)
 
@@ -73,13 +80,19 @@ class Question(ABC):
     def get_responses(self):
         return self._responses
 
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.__dict__ == other.__dict__
+        return False
+
 
 class MultipleChoiceQuestion(Question):
     """
     Represents a Multiple Choice Question object.
     """
 
-    def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: List[Response] = None, id=None):
+    def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: List[Dict or Response] = None,
+                 id=None):
         """
         :param prompt: The prompt for the multiple choice question
         :param choices: Dictionary with the answer choice keys and their prompts
@@ -109,7 +122,7 @@ class MultipleChoiceQuestion(Question):
 class MatchingQuestion(Question):
 
     def __init__(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str],
-                 answer: Dict[str, str], responses: List[Response] = None, id=None):
+                 answer: Dict[str, str], responses: List[Dict or Response] = None, id=None):
         """
 
         :param prompt: The prompt for the multiple choice question
@@ -149,7 +162,7 @@ class ShortAnswerQuestion(Question):
     A question where a user is given a prompt and is allowed to answer with text input.
     """
 
-    def __init__(self, prompt: str, answer: str, responses: List[Response] = None, id=None):
+    def __init__(self, prompt: str, answer: str, responses: List[Dict or Response] = None, id=None):
         """
         :param prompt: The prompt for the question
         :param answer: The answer to the question.
@@ -174,7 +187,7 @@ class FillInTheBlankQuestion(Question):
     A question where a user is given a blank in a prompt and is required to fill it out
     """
 
-    def __init__(self, before_prompt: str, after_prompt: str, answer: str, responses: List[Response] = None,
+    def __init__(self, before_prompt: str, after_prompt: str, answer: str, responses: List[Dict or Response] = None,
                  id=None):
         """
 
