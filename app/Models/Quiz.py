@@ -48,18 +48,18 @@ class Quiz:
         initialize()
         if not taken:
             return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4),
-                                 'quizzes/untaken/' + quiz_object.name)
+                                 '../quizzes/untaken/' + quiz_object.name)
         else:
             return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4),
-                                 'quizzes/taken/' + quiz_object.name)
+                                 '../quizzes/taken/' + quiz_object.name)
 
     @staticmethod
     def load_quiz(name_of_quiz: str, taken):
         initialize()
         if taken:
-            return Quiz.load_quiz_from_json(load_file_as_json('quizzes/taken/' + name_of_quiz))
+            return Quiz.load_quiz_from_json(load_file_as_json('../quizzes/taken/' + name_of_quiz))
         else:
-            return Quiz.load_quiz_from_json(load_file_as_json('quizzes/untaken/' + name_of_quiz))
+            return Quiz.load_quiz_from_json(load_file_as_json('../quizzes/untaken/' + name_of_quiz))
 
     def __eq__(self, other):
         if type(other) is type(self):

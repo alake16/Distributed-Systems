@@ -9,7 +9,7 @@ import os
 
 # This is prototype code.
 
-def initialize(directory='quizzes'):
+def initialize(directory='../quizzes'):
     if not os.path.exists(directory):
         os.mkdir(directory)
         os.mkdir(directory + '/untaken')
