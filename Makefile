@@ -2,7 +2,7 @@ freeze:
 	pip3 freeze | grep -v "pkg-resources" > requirements.txt
 
 test:
-	python3 -m discover -s app/tests
+	python3 -m unittest discover -s app/tests
 
 lint:
     pylint app
