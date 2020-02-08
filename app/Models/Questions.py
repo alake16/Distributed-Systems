@@ -11,9 +11,9 @@ class Question(ABC):
     def __init__(self, object_id=None, responses: List[Response] = None, type: str = None):
         self.type = type
         if object_id is None:
-            self.id = str(uuid.uuid4())
+            self.object_id = str(uuid.uuid4())
         else:
-            self.id = id
+            self.object_id = object_id
         self._responses: List[Response] = []
 
     @property
@@ -59,6 +59,10 @@ class Question(ABC):
             raise ValueError("This question type is not supported: {}".format(question_type))
 
     def add_response(self, response: Response):
+        """
+        :param response:
+        :return:
+        """
         if not isinstance(response, Response):
             raise ValueError("Only Response objects are allowed")
         if response.get_type() != self.get_type():
@@ -92,14 +96,14 @@ class MultipleChoiceQuestion(Question):
     """
 
     def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: List[Dict or Response] = None,
-                 id=None):
+                 object_id=None):
         """
         :param prompt: The prompt for the multiple choice question
         :param choices: Dictionary with the answer choice keys and their prompts
         :param answer: A key in the above dictionary(i.e. a, b, c, d)
         :param responses: A dictionary that keeps track of the responses on this object(i.e. {A: 0, B: 3, C:2, D:4}
         """
-        super().__init__(id, responses, 'multiple_choice')
+        super().__init__(object_id, responses, 'multiple_choice')
         self.prompt = prompt
         self.choices = choices
         self.answer = answer
@@ -107,22 +111,24 @@ class MultipleChoiceQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'kind': 'question', 'id': self.id, 'type': "multiple_choice", 'prompt': self.prompt,
+        return {'kind': 'question', 'object_id': self.object_id, 'type': "multiple_choice", 'prompt': self.prompt,
                 'choices': self.choices,
                 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
 
     def validate_response(self, response: Response):
         response_json = response.json_data
+        if 'choice' not in response_json:
+            raise ValueError("The key choice is not in the representation of this response {}".format(response_json))
         choice = response_json['choice']
         if choice not in self.choices.keys():
-            raise ValueError("Response choice not reflected in question choices")
+            raise ValueError("Response choice present but not reflected in question choices")
 
 
 class MatchingQuestion(Question):
 
     def __init__(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str],
-                 answer: Dict[str, str], responses: List[Dict or Response] = None, id=None):
+                 answer: Dict[str, str], responses: List[Dict or Response] = None, object_id=None):
         """
 
         :param prompt: The prompt for the multiple choice question
@@ -131,18 +137,19 @@ class MatchingQuestion(Question):
         :param answer_mapping: A mapping consisting of keys that are answer choices on the left with values that are answer choices on the right.
         :param responses: A list of tuples which themselves are mappings of answer choices on the left to answer choices on the right.
         """
-        super().__init__(id, responses, 'matching')
+        super().__init__(object_id, responses, 'matching')
         self.prompt = prompt
         self.left_choices = left_choices
         self.right_choices = right_choices
         self.answer = answer
+        self._initialize_responses(responses)
 
     def validate_response(self, response: Response):
         response_json = response.json_data
+        if 'answer_mapping' not in response_json.keys():
+            raise ValueError("There is no answer mapping present in the response {}".format(response_json))
         left = response_json['answer_mapping'].keys()
         right = response_json['answer_mapping'].values()
-        if len(left) != len(right):
-            raise ValueError("There are a different number of left and right choices")
         if not all([left_choice in self.left_choices for left_choice in left]) and all(
                 [right_choice in self.right_choices for right_choice in right]):
             raise ValueError("Left choices and/or right_choices for this question object does not contain the key's "
@@ -151,7 +158,7 @@ class MatchingQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'kind': 'question', 'id': self.id, 'type': "matching", 'prompt': self.prompt,
+        return {'kind': 'question', 'object_id': self.object_id, 'type': "matching", 'prompt': self.prompt,
                 'left_choices': self.left_choices,
                 'right_choices': self.right_choices, 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
@@ -162,15 +169,16 @@ class ShortAnswerQuestion(Question):
     A question where a user is given a prompt and is allowed to answer with text input.
     """
 
-    def __init__(self, prompt: str, answer: str, responses: List[Dict or Response] = None, id=None):
+    def __init__(self, prompt: str, answer: str, responses: List[Dict or Response] = None, object_id=None):
         """
         :param prompt: The prompt for the question
         :param answer: The answer to the question.
         :param responses: A list of string responses received on this object to the question.
         """
-        super().__init__(id, responses, 'short_answer')
+        super().__init__(object_id, responses, 'short_answer')
         self.prompt = prompt
         self.answer = answer
+        self._initialize_responses(responses)
 
     def validate_response(self, response: Response):
         response_json = response.json_data
@@ -178,7 +186,7 @@ class ShortAnswerQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'kind': 'question', 'id': self.id, 'type': 'short_answer', 'prompt': self.prompt,
+        return {'kind': 'question', 'object_id': self.object_id, 'type': 'short_answer', 'prompt': self.prompt,
                 'answer': self.answer, 'responses': [response.json_data for response in self._responses]}
 
 
@@ -188,7 +196,7 @@ class FillInTheBlankQuestion(Question):
     """
 
     def __init__(self, before_prompt: str, after_prompt: str, answer: str, responses: List[Dict or Response] = None,
-                 id=None):
+                 object_id=None):
         """
 
         :param before_prompt: The text before the blank
@@ -196,10 +204,11 @@ class FillInTheBlankQuestion(Question):
         :param correct_answer: The correct answer to the question
         :param responses: A list of text responses to the question
         """
-        super().__init__(id, responses, 'fill_in_the_blank')
+        super().__init__(object_id, responses, 'fill_in_the_blank')
         self.before_prompt = before_prompt
         self.after_prompt = after_prompt
         self.answer = answer
+        self._initialize_responses(responses)
 
     def validate_response(self, response: Response):
         response_json = response.json_data
@@ -207,7 +216,7 @@ class FillInTheBlankQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'kind': 'question', 'id': self.id, 'type': 'fill_in_the_blank', 'before_prompt': self.before_prompt,
+        return {'kind': 'question', 'object_id': self.object_id, 'type': 'fill_in_the_blank', 'before_prompt': self.before_prompt,
                 'after_prompt': self.after_prompt, 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
 

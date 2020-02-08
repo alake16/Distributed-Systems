@@ -16,18 +16,18 @@ class Quiz:
     def load_quiz_from_json(json_object):
         return Quiz(json_object['name'],
                     questions=[Question.create_a_question(question) for question in json_object['questions']],
-                    id=json_object['id'])
+                    object_id=json_object['object_id'])
 
-    def __init__(self, name: str, questions: List[Question] = None, id=None):
+    def __init__(self, name: str, questions: List[Question] = None, object_id=None):
         self.name = name
         if questions is None:
             self.questions = []
         else:
             self.questions = questions
-        if id is None:
-            self.id = str(uuid.uuid4())
+        if object_id is None:
+            self.object_id = str(uuid.uuid4())
         else:
-            self.id = id
+            self.object_id = object_id
 
     def add_question_to_quiz(self, question: Question):
         if not isinstance(question, Question):
@@ -40,7 +40,7 @@ class Quiz:
     @property
     def json_data(self):
         questions = [question for question in self.questions]
-        return {'kind': 'quiz', 'id': self.id, 'name': self.name,
+        return {'kind': 'quiz', 'object_id': self.object_id, 'name': self.name,
                 'questions': questions}
 
     @staticmethod

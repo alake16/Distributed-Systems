@@ -2,7 +2,13 @@ freeze:
 	pip3 freeze | grep -v "pkg-resources" > requirements.txt
 
 test:
-	python3 app/tests.py
+	python3 -m discover -s app/tests
 
 lint:
-	pylint app
+    pylint app
+
+init:
+    mkdir app/quizzes
+    mkdir app/quizzes/taken
+    mkdir app/quizzes/untaken
+
