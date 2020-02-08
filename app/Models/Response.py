@@ -71,6 +71,7 @@ class Response(ABC):
             return self.__dict__ == other.__dict__
         return False
 
+
 class MultipleChoiceResponse(Response):
 
     def __init__(self, choice: str, user_id: int, nickname: str):

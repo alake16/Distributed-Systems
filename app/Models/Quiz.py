@@ -39,7 +39,7 @@ class Quiz:
 
     @property
     def json_data(self):
-        questions = [question for question in self.questions]
+        questions = [question.json_data for question in self.questions]
         return {'kind': 'quiz', 'object_id': self.object_id, 'name': self.name,
                 'questions': questions}
 
@@ -65,9 +65,6 @@ class Quiz:
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
 
 if __name__ == '__main__':

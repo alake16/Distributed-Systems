@@ -169,23 +169,6 @@ class TestMultipleChoiceQuestion(unittest.TestCase):
         self.assertEqual(self.answered_question.get_responses(),
                          [Response.create_a_response(response) for response in self.responses])
 
-    def test_init(self):
-        """
-        This makes sure the __init__ function works properly.
-        :return:
-        """
-        self.assertEqual(self.multiple_choice_question.prompt, 'Who is the best?')
-        self.assertEqual(self.multiple_choice_question.choices, {"A": 'Mike', "B": 'Domingo'})
-        self.assertEqual(self.multiple_choice_question.answer, 'A')
-        self.assertEqual(self.multiple_choice_question.object_id, 'be24d525-8904-4948-b47d-54248586986d')
-        self.assertEqual(self.multiple_choice_question._responses, [])
-        self.assertEqual(self.answered_question.prompt, 'Who is the best?')
-        self.assertEqual(self.answered_question.choices, {"A": 'Mike', "B": 'Domingo'})
-        self.assertEqual(self.answered_question.object_id, 'be24d525-8904-4948-b47d-54248586986d')
-        self.assertEqual(self.answered_question.answer, 'A')
-        self.assertEqual(self.answered_question._responses,
-                         [Response.create_a_response(response) for response in self.responses])
-
     def test_json_data(self):
         self.assertEqual(self.multiple_choice_question.json_data,
                          {'answer': 'A', 'choices': {'A': 'Mike', 'B': 'Domingo'},
@@ -236,25 +219,6 @@ class TestMatchingQuestion(unittest.TestCase):
                                                   right_choices={'C': 'Ike', 'D': 'Mike'}, answer={'A': 'C', 'B': 'D'},
                                                   responses=self.responses,
                                                   object_id='be24d525-8904-4948-b47d-54248586986d')
-
-    def test_init(self):
-        """
-        This makes sure the __init__ function works properly.
-        :return:
-        """
-        self.assertEqual(self.question.prompt, 'Match the following questions')
-        self.assertEqual(self.question.left_choices, {"A": 'Mike', "B": 'Ike'})
-        self.assertEqual(self.question.right_choices, {'C': 'Ike', 'D': 'Mike'})
-        self.assertEqual(self.question.answer, {'A': 'C', 'B': 'D'})
-        self.assertEqual(self.question.object_id, 'be24d525-8904-4948-b47d-54248586986d')
-        self.assertEqual(self.question._responses, [])
-        self.assertEqual(self.answered_question.prompt, 'Match the following questions')
-        self.assertEqual(self.answered_question.left_choices, {"A": 'Mike', "B": 'Ike'})
-        self.assertEqual(self.answered_question.right_choices, {'C': 'Ike', 'D': 'Mike'})
-        self.assertEqual(self.answered_question.object_id, 'be24d525-8904-4948-b47d-54248586986d')
-        self.assertEqual(self.answered_question.answer, {'A': 'C', 'B': 'D'})
-        self.assertEqual(self.answered_question._responses,
-                         [Response.create_a_response(response) for response in self.responses])
 
     def test_json_data(self):
         self.assertEqual(self.question.json_data,
@@ -310,21 +274,6 @@ class TestShortAnswerQuestion(unittest.TestCase):
                           'type': 'short_answer'}
                          )
 
-    def test_init(self):
-        """
-        This makes sure the __init__ function works properly.
-        :return:
-        """
-        self.assertEqual(self.question.prompt, 'Who is the best?')
-        self.assertEqual(self.question.object_id, 'be24d525-8904-4948-b47d-54248586986d')
-        self.assertEqual(self.question.answer, 'YOU')
-        self.assertEqual(self.question._responses, [])
-        self.assertEqual(self.answered_question.prompt, 'Who is the best?')
-        self.assertEqual(self.answered_question.answer, 'YOU')
-        self.assertEqual(self.answered_question.object_id, 'be24d525-8904-4948-b47d-54248586986d')
-        self.assertEqual(self.answered_question._responses,
-                         [Response.create_a_response(response) for response in self.responses])
-
     def test_validate_response(self):
         response = MagicMock()
         self.question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'},
@@ -350,7 +299,7 @@ class TestFillInTheBlankQuestion(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        response = FillInTheBlankResponse("YOU", '1345125', 'Brian')
+        response = FillInTheBlankResponse("YOU",  '1345125', 'Brian')
         self.responses = [response]
         self.question = FillInTheBlankQuestion(before_prompt="", after_prompt="are the best", answer='YOU')
         self.answered_question = FillInTheBlankQuestion(before_prompt='', after_prompt="are the best",
@@ -367,23 +316,6 @@ class TestFillInTheBlankQuestion(unittest.TestCase):
                           'kind': 'question',
                           'responses': [],
                           'type': 'fill_in_the_blank'})
-
-    def test_init(self):
-        """
-        This makes sure the __init__ function works properly.
-        :return:
-        """
-        self.assertEqual(self.question.before_prompt, '')
-        self.assertEqual(self.question.after_prompt, 'are the best')
-        self.assertEqual(self.question.object_id, 'be24d525-8904-4948-b47d-54248586986d')
-        self.assertEqual(self.question.answer, 'YOU')
-        self.assertEqual(self.question._responses, [])
-        self.assertEqual(self.answered_question.before_prompt, '')
-        self.assertEqual(self.answered_question.after_prompt, 'are the best')
-        self.assertEqual(self.answered_question.object_id, 'be24d525-8904-4948-b47d-54248586986d')
-        self.assertEqual(self.answered_question.answer, 'YOU')
-        self.assertEqual(self.answered_question._responses,
-                         [Response.create_a_response(response) for response in self.responses])
 
     def test_get_type(self):
         self.assertEqual(self.question.get_type(), 'fill_in_the_blank')
