@@ -1,4 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-<p>Admin</p>
+<h1>Welcome to the Administrator Page!</h1>
+<form action="{{ url_for('createQuiz') }}">
+    <input type="submit" value="Create a Quiz" />
+</form>
+<form action="{{ url_for('activateQuiz') }}">
+    <input type="submit" value="Activate a Quiz" />
+</form>
 {% endblock content %}

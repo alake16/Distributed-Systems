@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Create a New Quiz!</h1>
+<form method="POST" action="">
+	{{ form.hidden_tag() }}
+	<p>
+		{{ form.name.label }}
+		{{ form.name(size=32) }}
+	</p>
+	
+	<p>
+		{{ form.description.label }}
+		{{ form.description(size=32) }}
+	</p>
+	<p>{{ form.submit() }}</p>
+</form>
+{% endblock content %}
