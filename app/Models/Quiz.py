@@ -1,9 +1,11 @@
 import json
 import uuid
 from typing import List
-from app.Models.Questions import Question, MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, FillInTheBlankQuestion
+from app.Models.Questions import Question, MultipleChoiceQuestion, Question, MatchingQuestion, ShortAnswerQuestion, \
+    FillInTheBlankQuestion
 from app.StorageHandler import write_to_file, load_file_as_json, initialize
-from app.Models.Response import Response, MultipleChoiceResponse, MatchingResponse, ShortAnswerResponse, FillInTheBlankResponse
+from app.Models.Response import Response, MultipleChoiceResponse, MatchingResponse, ShortAnswerResponse, \
+    FillInTheBlankResponse
 from app.JSONHandler import ProjectJSONEncoder
 
 
@@ -74,8 +76,8 @@ if __name__ == '__main__':
                                                       answer='Mike')
     quiz.add_question_to_quiz(multiple_choice_question)
 
-    matching_question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'},
-                                         right_choices={'C': 'Ike', 'D': 'Mike'}, answer={'A': 'C', 'B': 'D'})
+    matching_question = MatchingQuestion(prompt="Match the following questions", left_choices=['Mike', 'Ike'],
+                                         right_choices=['Ike', 'Mike'], answer={'Mike': 'Ike', 'Ike': 'Mike'})
     quiz.add_question_to_quiz(matching_question)
 
     short_answer_question = ShortAnswerQuestion(prompt="Who is the best?", answer='YOU')
@@ -93,7 +95,7 @@ if __name__ == '__main__':
     first_question.add_response(response)
     second_question = quiz.get_question(1)
 
-    response_question_two = MatchingResponse({'A': 'C', 'B': 'D'}, '1345125', 'Brian')
+    response_question_two = MatchingResponse({'Mike': None, 'Ike': None}, '1345125', 'Brian')
     second_question.add_response(response_question_two)
 
     third_question = quiz.get_question(2)
@@ -107,4 +109,3 @@ if __name__ == '__main__':
     Quiz.write_quiz(quiz, taken=True)
     quiz = Quiz.load_quiz("Brian's First Quiz", taken=True)
     print(json.dumps(quiz, cls=ProjectJSONEncoder))
-
