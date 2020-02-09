@@ -61,21 +61,11 @@ def deactivateQuestion():
     return f'No Active Question!'
 
 
-<<<<<<< HEAD
-@app.route('/trackResponse', methods=['POST'])
-=======
+
 @app.route('/trackResponse', methods=['GET'])
->>>>>>> feature/documentation
 def trackResponse():
     retrieved_repsonses = []
     global activeQuestion
-<<<<<<< HEAD
-    if activeQuestion is not None:
-        responses = activateQuestion.responses
-        responses = fetchResponses()
-
-=======
-
     if activateQuestion is not None:
 
         responses = activateQuestion.responses
@@ -85,8 +75,6 @@ def trackResponse():
         return tracker
 
     return 'No Active Question!'
->>>>>>> feature/documentation
-
 
 
 @app.route('/recordResponse', methods=['POST'])
