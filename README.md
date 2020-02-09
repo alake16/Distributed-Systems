@@ -24,6 +24,7 @@ git clone https://github.com/ddpalacios/Distributed-Systems.git
 
 ```bash
 > cd Distributed-Systems
+> make init
 > cd app
 > env FLASK_APP=server.py flask run
 ```
