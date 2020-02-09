@@ -47,7 +47,7 @@ def fetchResponses():
     if activeQuestion is not None:
         return flaskResponse(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder),
                              mimetype='application/json')
-    return f'No Active Question!'
+    return f'No Active '
 
 
 @app.route('/deactivateQuestion', methods=['POST'])
@@ -60,16 +60,21 @@ def deactivateQuestion():
         return responses
     return f'No Active Question!'
 
-'''
-Implement a method that allows us to track each incoming
-response for each answer
 
-'''
-@app.route('/trackResponse', methods=['POST'])
+@app.route('/trackResponse', methods=['GET'])
 def trackResponse():
+    retrieved_repsonses = []
     global activeQuestion
-    if activeQuestion is not None:
-        pass
+
+    if activateQuestion is not None:
+
+        responses = activateQuestion.responses
+        responses = fetchResponses()
+        retrieved_repsonses.extend((responses))
+        tracker = len(retrieved_repsonses)
+        return tracker
+
+    return 'No Active Question!'
 
 
 
