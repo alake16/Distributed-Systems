@@ -125,7 +125,7 @@ $ curl -i \
 > http://localhost:5000/recordResponse
 ```
 
-5. Finally, an instructor can submit a GET request to the `/fetchResponses` endpoint to view all of the student responses.  This can be achieved as follows:
+5. Finally, an instructor can submit a GET request to the `/fetchResponses` endpoint to view all of the student responses (this is currently being outputted to console).  This can be achieved as follows:
 
 ```bash
 curl -i -H "Content-Type:application/json" -X GET localhost:5000/fetchResponses
