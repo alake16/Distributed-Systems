@@ -6,6 +6,7 @@ from app.Models.Response import Response, MultipleChoiceResponse
 import json
 from app.JSONHandler import ProjectJSONEncoder
 
+
 app = Flask(__name__)
 
 activeQuestion = None
@@ -51,7 +52,8 @@ def fetchResponses():
     global activeQuestion, responses_tracker
     if activeQuestion is not None:
         responses = flaskResponse(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder), mimetype='application/json')
-        return "NUMBER OF RESPONSES: {}\n\n{}".format(responses_tracker, responses)
+        print(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder))
+        return "NUMBER OF RESPONSES: {}".format(responses_tracker)
     return f'No Active '
 
 
