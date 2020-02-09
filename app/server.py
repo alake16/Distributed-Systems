@@ -6,7 +6,6 @@ from app.Models.Response import Response, MultipleChoiceResponse
 import json
 from app.JSONHandler import ProjectJSONEncoder
 
-
 app = Flask(__name__)
 
 activeQuestion = None
