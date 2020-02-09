@@ -10,7 +10,7 @@ from app.JSONHandler import ProjectJSONEncoder
 app = Flask(__name__)
 
 activeQuestion = None
-
+responses_tracker = 0
 
 @app.route('/')
 def welcome():
@@ -18,35 +18,41 @@ def welcome():
     return f'Welcome to Quiz API v1!'
 
 
+# Starting route to receive responses
 @app.route('/activateQuestion', methods=['POST', 'GET'])
 def activateQuestion():
-    global activeQuestion
+    global activeQuestion, responses_tracker
 
     if request.method == 'POST':
         if isinstance(activeQuestion, Question):
             return f'There is Already an Active Question!'
         data = request.json
         if data["type"] == "multiple_choice":
+            
             activeQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"],
                                                     answer=data["answer"])
         else:
-            activeQuestion = MatchingQuestion(prompt=data["prompt"], left_choices=data["leftChoices"],
-                                              right_choices=data["rightChoices"], answer_mapping=data["answerMapping"])
-        return json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200, {'Content-Type': 'application/json'}
+            activeQuestion = MatchingQuestion(prompt=data["prompt"],
+                                              left_choices=data["leftChoices"],
+                                              right_choices=data["rightChoices"],
+                                              answer_mapping=data["answerMapping"])
+        return flaskResponse(json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200,
+                             {'Content-Type': 'application/json'})
 
     else:
         if activeQuestion is not None:
-            return json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200, {'Content-Type': 'application/json'}
+            return flaskResponse(json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200,
+                                 {'Content-Type': 'application/json'})
         else:
             return f'No Question Active!'
 
 
 @app.route('/fetchResponses', methods=['GET'])
 def fetchResponses():
-    global activeQuestion
+    global activeQuestion, responses_tracker
     if activeQuestion is not None:
-        return flaskResponse(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder),
-                             mimetype='application/json')
+        responses = flaskResponse(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder), mimetype='application/json')
+        return "NUMBER OF RESPONSES: {}\n\n{}".format(responses_tracker, responses)
     return f'No Active '
 
 
@@ -60,28 +66,12 @@ def deactivateQuestion():
         return responses
     return f'No Active Question!'
 
-
-
-@app.route('/trackResponse', methods=['GET'])
-def trackResponse():
-    retrieved_repsonses = []
-    global activeQuestion
-    if activateQuestion is not None:
-
-        responses = activateQuestion.responses
-        responses = fetchResponses()
-        retrieved_repsonses.extend((responses))
-        tracker = len(retrieved_repsonses)
-        return tracker
-
-    return 'No Active Question!'
-
-
 @app.route('/recordResponse', methods=['POST'])
 def recordResponse():
-    global activeQuestion
+    global activeQuestion, responses_tracker
     if isinstance(activeQuestion, MultipleChoiceQuestion):
         data = request.json
+        responses_tracker +=1
         activeQuestion.add_response(
             MultipleChoiceResponse(user_id=data["user_id"], nickname=data["nickname"], choice=data["choice"]))
         return jsonify(data)
