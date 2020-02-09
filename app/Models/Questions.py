@@ -121,7 +121,7 @@ class MultipleChoiceQuestion(Question):
         if 'choice' not in response_json:
             raise ValueError("The key choice is not in the representation of this response {}".format(response_json))
         choice = response_json['choice']
-        if choice not in self.choices.keys():
+        if choice not in self.choices:
             raise ValueError("Response choice present but not reflected in question choices")
 
 
