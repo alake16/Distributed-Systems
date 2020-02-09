@@ -101,13 +101,15 @@ class MultipleChoiceQuestion(Question):
         :param prompt: The prompt for the multiple choice question
         :param choices: Dictionary with the answer choice keys and their prompts
         :param answer: A key in the above dictionary(i.e. a, b, c, d)
-        :param responses: A dictionary that keeps track of the responses on this object(i.e. {A: 0, B: 3, C:2, D:4}
+        :param responses: A list of Responses in dictionary or Response object format
         """
         super().__init__(object_id, responses, 'multiple_choice')
         self.prompt = prompt
-        self.choices = choices
+        self.choices = list(dict.fromkeys(choices))
         self.answer = answer
         self._initialize_responses(responses)
+        if self.answer not in choices:
+            raise ValueError("The answer must be reflected in the choices")
 
     @property
     def json_data(self) -> Dict:
@@ -127,21 +129,26 @@ class MultipleChoiceQuestion(Question):
 
 class MatchingQuestion(Question):
 
-    def __init__(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str],
+    def __init__(self, prompt: str, left_choices: List[str], right_choices: List[str],
                  answer: Dict[str, str], responses: List[Dict or Response] = None, object_id=None):
         """
 
-        :param prompt: The prompt for the multiple choice question
-        :param left_choices: The choices on the left for the user to match to the choices on the right.
-        :param right_choices: The choices on the right to be matched by the user to the choices on the right.
-        :param answer_mapping: A mapping consisting of keys that are answer choices on the left with values that are answer choices on the right.
-        :param responses: A list of tuples which themselves are mappings of answer choices on the left to answer choices on the right.
+        :param prompt: The prompt for the multiple choice question :param left_choices: The choices on the left for
+        the user to match to the choices on the right. :param right_choices: The choices on the right to be matched
+        by the user to the choices on the right. :param answer_mapping: A mapping consisting of keys that are answer
+        choices on the left with values that are answer choices on the right. :param responses: A list of tuples
+        which themselves are mappings of answer choices on the left to answer choices on the right.
         """
         super().__init__(object_id, responses, 'matching')
         self.prompt = prompt
-        self.left_choices = left_choices
-        self.right_choices = right_choices
+        # Remove duplicates while preserving insertion order(By default uses OrderedDict)
+        self.left_choices = list(dict.fromkeys(left_choices))
+        self.right_choices = list(dict.fromkeys(right_choices))
         self.answer = answer
+        if not all(left_choice in self.left_choices for left_choice in self.answer.values()):
+            raise ValueError("All left choices in the question must be reflected in the answer choices")
+        if not all(correct_answer in self.right_choices for correct_answer in self.answer.values()):
+            raise ValueError("All of the right choices in the answer must be reflected in the question")
         self._initialize_responses(responses)
 
     def validate_response(self, response: Response):
@@ -150,9 +157,12 @@ class MatchingQuestion(Question):
             raise ValueError("There is no answer mapping present in the response {}".format(response_json))
         left = response_json['answer_mapping'].keys()
         right = response_json['answer_mapping'].values()
-        if not all([left_choice in self.left_choices for left_choice in left]) and all(
-                [right_choice in self.right_choices for right_choice in right]):
-            raise ValueError("Left choices and/or right_choices for this question object does not contain the key's "
+        assert len(right) == len(left)
+        if not list(left) == self.left_choices:
+            raise ValueError("Left choices for the answer must be the same as the left choices for the question")
+        if not all(
+                [right_choice in self.right_choices or right_choice is None for right_choice in right]):
+            raise ValueError("Right_choices for this question object does not contain the key's "
                              "specified in the response")
         return
 
@@ -173,7 +183,7 @@ class ShortAnswerQuestion(Question):
         """
         :param prompt: The prompt for the question
         :param answer: The answer to the question.
-        :param responses: A list of string responses received on this object to the question.
+        :param responses: A list of responses received on this object to the question in dictionary or Response object format
         """
         super().__init__(object_id, responses, 'short_answer')
         self.prompt = prompt
@@ -202,7 +212,7 @@ class FillInTheBlankQuestion(Question):
         :param before_prompt: The text before the blank
         :param after_prompt: The text after the blank
         :param correct_answer: The correct answer to the question
-        :param responses: A list of text responses to the question
+        :param responses: A list of responses to the question in dictionary or response format.
         """
         super().__init__(object_id, responses, 'fill_in_the_blank')
         self.before_prompt = before_prompt
