@@ -54,7 +54,7 @@ class TestResponse(unittest.TestCase):
         multiple_choice_response_json = {
             "kind": "response",
             "type": "multiple_choice",
-            "choice": "B",
+            "choice": "Mike",
             "user_id": "1345125",
             "nickname": "Brian"
         }
@@ -73,10 +73,10 @@ class TestMultipleChoiceResponse(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        self.response_object = MultipleChoiceResponse(choice='A', user_id=1345125, nickname='brian')
+        self.response_object = MultipleChoiceResponse(choice='Mike', user_id=1345125, nickname='brian')
 
     def test_json_data(self):
-        self.assertEqual(self.response_object.json_data, {'choice': 'A',
+        self.assertEqual(self.response_object.json_data, {'choice': 'Mike',
                                                           'kind': 'response',
                                                           'nickname': 'brian',
                                                           'type': 'multiple_choice',

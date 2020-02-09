@@ -95,7 +95,7 @@ class MultipleChoiceQuestion(Question):
     Represents a Multiple Choice Question object.
     """
 
-    def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: List[Dict or Response] = None,
+    def __init__(self, prompt: str, choices: List[str], answer: str, responses: List[Dict or Response] = None,
                  object_id=None):
         """
         :param prompt: The prompt for the multiple choice question

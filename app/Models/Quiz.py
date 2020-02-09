@@ -70,8 +70,8 @@ class Quiz:
 if __name__ == '__main__':
     quiz = Quiz("Brian's First Quiz")
 
-    multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?", choices={"A": 'Mike', "B": 'Domingo'},
-                                                      answer='A')
+    multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?", choices=['Mike', 'Domingo'],
+                                                      answer='Mike')
     quiz.add_question_to_quiz(multiple_choice_question)
 
     matching_question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'},
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     quiz = Quiz.load_quiz("Brian's First Quiz", taken=False)
 
     first_question = quiz.get_question(0)
-    response = MultipleChoiceResponse('B', '1345125', 'Brian')
+    response = MultipleChoiceResponse('Mike', '1345125', 'Brian')
     first_question.add_response(response)
     second_question = quiz.get_question(1)
 

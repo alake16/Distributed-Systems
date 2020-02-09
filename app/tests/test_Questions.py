@@ -39,16 +39,16 @@ class TestQuestion(unittest.TestCase):
             "id": "c777ff3a-270e-447a-ad49-12006e04cb36",
             "type": "multiple_choice",
             "prompt": "Who is the best?",
-            "choices": {
-                "A": "Mike",
-                "B": "Domingo"
-            },
-            "answer": "A",
+            "choices": [
+                "Mike",
+                "Domingo"
+            ],
+            "answer": "Mike",
             "responses": [
                 {
                     "kind": "response",
                     "type": "multiple_choice",
-                    "choice": "B",
+                    "choice": "Mike",
                     "user_id": "1345125",
                     "nickname": "Brian"
                 }
@@ -150,17 +150,17 @@ class TestMultipleChoiceQuestion(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        response_object = MultipleChoiceResponse(choice='A', user_id=1345125, nickname='brian')
+        response_object = MultipleChoiceResponse(choice='Mike', user_id=1345125, nickname='brian')
         self.responses = [
-            {'kind': 'response', 'type': 'multiple_choice', 'choice': 'B', 'user_id': '1345125', 'nickname': 'Brian'},
+            {'kind': 'response', 'type': 'multiple_choice', 'choice': 'Mike', 'user_id': '1345125', 'nickname': 'Brian'},
             response_object]
         self.multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?",
-                                                               choices={"A": 'Mike', "B": 'Domingo'},
-                                                               answer='A')
+                                                               choices=['Mike', 'Domingo'],
+                                                               answer='Mike')
         self.answered_question = MultipleChoiceQuestion(prompt="Who is the best?", object_id='be24d525-8904-4948-b47d'
                                                                                              '-54248586986d',
-                                                        choices={"A": "Mike", "B": 'Domingo'},
-                                                        answer='A', responses=self.responses)
+                                                        choices=["Mike", 'Domingo'],
+                                                        answer='Mike', responses=self.responses)
 
     def test_get_responses(self):
         self.assertEqual(len(self.answered_question.get_responses()), 2)
@@ -171,19 +171,24 @@ class TestMultipleChoiceQuestion(unittest.TestCase):
 
     def test_json_data(self):
         self.assertEqual(self.multiple_choice_question.json_data,
-                         {'answer': 'A', 'choices': {'A': 'Mike', 'B': 'Domingo'},
-                          'object_id': 'be24d525-8904-4948-b47d-54248586986d', 'kind': 'question',
-                          'prompt': 'Who is the best?', 'responses': [], 'type': 'multiple_choice'})
+                         {'answer': 'Mike',
+                          'choices': ['Mike', 'Domingo'],
+                          'kind': 'question',
+                          'object_id': 'be24d525-8904-4948-b47d-54248586986d',
+                          'prompt': 'Who is the best?',
+                          'responses': [],
+                          'type': 'multiple_choice'}
+                         )
 
     def test_validate_response(self):
         response = MagicMock()
         self.multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?",
-                                                               choices={"A": 'Mike', "B": 'Domingo'},
-                                                               answer='A')
-        response.json_data = {'choice': 'A'}
+                                                               choices=['Mike', 'Domingo'],
+                                                               answer='Mike')
+        response.json_data = {'choice': 'Mike'}
         self.multiple_choice_question.validate_response(response)
         invalid_response_one = MagicMock()
-        invalid_response_one.json_data = {'dog': 'A'}
+        invalid_response_one.json_data = {'choice': 'Alex'}
         with self.assertRaises(ValueError):
             self.multiple_choice_question.validate_response(invalid_response_one)
 
