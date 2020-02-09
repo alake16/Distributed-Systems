@@ -59,25 +59,25 @@ class TestQuestion(unittest.TestCase):
             "id": "d3d46649-4dbb-4d6b-b1fe-5f87f5b42756",
             "type": "matching",
             "prompt": "Match the following questions",
-            "left_choices": {
-                "A": "Mike",
-                "B": "Ike"
-            },
-            "right_choices": {
-                "C": "Ike",
-                "D": "Mike"
-            },
+            "left_choices": [
+                "Mike",
+                "Ike"
+            ],
+            "right_choices": [
+                "Ike",
+                "Mike"
+            ],
             "answer": {
-                "A": "C",
-                "B": "D"
+                "Mike": "Ike",
+                "Ike": "Mike",
             },
             "responses": [
                 {
                     "kind": "response",
                     "type": "matching",
                     "answer_mapping": {
-                        "A": "C",
-                        "B": "D"
+                        "Mike": "Ike",
+                        "Ike": "Mike"
                     },
                     "user_id": "1345125",
                     "nickname": "Brian"
@@ -129,16 +129,16 @@ class TestQuestion(unittest.TestCase):
     def test_add_response(self, mock_validate):
         # Not using the spec will not allow the isinstance method to work since it'll see MagicMock
         multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?",
-                                                          choices={"A": 'Mike', "B": 'Domingo'},
-                                                          answer='A')
+                                                          choices=['Mike', 'Domingo'],
+                                                          answer='Mike')
         response = MagicMock(spec=MultipleChoiceResponse)
         response.get_type.return_value = 'multiple_choice'
-        response.json_data = {'choice': 'A'}
+        response.json_data = {'choice': 'Mike'}
         multiple_choice_question.add_response(response)
         mock_validate.assert_called()
         response = MagicMock(spec=MultipleChoiceResponse)
         response.get_type.return_value = 'matching'
-        response.json_data = {'choice': 'A'}
+        response.json_data = {'choice': 'Mike'}
         with self.assertRaises(ValueError):
             multiple_choice_question.add_response(response)
 
@@ -203,52 +203,51 @@ class TestMatchingQuestion(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        response_object = MatchingResponse({'A': 'C', 'B': 'D'}, '1345125', 'Brian')
+        response_object = MatchingResponse({'Mike': 'Ike', 'Ike': 'Mike'}, '1345125', 'Brian')
         self.responses = [
             {
                 "kind": "response",
                 "type": "matching",
                 "answer_mapping": {
-                    "A": "C",
-                    "B": "D"
+                    "Mike": "Ike",
+                    "Ike": "Mike"
                 },
                 "user_id": "1345125",
                 "nickname": "Brian"
             }
             ,
             response_object]
-        self.question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'},
-                                         right_choices={'C': 'Ike', 'D': 'Mike'}, answer={'A': 'C', 'B': 'D'})
+        self.question = MatchingQuestion(prompt="Match the following questions", left_choices=['Mike', 'Ike'],
+                                         right_choices=['Ike', 'Mike'], answer={'Mike': 'Ike', 'Ike': 'Mike'})
         self.answered_question = MatchingQuestion(prompt="Match the following questions",
-                                                  left_choices={"A": 'Mike', "B": 'Ike'},
-                                                  right_choices={'C': 'Ike', 'D': 'Mike'}, answer={'A': 'C', 'B': 'D'},
+                                                  left_choices=['Mike', 'Ike'],
+                                                  right_choices=['Ike', 'Mike'], answer={'Mike': 'Ike', 'Ike': 'Mike'},
                                                   responses=self.responses,
                                                   object_id='be24d525-8904-4948-b47d-54248586986d')
 
     def test_json_data(self):
         self.assertEqual(self.question.json_data,
-                         {'answer': {'A': 'C', 'B': 'D'},
-                          'object_id': 'be24d525-8904-4948-b47d-54248586986d',
+                         {'answer': {'Ike': 'Mike', 'Mike': 'Ike'},
                           'kind': 'question',
-                          'left_choices': {'A': 'Mike', 'B': 'Ike'},
+                          'left_choices': ['Mike', 'Ike'],
+                          'object_id': 'be24d525-8904-4948-b47d-54248586986d',
                           'prompt': 'Match the following questions',
                           'responses': [],
-                          'right_choices': {'C': 'Ike', 'D': 'Mike'},
-                          'type': 'matching'}
-                         )
+                          'right_choices': ['Ike', 'Mike'],
+                          'type': 'matching'})
 
     def test_validate_response(self):
         response = MagicMock()
-        self.question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'},
-                                         right_choices={'C': 'Ike', 'D': 'Mike'}, answer={'A': 'C', 'B': 'D'})
-        response.json_data = {'answer_mapping': {'A': 'C'}}
+        self.question = MatchingQuestion(prompt="Match the following questions", left_choices=['Mike', 'Ike'],
+                                         right_choices=['Ike', 'Mike'], answer={'Mike': 'Ike', 'Ike': 'Mike'})
+        response.json_data = {'answer_mapping': {'Mike': 'Ike', 'Ike': 'Mike'}}
         self.question.validate_response(response)
         invalid_response_one = MagicMock()
-        invalid_response_one.json_data = {'dog': 'A'}
+        invalid_response_one.json_data = {'dog': 'Ike'}
         with self.assertRaises(ValueError):
             self.question.validate_response(invalid_response_one)
         invalid_response_two = MagicMock()
-        invalid_response_two.json_data = {'answer_mapping': {'F': 'C'}}
+        invalid_response_two.json_data = {'answer_mapping': {'Mike': 'Bike'}}
         with self.assertRaises(ValueError):
             self.question.validate_response(invalid_response_two)
 
@@ -280,19 +279,7 @@ class TestShortAnswerQuestion(unittest.TestCase):
                          )
 
     def test_validate_response(self):
-        response = MagicMock()
-        self.question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'},
-                                         right_choices={'C': 'Ike', 'D': 'Mike'}, answer={'A': 'C', 'B': 'D'})
-        response.json_data = {'answer_mapping': {'A': 'C'}}
-        self.question.validate_response(response)
-        invalid_response_one = MagicMock()
-        invalid_response_one.json_data = {'dog': 'A'}
-        with self.assertRaises(ValueError):
-            self.question.validate_response(invalid_response_one)
-        invalid_response_two = MagicMock()
-        invalid_response_two.json_data = {'answer_mapping': {'F': 'C'}}
-        with self.assertRaises(ValueError):
-            self.question.validate_response(invalid_response_two)
+        pass
 
     def test_get_type(self):
         self.assertEqual(self.question.get_type(), 'short_answer')
@@ -326,19 +313,7 @@ class TestFillInTheBlankQuestion(unittest.TestCase):
         self.assertEqual(self.question.get_type(), 'fill_in_the_blank')
 
     def test_validate_response(self):
-        response = MagicMock()
-        self.question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'},
-                                         right_choices={'C': 'Ike', 'D': 'Mike'}, answer={'A': 'C', 'B': 'D'})
-        response.json_data = {'answer_mapping': {'A': 'C'}}
-        self.question.validate_response(response)
-        invalid_response_one = MagicMock()
-        invalid_response_one.json_data = {'dog': 'A'}
-        with self.assertRaises(ValueError):
-            self.question.validate_response(invalid_response_one)
-        invalid_response_two = MagicMock()
-        invalid_response_two.json_data = {'answer_mapping': {'F': 'C'}}
-        with self.assertRaises(ValueError):
-            self.question.validate_response(invalid_response_two)
+        pass
 
 
 if __name__ == '__main__':

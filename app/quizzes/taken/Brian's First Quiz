@@ -1,11 +1,11 @@
 {
     "kind": "quiz",
-    "object_id": "7baa316d-7e41-4c3b-ae2f-9a26b16f2241",
+    "object_id": "8afc10ff-97b3-450b-8df4-28752fe9afa8",
     "name": "Brian's First Quiz",
     "questions": [
         {
             "kind": "question",
-            "object_id": "07c9e04b-4cad-4c50-aeee-805c89428c66",
+            "object_id": "cac85635-15c2-4f50-827d-60b2270c639a",
             "type": "multiple_choice",
             "prompt": "Who is the best?",
             "choices": [
@@ -25,28 +25,28 @@
         },
         {
             "kind": "question",
-            "object_id": "e41438e0-9f1b-452f-8b8d-114b2f0c0802",
+            "object_id": "4bcdc3d2-14e5-4576-88fd-081ac6fc2ef5",
             "type": "matching",
             "prompt": "Match the following questions",
-            "left_choices": {
-                "A": "Mike",
-                "B": "Ike"
-            },
-            "right_choices": {
-                "C": "Ike",
-                "D": "Mike"
-            },
+            "left_choices": [
+                "Mike",
+                "Ike"
+            ],
+            "right_choices": [
+                "Ike",
+                "Mike"
+            ],
             "answer": {
-                "A": "C",
-                "B": "D"
+                "Mike": "Ike",
+                "Ike": "Mike"
             },
             "responses": [
                 {
                     "kind": "response",
                     "type": "matching",
                     "answer_mapping": {
-                        "A": "C",
-                        "B": "D"
+                        "Mike": null,
+                        "Ike": null
                     },
                     "user_id": "1345125",
                     "nickname": "Brian"
@@ -55,7 +55,7 @@
         },
         {
             "kind": "question",
-            "object_id": "f49be826-a813-413f-b999-fab330d23329",
+            "object_id": "dbab7e2e-4dcf-4e46-ac49-0bdb150349b9",
             "type": "short_answer",
             "prompt": "Who is the best?",
             "answer": "YOU",
@@ -71,7 +71,7 @@
         },
         {
             "kind": "question",
-            "object_id": "9eda8ecb-50f1-4ec7-bcce-f5d6f00ae1bd",
+            "object_id": "9b35f072-426a-40a9-b7bf-5e6c578cef17",
             "type": "fill_in_the_blank",
             "before_prompt": "",
             "after_prompt": "are the best",
