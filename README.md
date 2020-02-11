@@ -1,10 +1,16 @@
 # Distributed-Systems
 Creating a standalone program to model the creation of quiz questions and the tracking of answers from multiple users. Questions are modeled in JSON format for persistent storage. The Flask framework is used to manage communications between the front and back ends of our project.
 
-# Development Server Operation
-To deploy the quiz responses server, run the following command from the `app` directory:
+# Development API Server Operation
+To deploy the quiz responses API server, run the following command from the `app` directory:
 ```bash
-env FLASK_APP=server.py flask run
+env FLASK_APP=server.py flask run --port 5000
+```
+
+# Development API Server Operation
+To deploy the application's web server, run the following command from the `app` directory:
+```bash
+env FLASK_APP=routes.py flask run --port 5001
 ```
 
 # Unit tests
