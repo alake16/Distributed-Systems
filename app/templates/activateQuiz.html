@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+{% if not quizNames.empty %}
+<h1>Choose a Quiz to Administer!</h1>
+{% for quiz in quizNames %}
+<form action="{{ url_for('activateQuizName', quizName=quiz) }}">
+    <input type="submit" value="{{ quiz }}" />
+</form>
+{% endfor %}
+{% else %}
+<h1>No Quizzes to Administer!</h1>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,42 @@
+{
+    "kind": "quiz",
+    "object_id": "8832dcc8-cd09-4dc6-b535-403e80d42e44",
+    "name": "Sports Quiz",
+    "questions": [
+        {
+            "kind": "question",
+            "object_id": "6b423340-e2be-4bba-805d-a7abd4476bca",
+            "type": "fill_in_the_blank",
+            "before_prompt": "The Colts defeated the ",
+            "after_prompt": "in Super Bowl XLI",
+            "answer": "Bears",
+            "responses": []
+        },
+        {
+            "kind": "question",
+            "object_id": "79b12466-c580-43c1-bd8e-b7ce40e5af86",
+            "type": "multiple_choice",
+            "prompt": "Who is the best basketball player?",
+            "choices": {
+                "A": "Kobe",
+                "B": "Lebron",
+                "C": "Michael Jordan",
+                "D": "Magic Johnson"
+            },
+            "answer": "A",
+            "responses": []
+        },
+        {
+            "kind": "question",
+            "object_id": "29739f05-34a9-402a-a0e2-36e9a6ff308b",
+            "type": "multiple_choice",
+            "prompt": "Who is the best football player?",
+            "choices": {
+                "A": "Tom Brady",
+                "B": "Peyton Manning"
+            },
+            "answer": "B",
+            "responses": []
+        }
+    ]
+}

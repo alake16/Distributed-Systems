@@ -4,8 +4,8 @@
 <form action="{{ url_for('addQuestion', questionType='multiple_choice') }}">
     <input type="submit" value="Add a Multiple Choice Question" />
 </form>
-<form action="{{ url_for('addQuestion', questionType='matching') }}">
-    <input type="submit" value="Add a Matching Question" />
+<form action="{{ url_for('addQuestion', questionType='fill_in_the_blank') }}">
+    <input type="submit" value="Add a Fill in the Blank Question" />
 </form>
 <form action="{{  url_for('writeQuiz') }}">
     <input type="submit" value="Finished Adding Questions to {{ quizName }}" />

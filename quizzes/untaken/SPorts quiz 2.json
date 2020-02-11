@@ -1,0 +1,29 @@
+{
+    "kind": "quiz",
+    "object_id": "29ca65ae-29f0-40a7-97aa-bef6032c1afc",
+    "name": "SPorts quiz 2",
+    "questions": [
+        {
+            "kind": "question",
+            "object_id": "81fc04f1-ba30-44e6-8a61-921eaf8017ab",
+            "type": "multiple_choice",
+            "prompt": "Who won the Super Bowl?",
+            "choices": {
+                "A": "49ers",
+                "B": "Chiefs",
+                "C": "Bears"
+            },
+            "answer": "B",
+            "responses": []
+        },
+        {
+            "kind": "question",
+            "object_id": "5ea0c36b-dcf8-483e-a790-8fd5626bd536",
+            "type": "fill_in_the_blank",
+            "before_prompt": "In 2017 the Bears drafted",
+            "after_prompt": "Trubisky",
+            "answer": "Mitchell",
+            "responses": []
+        }
+    ]
+}

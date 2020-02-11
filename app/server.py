@@ -1,8 +1,8 @@
 from typing import Dict
 from flask import Flask, request, jsonify
 from flask import Response as flaskResponse
-from app.Models.Questions import Question, MultipleChoiceQuestion, MatchingQuestion
-from app.Models.Response import Response, MultipleChoiceResponse
+from app.Models.Questions import Question, MultipleChoiceQuestion, MatchingQuestion, FillInTheBlankQuestion
+from app.Models.Response import Response, MultipleChoiceResponse, FillInTheBlankResponse
 import json
 from app.JSONHandler import ProjectJSONEncoder
 
@@ -25,6 +25,10 @@ def activateQuestion():
         data = request.json
         if data["type"] == "multiple_choice":
             activeQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"],
+                                                    answer=data["answer"])
+        elif data["type"] == "fill_in_the_blank":
+            activeQuestion = FillInTheBlankQuestion(before_prompt=data["before_prompt"],
+                                                    after_prompt=data["after_prompt"],
                                                     answer=data["answer"])
         else:
             activeQuestion = MatchingQuestion(prompt=data["prompt"],
@@ -75,7 +79,14 @@ def recordResponse():
     global activeQuestion
     if isinstance(activeQuestion, MultipleChoiceQuestion):
         data = request.json
-        activeQuestion.add_response(MultipleChoiceResponse(user_id=data["user_id"],
-                                    nickname=data["nickname"], choice=data["choice"]))
+        activeQuestion.add_response(MultipleChoiceResponse(choice=data["choice"],
+                                                           user_id=data["user_id"],
+                                                           nickname=data["nickname"]))
+        return jsonify(data)
+    elif isinstance(activeQuestion, FillInTheBlankQuestion):
+        data = request.json
+        activeQuestion.add_response(FillInTheBlankResponse(blank_answer=data["answer"],
+                                                           user_id=data["userID"],
+                                                           nickname=data["nickname"]))
         return jsonify(data)
     return f'No Active Question!'

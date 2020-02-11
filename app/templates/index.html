@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-<p>Hello and welcome to the greatest quizzing application ever created.</p>
+<h1>Hello and welcome to the greatest quizzing application ever created.</h1>
 <form action="{{ url_for('admin') }}">
     <input type="submit" value="Administrator" />
 </form>
-<form action="{{ url_for('taker') }}">
+<form action="{{ url_for('takeQuiz') }}">
     <input type="submit" value="Quiz Taker" />
 </form>
 {% endblock content %}
