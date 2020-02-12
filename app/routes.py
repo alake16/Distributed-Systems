@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
-from app.forms import NewQuizForm, MultipleChoiceQuestionForm, FillInTheBlankQuestionForm, FillInTheBlankAnswerForm, MultipleChoiceAnswerForm
+from app.forms import NewQuizForm, MultipleChoiceQuestionForm, FillInTheBlankQuestionForm, FillInTheBlankAnswerForm, MultipleChoiceAnswerForm, form_factory
 from app.Models.Quiz import Quiz
-from app.Models.Questions import MultipleChoiceQuestion, FillInTheBlankQuestion
+from app.Models.Questions import Question, MultipleChoiceQuestion, FillInTheBlankQuestion
 from app.helpers import fetchAllUntakenQuizNames, loadQuizFromName
 import requests
 
@@ -47,35 +47,14 @@ def addQuestions(quizName):
 def addQuestion(questionType):
     global createdQuiz
     if createdQuiz is not None:
-        if questionType == "multiple_choice":
-            form = MultipleChoiceQuestionForm()
+        if questionType in ['multiple_choice', 'fill_in_the_blank']:
+            form = form_factory(questionType)
             if form.validate_on_submit():
-                choices = {
-                    "A": form.choiceA.data,
-                    "B": form.choiceB.data,
-                    "C": form.choiceC.data,
-                    "D": form.choiceD.data,
-                    "E": form.choiceE.data,
-                }
-                # get rid of any empty choices
-                choices = {k: v for k, v in choices.items() if v}
-                newMultChoiceQuestion = MultipleChoiceQuestion(prompt=form.prompt.data,
-                                                               choices=choices,
-                                                               answer=form.answer.data)
-                createdQuiz.add_question_to_quiz(question=newMultChoiceQuestion)
+                question_data = form.json_data
+                question = Question.create_a_question(question_data)
+                createdQuiz.add_question_to_quiz(question=question)
                 return redirect(url_for("addQuestions", quizName=createdQuiz.name))
-            return render_template("newMultipleChoiceQuestion.html", title="Add " + questionType +
-                                   " Question", quizName=createdQuiz.name, form=form)
-        # fill in the blank question
-        else:
-            form = FillInTheBlankQuestionForm()
-            if form.validate_on_submit():
-                newFillInTheBlankQuestion = FillInTheBlankQuestion(before_prompt=form.beforePrompt.data,
-                                                                   after_prompt=form.afterPrompt.data,
-                                                                   answer=form.answer.data)
-                createdQuiz.add_question_to_quiz(question=newFillInTheBlankQuestion)
-                return redirect(url_for("addQuestions", quizName=createdQuiz.name))
-            return render_template("newFillInTheBlankQuestion.html", title="Add " + questionType +
+            return render_template('new_' + questionType + '_question.html', title="Add " + questionType +
                                    " Question", quizName=createdQuiz.name, form=form)
 
 # Quiz Session Creator Page

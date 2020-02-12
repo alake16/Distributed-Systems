@@ -44,7 +44,7 @@ class Question(ABC):
             raise TypeError("The json representation must be a dictionary")
         question_type = json_as_dictionary.get('type')
         json_as_dictionary.pop('type')
-        json_as_dictionary.pop('kind')
+        if 'kind' in json_as_dictionary: json_as_dictionary.pop('kind')
         if question_type is None:
             raise ValueError("The value passed to create_a_question_from_json must be question and have a type")
         if question_type == 'multiple_choice':
