@@ -23,18 +23,7 @@ def activateQuestion():
         if isinstance(activeQuestion, Question):
             return f'There is Already an Active Question!'
         data = request.json
-        if data["type"] == "multiple_choice":
-            activeQuestion = MultipleChoiceQuestion(prompt=data["prompt"], choices=data["choices"],
-                                                    answer=data["answer"])
-        elif data["type"] == "fill_in_the_blank":
-            activeQuestion = FillInTheBlankQuestion(before_prompt=data["before_prompt"],
-                                                    after_prompt=data["after_prompt"],
-                                                    answer=data["answer"])
-        else:
-            activeQuestion = MatchingQuestion(prompt=data["prompt"],
-                                              left_choices=data["leftChoices"],
-                                              right_choices=data["rightChoices"],
-                                              answer_mapping=data["answerMapping"])
+        activeQuestion = Question.create_a_question(**data)
         return flaskResponse(json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
 
@@ -63,30 +52,12 @@ def deactivateQuestion():
         return responses
     return f'No Active Question!'
 
-'''
-Implement a method that allows us to track each incoming
-response for each answer
-
-'''
-@app.route('/trackResponse', methods=['POST'])
-def trackResponse():
-    global activeQuestion
-    if activeQuestion is not None:
-        pass
-
 @app.route('/recordResponse', methods=['POST'])
 def recordResponse():
     global activeQuestion
     if isinstance(activeQuestion, MultipleChoiceQuestion):
         data = request.json
-        activeQuestion.add_response(MultipleChoiceResponse(choice=data["choice"],
-                                                           user_id=data["user_id"],
-                                                           nickname=data["nickname"]))
-        return jsonify(data)
-    elif isinstance(activeQuestion, FillInTheBlankQuestion):
-        data = request.json
-        activeQuestion.add_response(FillInTheBlankResponse(blank_answer=data["answer"],
-                                                           user_id=data["userID"],
-                                                           nickname=data["nickname"]))
+        response = Response.create_a_response(data)
+        activeQuestion.add_response(response)
         return jsonify(data)
     return f'No Active Question!'
