@@ -72,7 +72,7 @@ class Question(ABC):
 
     def _initialize_responses(self, responses: List[Dict or Response]):
         if responses is not None and len(responses) > 0:
-            response_objects = [Response.create_a_response(response) if isinstance(response, dict) else response for
+            response_objects = [Response.create_a_response(response, self.object_id) if isinstance(response, dict) else response for
                                 response in responses]
             for response_object in response_objects:
                 self.add_response(response_object)

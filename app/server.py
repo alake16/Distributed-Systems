@@ -10,10 +10,12 @@ app = Flask(__name__)
 
 activeQuestion = None
 
+
 @app.route('/')
 def welcome():
     name = request.args.get("name", "World")
     return f'Welcome to Quiz API v1!'
+
 
 @app.route('/activateQuestion', methods=['POST', 'GET'])
 def activateQuestion():
@@ -34,6 +36,7 @@ def activateQuestion():
         else:
             return f'No Question Active!'
 
+
 @app.route('/fetchResponses', methods=['GET'])
 def fetchResponses():
     global activeQuestion
@@ -41,6 +44,7 @@ def fetchResponses():
         return flaskResponse(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder),
                              mimetype='application/json')
     return f'No Active Question!'
+
 
 @app.route('/deactivateQuestion', methods=['POST'])
 def deactivateQuestion():
@@ -52,12 +56,13 @@ def deactivateQuestion():
         return responses
     return f'No Active Question!'
 
+
 @app.route('/recordResponse', methods=['POST'])
 def recordResponse():
     global activeQuestion
     if isinstance(activeQuestion, MultipleChoiceQuestion):
         data = request.json
-        response = Response.create_a_response(data)
+        response = Response.create_a_response(data, activeQuestion.object_id)
         activeQuestion.add_response(response)
         return jsonify(data)
     return f'No Active Question!'
