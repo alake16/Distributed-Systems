@@ -5,6 +5,17 @@ from app.Models.Questions import Question, MultipleChoiceQuestion, FillInTheBlan
 from app.helpers import fetchAllUntakenQuizNames, loadQuizFromName
 import requests
 
+
+import random
+from bokeh.models import (HoverTool, FactorRange, Plot, LinearAxis, Grid,
+                          Range1d)
+from bokeh.models.glyphs import VBar
+from bokeh.plotting import figure
+from bokeh.charts import Bar
+from bokeh.embed import components
+from bokeh.models.sources import ColumnDataSource
+from flask import Flask, render_template
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'you-will-never-guess'
 
