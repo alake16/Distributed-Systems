@@ -115,3 +115,11 @@ def takeQuiz():
 # def notfound():
 #     """Serve 404 template."""
 #     return make_response(render_template("404.html"), 404)
+
+# ----------------Histograms------------------
+
+@app.route("/<int:bars_count>")
+def chart(bars_count):
+    if bars_count <=0:
+        bars_count=1
+    return render_template("chart.html", bars_count=bars_count)
