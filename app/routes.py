@@ -167,14 +167,15 @@ def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
     plot.min_border_top = 0
     plot.xgrid.grid_line_color = None
     plot.ygrid.grid_line_color = "#999999"
-    plot.yaxis.axis_label = "Bugs found"
+    plot.yaxis.axis_label = "Student Response Count"
     plot.ygrid.grid_line_alpha = 0.1
-    plot.xaxis.axis_label = "Days after app deployment"
+    plot.xaxis.axis_label = "Question Answer Choices"
     plot.xaxis.major_label_orientation = 1
     return plot
 
-@app.route("/<int:bars_count>/")
-def chart(bars_count):
+#/histogram/quiz_name
+@app.route("/<string:quiz_name>/<int:bars_count>/")
+def chart(quiz_name, bars_count):
     if bars_count <= 0:
         bars_count = 1
 
@@ -184,10 +185,12 @@ def chart(bars_count):
         data['bugs'].append(random.randint(1,100))
         data['costs'].append(random.uniform(1.00, 1000.00))
 
+    data["days"] = ['A', 'B', 'C', 'D', 'E']
+
     hover = create_hover_tool()
-    plot = create_bar_chart(data, "Bugs found per day", "days",
+    plot = create_bar_chart(data, "Student response count", "days",
                             "bugs", hover)
     script, div = components(plot)
 
-    return render_template("chart.html", bars_count=bars_count,
+    return render_template("chart.html", bars_count=bars_count, quiz_name=quiz_name,
                            the_div=div, the_script=script)
