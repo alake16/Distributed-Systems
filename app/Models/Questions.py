@@ -97,13 +97,16 @@ class Question(ABC):
         def user_to_most_recent_responses(stream_of_responses):
             user_to_most_recent_response_dict = {}
             for response in stream_of_responses:
-                user_to_most_recent_response_dict[response.user_id] = response.answer
+                user_to_most_recent_response_dict[response.user_id] = str(response.answer)
             return user_to_most_recent_response_dict
 
         def reduce_to_counts_dictionary(user_to_most_recent_responses_dict):
             response_to_counts = {}
             for response in user_to_most_recent_responses_dict.values():
-                response_to_counts[response] += 1
+                if response not in user_to_most_recent_responses_dict:
+                    response_to_counts[response] = 1
+                else:
+                    response_to_counts[response] += 1
             return response_to_counts
 
         return reduce_to_counts_dictionary(user_to_most_recent_responses(question_object.get_responses()))
