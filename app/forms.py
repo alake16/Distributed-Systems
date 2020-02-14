@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
+
 # This function was taken from https://stackoverflow.com/questions/30278539/python-cycle-through-the-alphabet
 def _alphabet_generator():
     """
@@ -14,9 +15,10 @@ def _alphabet_generator():
         for t in itertools.product(string.ascii_lowercase, repeat=i):
             yield ''.join(t)
 
+
 def form_factory(type: str, kind='question'):
     if kind.lower() == 'answer':
-       pass
+        pass
     if kind.lower() == 'question':
         if type == 'multiple_choice':
             return MultipleChoiceQuestionForm()
@@ -29,10 +31,12 @@ def form_factory(type: str, kind='question'):
     else:
         raise ValueError()
 
+
 class NewQuizForm(FlaskForm):
     name = StringField('Quiz Name', validators=[DataRequired()])
     description = StringField('Quiz Description')
     submit = SubmitField('Create Quiz and Add Questions')
+
 
 class MultipleChoiceQuestionForm(FlaskForm):
     prompt = StringField('Question Prompt')
@@ -52,6 +56,7 @@ class MultipleChoiceQuestionForm(FlaskForm):
         choices = {next(alphabet_iterator): choice for choice in choices if choice}
         return {'type': 'multiple_choice', 'choices': choices, 'prompt': self.prompt.data, 'answer': self.answer.data}
 
+
 class FillInTheBlankQuestionForm(FlaskForm):
     beforePrompt = StringField('Before Prompt')
     answer = StringField('Answer')
@@ -60,11 +65,14 @@ class FillInTheBlankQuestionForm(FlaskForm):
 
     @property
     def json_data(self):
-        return {'type': 'fill_in_the_blank', 'before_prompt': self.beforePrompt.data, 'answer': self.answer.data, 'after_prompt': self.afterPrompt.data}
+        return {'type': 'fill_in_the_blank', 'before_prompt': self.beforePrompt.data, 'answer': self.answer.data,
+                'after_prompt': self.afterPrompt.data}
+
 
 class FillInTheBlankAnswerForm(FlaskForm):
     answer = StringField('Answer')
     submit = SubmitField('Submit Answer')
+
 
 class MultipleChoiceAnswerForm(FlaskForm):
     answer = StringField('Answer')

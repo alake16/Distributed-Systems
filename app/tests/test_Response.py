@@ -31,7 +31,7 @@ class TestResponse(unittest.TestCase):
             'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
             "kind": "response",
             "type": "matching",
-            "answer_mapping": {
+            "answer": {
                 "A": "C",
                 "B": "D"
             },
@@ -42,7 +42,7 @@ class TestResponse(unittest.TestCase):
             'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
             "kind": "response",
             "type": "short_answer",
-            "short_answer": "YOU",
+            "answer": "YOU",
             "user_id": "1345125",
             "nickname": "Brian"
         }
@@ -50,7 +50,7 @@ class TestResponse(unittest.TestCase):
             'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
             "kind": "response",
             "type": "fill_in_the_blank",
-            "blank_answer": "YOU",
+            "answer": "YOU",
             "user_id": "1345125",
             "nickname": "Brian"
         }
@@ -58,7 +58,7 @@ class TestResponse(unittest.TestCase):
             'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
             "kind": "response",
             "type": "multiple_choice",
-            "choice": "B",
+            "answer": "B",
             "user_id": "1345125",
             "nickname": "Brian"
         }
@@ -77,12 +77,12 @@ class TestMultipleChoiceResponse(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        self.response_object = MultipleChoiceResponse(choice='A', user_id=1345125, nickname='brian',
+        self.response_object = MultipleChoiceResponse(answer='A', user_id=1345125, nickname='brian',
                                                       question_id='d3d46649-4dbb-4d6b-b1fe-5f87f5b42756')
 
     def test_json_data(self):
         self.assertEqual(self.response_object.json_data, {'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
-                                                          'choice': 'A',
+                                                          'answer': 'A',
                                                           'kind': 'response',
                                                           'nickname': 'brian',
                                                           'type': 'multiple_choice',
@@ -103,7 +103,7 @@ class TestMatchingResponse(unittest.TestCase):
     def test_json_data(self):
         self.assertEqual(self.response_object.json_data, {
             'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
-            'answer_mapping': {'A': 'C', 'B': 'D'},
+            'answer': {'A': 'C', 'B': 'D'},
             'kind': 'response',
             'nickname': 'Brian',
             'type': 'matching',
@@ -126,7 +126,7 @@ class TestShortAnswerResponse(unittest.TestCase):
             'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
             'kind': 'response',
             'nickname': 'Brian',
-            'short_answer': 'YOU',
+            'answer': 'YOU',
             'type': 'short_answer',
             'user_id': '1345125'})
 
@@ -143,7 +143,7 @@ class TestFillInTheBlankResponse(unittest.TestCase):
 
     def test_json_data(self):
         self.assertEqual(self.response_object.json_data, {'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
-                                                          'blank_answer': 'YOU',
+                                                          'answer': 'YOU',
                                                           'kind': 'response',
                                                           'nickname': 'Brian',
                                                           'type': 'fill_in_the_blank',

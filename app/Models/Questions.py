@@ -4,7 +4,7 @@ import copy
 from typing import Dict, List
 from abc import ABC, abstractmethod
 from app.Models.Response import Response
-
+from functools import reduce
 
 class Question(ABC):
 
@@ -118,9 +118,9 @@ class MultipleChoiceQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        if 'choice' not in response_json:
+        if 'answer' not in response_json:
             raise ValueError("The key choice is not in the representation of this response {}".format(response_json))
-        choice = response_json['choice']
+        choice = response_json['answer']
         if choice not in self.choices.keys():
             raise ValueError("Response choice present but not reflected in question choices")
 
@@ -146,10 +146,10 @@ class MatchingQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        if 'answer_mapping' not in response_json.keys():
-            raise ValueError("There is no answer mapping present in the response {}".format(response_json))
-        left = response_json['answer_mapping'].keys()
-        right = response_json['answer_mapping'].values()
+        if 'answer' not in response_json.keys():
+            raise ValueError("There is no answer present in the response {}".format(response_json))
+        left = response_json['answer'].keys()
+        right = response_json['answer'].values()
         if not all([left_choice in self.left_choices for left_choice in left]) and all(
                 [right_choice in self.right_choices for right_choice in right]):
             raise ValueError("Left choices and/or right_choices for this question object does not contain the key's "
