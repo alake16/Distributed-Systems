@@ -23,7 +23,7 @@ def activateQuestion():
         if isinstance(activeQuestion, Question):
             return f'There is Already an Active Question!'
         data = request.json
-        activeQuestion = Question.create_a_question(**data)
+        activeQuestion = Question.create_a_question(data)
         return flaskResponse(json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
 
