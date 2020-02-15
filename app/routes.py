@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for, flash
 from app.forms import NewQuizForm, MultipleChoiceQuestionForm, FillInTheBlankQuestionForm, FillInTheBlankAnswerForm, MultipleChoiceAnswerForm, form_factory
 from app.Models.Quiz import Quiz
 from app.Models.Questions import Question, MultipleChoiceQuestion, FillInTheBlankQuestion
+from app.Models.Response import MultipleChoiceResponse, FillInTheBlankResponse
 from app.helpers import fetchAllUntakenQuizNames, loadQuizFromName
 import requests
 
@@ -113,12 +114,12 @@ def takeQuiz():
         form = MultipleChoiceResponseForm()
         response = None
         if form.validate_on_submit():
-            response = MultipleChoiceResponseForm(choice=form.answer.data, user_id=1, nickname="Test")
+            response = MultipleChoiceResponse(answer=form.answer.data, user_id=1, nickname="Test", question_id=activeQuestion.object_id)
             requests.post("http://127.0.0.1:5000/recordResponse", json=response.json_data)
     elif activeQuestion.type == "fill_in_the_blank":
         form = FillInTheBlankAnswerForm()
         if form.validate_on_submit():
-            response = FillInTheBlankResponse(blank_answer=form.answer.data, user_id=1, nickname="Test")
+            response = FillInTheBlankResponse(answer=form.answer.data, user_id=1, nickname="Test", question_id=activeQuestion.object_id)
             requests.post("http://127.0.0.1:5000/recordResponse", json=response.json_data)
     return render_template("takeQuiz.html", title="Take a Quiz", question=activeQuestion)
 

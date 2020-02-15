@@ -25,9 +25,10 @@ class TestQuiz(unittest.TestCase):
                     "answer": "A",
                     "responses": [
                         {
+                            'question_id': '5fd59f54-ba3d-4045-8db6-b7487103e3e1',
                             "kind": "response",
                             "type": "multiple_choice",
-                            "choice": "B",
+                            "answer": "B",
                             "user_id": "1345125",
                             "nickname": "Brian"
                         }
@@ -52,9 +53,10 @@ class TestQuiz(unittest.TestCase):
                     },
                     "responses": [
                         {
+                            'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
                             "kind": "response",
                             "type": "matching",
-                            "answer_mapping": {
+                            "answer": {
                                 "A": "C",
                                 "B": "D"
                             },
@@ -71,9 +73,10 @@ class TestQuiz(unittest.TestCase):
                     "answer": "YOU",
                     "responses": [
                         {
+                            'question_id': "e00a3f6d-3ab7-4cb4-8441-6584a785f50d",
                             "kind": "response",
                             "type": "short_answer",
-                            "short_answer": "YOU",
+                            "answer": "YOU",
                             "user_id": "1345125",
                             "nickname": "Brian"
                         }
@@ -88,9 +91,10 @@ class TestQuiz(unittest.TestCase):
                     "answer": "YOU",
                     "responses": [
                         {
+                            'question_id': "ab2cc19d-3d31-4ba9-8b90-ae1c8e035884",
                             "kind": "response",
                             "type": "fill_in_the_blank",
-                            "blank_answer": "YOU",
+                            "answer": "YOU",
                             "user_id": "1345125",
                             "nickname": "Brian"
                         }

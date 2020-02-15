@@ -72,8 +72,9 @@ class Question(ABC):
 
     def _initialize_responses(self, responses: List[Dict or Response]):
         if responses is not None and len(responses) > 0:
-            response_objects = [Response.create_a_response(response) if isinstance(response, dict) else response for
-                                response in responses]
+            response_objects = [
+                Response.create_a_response(response, self.object_id) if isinstance(response, dict) else response for
+                response in responses]
             for response_object in response_objects:
                 self.add_response(response_object)
 
@@ -88,6 +89,27 @@ class Question(ABC):
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         return False
+
+    # TODO MapReduce Model with Coroutines, Make More Efficient -> will come naturally with Streaming Arch
+    @staticmethod
+    def get_counts(question_object):
+
+        def user_to_most_recent_responses(stream_of_responses):
+            user_to_most_recent_response_dict = {}
+            for response in stream_of_responses:
+                user_to_most_recent_response_dict[response.user_id] = str(response.answer)
+            return user_to_most_recent_response_dict
+
+        def reduce_to_counts_dictionary(user_to_most_recent_responses_dict):
+            response_to_counts = {}
+            for response in user_to_most_recent_responses_dict.values():
+                if response not in user_to_most_recent_responses_dict:
+                    response_to_counts[response] = 1
+                else:
+                    response_to_counts[response] += 1
+            return response_to_counts
+
+        return reduce_to_counts_dictionary(user_to_most_recent_responses(question_object.get_responses()))
 
 
 class MultipleChoiceQuestion(Question):
@@ -118,9 +140,9 @@ class MultipleChoiceQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        if 'choice' not in response_json:
+        if 'answer' not in response_json:
             raise ValueError("The key choice is not in the representation of this response {}".format(response_json))
-        choice = response_json['choice']
+        choice = response_json['answer']
         if choice not in self.choices.keys():
             raise ValueError("Response choice present but not reflected in question choices")
 
@@ -146,10 +168,10 @@ class MatchingQuestion(Question):
 
     def validate_response(self, response: Response):
         response_json = response.json_data
-        if 'answer_mapping' not in response_json.keys():
-            raise ValueError("There is no answer mapping present in the response {}".format(response_json))
-        left = response_json['answer_mapping'].keys()
-        right = response_json['answer_mapping'].values()
+        if 'answer' not in response_json.keys():
+            raise ValueError("There is no answer present in the response {}".format(response_json))
+        left = response_json['answer'].keys()
+        right = response_json['answer'].values()
         if not all([left_choice in self.left_choices for left_choice in left]) and all(
                 [right_choice in self.right_choices for right_choice in right]):
             raise ValueError("Left choices and/or right_choices for this question object does not contain the key's "
@@ -216,7 +238,8 @@ class FillInTheBlankQuestion(Question):
 
     @property
     def json_data(self) -> Dict:
-        return {'kind': 'question', 'object_id': self.object_id, 'type': 'fill_in_the_blank', 'before_prompt': self.before_prompt,
+        return {'kind': 'question', 'object_id': self.object_id, 'type': 'fill_in_the_blank',
+                'before_prompt': self.before_prompt,
                 'after_prompt': self.after_prompt, 'answer': self.answer,
                 'responses': [response.json_data for response in self._responses]}
 
