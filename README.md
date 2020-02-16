@@ -25,8 +25,8 @@ To generate the sphinx documentation
 cd docs
 make html
 sphinx-serve -h 127.0.0.1
-Go to 127.0.0.1:8001 in a web browser.
 ```
+Go to 127.0.0.1:8001 in a web browser.
 
 # Contributors
 Vismark Juarez (https://github.com/VismarkJuarez)
