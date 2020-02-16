@@ -22,9 +22,11 @@ def activateQuestion():
     global activeQuestion
 
     if request.method == 'POST':
+        print('received the following payload: {}'.format(request.json))
         if isinstance(activeQuestion, Question):
             return f'There is Already an Active Question!'
         data = request.json
+        print('sending the json payload to the Question.create_a_question() method')
         activeQuestion = Question.create_a_question(data)
         return flaskResponse(json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
@@ -60,6 +62,7 @@ def deactivateQuestion():
 @app.route('/recordResponse', methods=['POST'])
 def recordResponse():
     global activeQuestion
+    print('received the following payload: {}'.format(request.json))
     if isinstance(activeQuestion, MultipleChoiceQuestion):
         data = request.json
         response = Response.create_a_response(data, activeQuestion.object_id)
