@@ -102,7 +102,8 @@ def activateQuizName(quizName):
         requests.post("http://127.0.0.1:5000/deactivateQuestion")
     activeQuestion = activeQuiz.get_question_number(activeQuestionNumber)
     activeQuestionNumber += 1
-    requests.post("http://127.0.0.1:5000/activateQuestion", json=activeQuestion.json_data)
+    #TODO URL param args should be added dynamically
+    requests.post("http://127.0.0.1:5000/activateQuestion?quizName={}".format(quizName), json=activeQuestion.json_data)
     return render_template("activeQuiz.html", title="Active Quiz", quizName=quizName,
                            question=activeQuestion)
 
