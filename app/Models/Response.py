@@ -46,7 +46,7 @@ class Response(ABC):
         schema_name = response_type + '_response_schema'
         validate(instance=request_for_response_object, schema=globals()[schema_name])
         request_for_response_object.pop('type')
-        request_for_response_object.pop('kind')
+        #request_for_response_object.pop('kind') #TODO: Needs team review. Throws err:"`kind` is not a valid key"
         request_for_response_object['question_id'] = question_id
         if response_type is None:
             raise ValueError("The value passed to create_a_response_from_json must be question and have a type")
@@ -81,13 +81,13 @@ class Response(ABC):
 
 class MultipleChoiceResponse(Response):
 
-    def __init__(self, answer: str, user_id: int, nickname: str, question_id):
+    def __init__(self, choice: str, user_id: int, nickname: str, question_id):
         super().__init__(user_id, nickname, 'multiple_choice', question_id)
-        self.answer = answer
+        self.choice = choice
 
     @property
     def json_data(self):
-        return {'question_id': self.question_id, 'kind': 'response', 'type': self.type, 'answer': self.answer, 'user_id': self.user_id,
+        return {'question_id': self.question_id, 'kind': 'response', 'type': self.type, 'choice': self.choice, 'user_id': self.user_id,
                 'nickname': self.nickname}
 
 
