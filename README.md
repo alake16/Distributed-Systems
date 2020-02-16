@@ -1,4 +1,5 @@
 # Distributed-Systems
+[![Build Status](https://travis-ci.com/alake16/Distributed-Systems.svg?branch=master)](https://travis-ci.com/alake16/Distributed-Systems)
 Creating a standalone program to model the creation of quiz questions and the tracking of answers from multiple users. Questions are modeled in JSON format for persistent storage. The Flask framework is used to manage communications between the front and back ends of our project.
 
 # Development Server Operation
