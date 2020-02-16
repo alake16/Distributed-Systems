@@ -9,20 +9,6 @@ install:
   
 script: make test
 
-# jobs:
-# include:
-#   - stage: test/build
-#     script: make test
-#   - stage: deploy
-#     script: skip     # usually you do not want to rerun any tests
-#     deploy: &heroku
-#       provider: heroku
-#       api_key:
-#         secure: travis encrypt $(heroku auth:token) --add deploy.api_key 
-#       app: blooming-taiga-86486
-#       on:
-#         repo: alake16/Distributed-Systems
-
 deploy: heroku
   provider: heroku
   api_key:
