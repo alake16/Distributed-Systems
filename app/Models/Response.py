@@ -42,6 +42,7 @@ class Response(ABC):
             raise ValueError("The json representation must be a dictionary")
         if 'type' not in request_for_response_object:
             raise ValueError("The json representation must have a type")
+        if 'kind' in request_for_response_object: request_for_response_object.pop('kind')
         response_type = request_for_response_object.get('type')
         schema_name = response_type + '_response_schema'
         validate(instance=request_for_response_object, schema=globals()[schema_name])
