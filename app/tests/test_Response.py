@@ -10,6 +10,13 @@ import uuid
 class TestResponse(unittest.TestCase):
 
     def helper(self, response_json, response_class, response_type):
+        """
+        Helper method to test the factory method for creating responses.
+        :param response_json:
+        :param response_class:
+        :param response_type:
+        :return:
+        """
         with patch('app.Models.Response.' + response_type + '.__init__') as mock_init:
             mock_init.return_value = None
             response = Response.create_a_response(response_json, 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756')
@@ -27,6 +34,13 @@ class TestResponse(unittest.TestCase):
             mock_init.assert_has_calls(calls)
 
     def test_create_a_response(self):
+        """
+        Ensures that the factory method logic works properly.
+        1) create_a_response is being passed the appropriate variables.
+        2) Response's __init__ functions are called with the JSON objects below(using keyword arguments)
+        3) Mocking __init__ is used to prevent testing whether initilization logic is correct(left to other tests).
+        :return:
+        """
         matching_response_json = {
             'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
             "kind": "response",
@@ -73,6 +87,9 @@ class TestResponse(unittest.TestCase):
 
 
 class TestMultipleChoiceResponse(unittest.TestCase):
+    """
+    These tests ensure that object initilization is done properly(all the relevant data should be reflected in the json_data property).
+    """
     @patch('uuid.uuid4', side_effect=[uuid.UUID('be24d525-8904-4948-b47d-54248586986d'), uuid.UUID('ce24d525-8904'
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
@@ -93,6 +110,9 @@ class TestMultipleChoiceResponse(unittest.TestCase):
 
 
 class TestMatchingResponse(unittest.TestCase):
+    """
+    These tests ensure that object initilization is done properly(all the relevant data should be reflected in the json_data property).
+    """
     @patch('uuid.uuid4', side_effect=[uuid.UUID('be24d525-8904-4948-b47d-54248586986d'), uuid.UUID('ce24d525-8904'
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
@@ -114,6 +134,9 @@ class TestMatchingResponse(unittest.TestCase):
 
 
 class TestShortAnswerResponse(unittest.TestCase):
+    """
+    These tests ensure that object initilization is done properly(all the relevant data should be reflected in the json_data property).
+    """
     @patch('uuid.uuid4', side_effect=[uuid.UUID('be24d525-8904-4948-b47d-54248586986d'), uuid.UUID('ce24d525-8904'
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
@@ -135,6 +158,9 @@ class TestShortAnswerResponse(unittest.TestCase):
 
 
 class TestFillInTheBlankResponse(unittest.TestCase):
+    """
+    These tests ensure that object initilization is done properly(all the relevant data should be reflected in the json_data property).
+    """
     @patch('uuid.uuid4', side_effect=[uuid.UUID('be24d525-8904-4948-b47d-54248586986d'), uuid.UUID('ce24d525-8904'
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
