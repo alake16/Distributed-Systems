@@ -3,7 +3,7 @@ multiple_choice_response_schema = {
     "properties": {
         'kind': {"type": "string"},
         "type": {"type": "string"},
-        "choice": {"type": "string"},
+        "answer": {"type": "string"},
         "user_id": {"type": "string"},
         "nickname": {"type": "string"}
     },
