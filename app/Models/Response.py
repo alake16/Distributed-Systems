@@ -82,13 +82,13 @@ class Response(ABC):
 
 class MultipleChoiceResponse(Response):
 
-    def __init__(self, choice: str, user_id: int, nickname: str, question_id):
+    def __init__(self, answer: str, user_id: int, nickname: str, question_id):
         super().__init__(user_id, nickname, 'multiple_choice', question_id)
-        self.choice = choice
+        self.answer = answer
 
     @property
     def json_data(self):
-        return {'question_id': self.question_id, 'kind': 'response', 'type': self.type, 'choice': self.choice, 'user_id': self.user_id,
+        return {'question_id': self.question_id, 'kind': 'response', 'type': self.type, 'answer': self.answer, 'user_id': self.user_id,
                 'nickname': self.nickname}
 
 
