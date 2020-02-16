@@ -9,8 +9,13 @@ from app.JSONHandler import ProjectJSONEncoder
 app = Flask(__name__)
 
 activeQuestion = None
-allQuestionPrompts = {} # {'questionId': 'questionPrompt'}
-allResponses = []
+
+'''
+Will store all of the instructor's posed questions
+-- which, in turn, also provides a list of all the
+answer choices and answers.
+'''
+allQuestions = []
 
 @app.route('/')
 def welcome():
@@ -29,7 +34,6 @@ def activateQuestion():
         data = request.json
         print('sending the json payload to the Question.create_a_question() method')
         activeQuestion = Question.create_a_question(data)
-        allQuestionPrompts[activeQuestion.object_id] = activeQuestion.get_prompt()
         return flaskResponse(json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
 
@@ -53,6 +57,15 @@ def fetchResponses():
 @app.route('/deactivateQuestion', methods=['POST'])
 def deactivateQuestion():
     global activeQuestion
+
+    '''
+    Store the question object in the list of allQuestions.
+    This is done now (when the question is being deactivated)
+    in order to aggregate the student responses and present
+    the question's metrics on the instructor UI.
+    '''
+    allQuestions.append(activeQuestion)
+
     if activeQuestion is not None:
         responses = activeQuestion._responses
         responses = fetchResponses()
@@ -69,15 +82,17 @@ def recordResponse():
         data = request.json
         response = Response.create_a_response(data, activeQuestion.object_id)
         activeQuestion.add_response(response)
-        allResponses.append(response)
         return flaskResponse(json.dumps(data, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
     return f'No Active Question!'
 
-@app.route('/counts', methods=['GET'])
+'''
+Returns all of the questions posed by the instructor.
+
+TODO: These should eventually be queried by sessionId and quizName.
+TODO: These should also eventually be stored in a database.
+'''
+@app.route('/allQuestion', methods=['GET'])
 def retrievCounts():
-    print('allQuestions: {}'.format(allQuestionPrompts))
-    for i, response in enumerate(allResponses):
-        print('{}'.format(response.json_data))
-    return flaskResponse(json.dumps(activeQuestion.get_counts(activeQuestion), cls=ProjectJSONEncoder), 200,
+    return flaskResponse(json.dumps(allQuestions, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
