@@ -9,7 +9,7 @@ from app.JSONHandler import ProjectJSONEncoder
 app = Flask(__name__)
 
 activeQuestion = None
-allQuestions = {} # {'questionId': 'questionPrompt'}
+allQuestionPrompts = {} # {'questionId': 'questionPrompt'}
 allResponses = []
 
 @app.route('/')
@@ -29,8 +29,7 @@ def activateQuestion():
         data = request.json
         print('sending the json payload to the Question.create_a_question() method')
         activeQuestion = Question.create_a_question(data)
-        #Associate the newly currentQuestion's id to its prompt and add it to the `allQuestions` list
-        allQuestions[activeQuestion.object_id] = activeQuestion.get_prompt()
+        allQuestionPrompts[activeQuestion.object_id] = activeQuestion.get_prompt()
         return flaskResponse(json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
 
@@ -76,10 +75,9 @@ def recordResponse():
     return f'No Active Question!'
 
 @app.route('/counts', methods=['GET'])
-def retrieveCounts():
-    print('allQuestions: {}'.format(allQuestions))
-    #print('allResponses: {}'.format(allResponses.values()))
+def retrievCounts():
+    print('allQuestions: {}'.format(allQuestionPrompts))
     for i, response in enumerate(allResponses):
-        print(allResponses.__getitem__(i).json_data)
+        print('{}'.format(response.json_data))
     return flaskResponse(json.dumps(activeQuestion.get_counts(activeQuestion), cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
