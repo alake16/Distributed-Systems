@@ -148,6 +148,9 @@ class MultipleChoiceQuestion(Question):
         if answer not in self.choices:
             raise ValueError("Response choice present but not reflected in question choices")
 
+    def get_prompt(self):
+        return self.prompt
+
 
 class MatchingQuestion(Question):
 
