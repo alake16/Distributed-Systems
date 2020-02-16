@@ -67,5 +67,7 @@ def recordResponse():
         data = request.json
         response = Response.create_a_response(data, activeQuestion.object_id)
         activeQuestion.add_response(response)
-        return jsonify(data)
+        #return jsonify(data) # Err thrown -- "AttributeError: 'Request' object has no attribute 'is_xhr'" TODO: Needs team review 
+        return flaskResponse(json.dumps(data, cls=ProjectJSONEncoder), 200,
+                             {'Content-Type': 'application/json'})
     return f'No Active Question!'
