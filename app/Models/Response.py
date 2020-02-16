@@ -46,7 +46,7 @@ class Response(ABC):
         schema_name = response_type + '_response_schema'
         validate(instance=request_for_response_object, schema=globals()[schema_name])
         request_for_response_object.pop('type')
-        request_for_response_object.pop('kind')
+        if 'kind' in request_for_response object: request_for_response_object.pop('kind')
         request_for_response_object['question_id'] = question_id
         if response_type is None:
             raise ValueError("The value passed to create_a_response_from_json must be question and have a type")
