@@ -2,11 +2,14 @@ language: python
 python: '3.7'
 install:
 - pip install -r requirements.txt
-script: make test
+script: python3 -m unittest discover -s app/tests
 deploy:
   provider: heroku
   api_key:
     secure: MVScRQKCcXrqBybDtPLZYGimMk/9Z5oCnyctCfszxNCIGHlSlP3KaW2gJzdpF6YEXT23v6r2c5HgDSiPpv2N1Zr8K+Y9auzNpLoC8dkSgOGzaqBhLY8PXtAjcGm1ynac0dR5+riB6iDatOmBMEa3AcfYQpn95QPq2HgiNa+7s4pKgQwzrLuT32FC6CheBE9lsYfP655RQTdzK7pU8JskHlBnPWwKS4M70kb11kMkaKfLNScKf4qj8jHSVFQjylFbtJ6fgq4rln16Qmm9xXph113Es5bnKhYLSWgPIAkArNFQcH/quFXZsMksq3FTktk8MJqmx2Q5d0YWspUdZQ4xXiBhUZ/+Wts90Bw0LVu3+A3RITveVskFD8tt6RcIU/b4ER8GuAQXKm6QytWrybwH9sC5HUuRi8+kyBVVK6uRGO5UUa02aHYwQl5J24qgQ/JCaUtKYa25jThyINqmmCczsd6O4TeGFEnXTbDuQaHvJeEWDSPAmZ8xEtiT8WZslDb8P55kfbzXEEsHjfcqM9/1TnI1SpvhNhmJazm6TIKtmRmxtsqAmnGmyGEZogtGje9bT3ECDcxOnVviqENQ8Sm9ZHN7wP3Sd2ZGtLKNKjRYmHrxDHlv+r2HymLKf2sVlMJt7rVjBQcAjFyyCO5511A1wzEEnh0JSo0T7xR0Pba/CvM=
   app: blooming-taiga-86486
+  on:
+    repo: alake16/Distributed-Systems
+  app: quiz-we
   on:
     repo: alake16/Distributed-Systems
