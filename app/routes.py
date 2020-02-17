@@ -205,6 +205,10 @@ def create_hover_tool():
     return None
 
 
+
+    
+
+
 def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
                      width=1200, height=300):
     """Creates a bar chart plot with the exact styling for the centcom
@@ -243,24 +247,99 @@ def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
     plot.xaxis.major_label_orientation = 1
     return plot
 
-#/histogram/quiz_name
-@app.route("/<string:quiz_name>/<int:bars_count>/")
-def chart(quiz_name, bars_count):
-    if bars_count <= 0:
-        bars_count = 1
 
+
+
+
+'''
+{
+            "kind": "question",
+            "object_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+            "type": "multiple_choice",
+            "prompt": "Best Pizza Topping is:",
+            "choices": [
+                "Pepperoni",
+                "Sausage",
+                "Pineapple"
+            ],
+            "answer": "Pepperoni",
+            "responses": [
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Sausage",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "Michelle"
+                },
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Pepperoni",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "Michael"
+                },
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Pineapple",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "George"
+                }
+            ]
+        }
+'''
+def createPlotForQuestion(question):
     data = {"days": [], "bugs": [], "costs": []}
+
+    print('CREATING PLOT FOR FOLLOWING QUESTION: {}'.format(question), flush=True)
+
+    allPossibleChoices = question.get("choices")
+
+    print('the extracted list of choices from the dictionary is: {}'.format(allPossibleChoices))
+    #print('The first element in the list is: {}'.format(firstQuestionObject))
+    #print('The list of choices from the first object is: {}'.format(choicesFromFirstQuestionObject))
+
+    bars_count=4
+
     for i in range(1, bars_count + 1):
         data['days'].append(i)
         data['bugs'].append(random.randint(1,100))
         data['costs'].append(random.uniform(1.00, 1000.00))
 
-    data["days"] = ['A', 'B', 'C', 'D', 'E']
+    data["days"] = ['A', 'B', 'C', 'D', 'E'] #labels on the x axis
 
     hover = create_hover_tool()
+
+    plots = []
+
     plot = create_bar_chart(data, "Student response count", "days",
                             "bugs", hover)
-    script, div = components(plot)
 
-    return render_template("chart.html", bars_count=bars_count, quiz_name=quiz_name,
+    plots.append(plot)
+
+    return plots
+
+
+#/histogram/quiz_name
+@app.route("/<string:quiz_name>/<int:bars_count>/")
+def chart(quiz_name, bars_count):
+
+    #Retrieve all questions for the given quiz name
+    quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
+
+    plots = [] #will hold all plots (one for each question)
+
+    for question in quizQuestions["questions"]:
+        plot = createPlotForQuestion(question)
+        plots.append(plot)
+
+    script, div = components(plots) #Blows up here.
+
+    #plots = [plot, plot2]
+    #script, div = components(plots)
+
+    return render_template("chart.html", quiz_name=quiz_name,
                            the_div=div, the_script=script)
