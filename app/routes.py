@@ -323,6 +323,35 @@ def createPlotForQuestion(question):
     return plots
 
 
+'''
+Recevies an answer choice and the answer's response list.
+returns the number of times the answer choice appeared in
+the response list (the number of times the students answered
+the given question with that answer choice).
+'''
+def aggregateResponseCountForAnswerChoice(choice, responsesList):
+    '''
+    print('RECEIVED The following choice: {}'.format(choice))
+    print('RECEIVED The following responsesList: {}'.format(responsesList))
+    
+    firstElement = responsesList[0]
+    print('FIRST ELEMENT: {}'.format(firstElement))
+
+    firstElementAnswer = firstElement["answer"]
+    print('FIRST ELEMENT ANSWER: {}'.format(firstElementAnswer))'
+    '''
+
+    responseCount = 0
+
+    for response in responsesList:
+        providedAnswer = response["answer"]
+        if providedAnswer == choice:
+            responseCount += 1
+
+    print('RETURNING A RESPONSE COUNT FOR: {}'.format(responseCount))
+    return responseCount
+
+
 #/histogram/quiz_name
 @app.route("/<string:quiz_name>/<int:bars_count>/")
 def chart(quiz_name, bars_count):
@@ -334,10 +363,11 @@ def chart(quiz_name, bars_count):
 
     for question in allQuestions:
         questionChoicesList = question["choices"]
-
+        responsesList = question["responses"]
         for i in range(0, len(questionChoicesList)):
             data['choices'].append(questionChoicesList[i])
-            data['responseCount'].append(random.randint(1,100))
+            responseCount = aggregateResponseCountForAnswerChoice(questionChoicesList[i], responsesList)
+            data['responseCount'].append(responseCount)
             data['costs'].append(random.uniform(1.00, 1000.00))
 
             data["choices"] = questionChoicesList
