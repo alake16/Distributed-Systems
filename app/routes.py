@@ -7,6 +7,7 @@ from app.Models.Response import MultipleChoiceResponse, FillInTheBlankResponse
 from app.helpers import fetchAllUntakenQuizNames, loadQuizFromName
 import requests
 import json
+from flask import jsonify
 from app.JSONHandler import ProjectJSONEncoder
 
 
@@ -19,6 +20,7 @@ from bokeh.charts import Bar
 from bokeh.embed import components
 from bokeh.models.sources import ColumnDataSource
 from flask import Flask, render_template
+from app.Models.QuizQuestions import QuizQuestions
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'you-will-never-guess'
@@ -127,18 +129,31 @@ def takeQuiz():
             requests.post("http://127.0.0.1:5000/recordResponse", json=response.json_data)
     return render_template("takeQuiz.html", title="Take a Quiz", question=activeQuestion)
 
+
 def retrieveQuestionsByQuizName(quizName):
     #TODO Clean this url up -- url args should be added via variable or method
     #TODO Should return a status code, etc
     returnedResponse = requests.get("http://127.0.0.1:5000/allQuestionsByQuizName?quizName={}".format(quizName))
-    print('the data returned is: {}'.format(returnedResponse.text))
-    return returnedResponse.text
+
+    print('the data returned is: {}'.format(returnedResponse.json()))
+    return returnedResponse.json()
+
 
 @app.route('/retrieveQuestionsForQuiz')
 def retrieveQuestionsForQuiz():
     quizName = request.args['quizName']
     quizQuestions = retrieveQuestionsByQuizName(quizName)
-    return quizQuestions
+
+    extractedList = quizQuestions.get("questions")
+    firstQuestionObject = extractedList[0]
+    choicesFromFirstQuestionObject = firstQuestionObject.get("choices")
+
+    #print('the extracted list from the dictionary is: {}'.format(extractedList))
+    #print('The first element in the list is: {}'.format(firstQuestionObject))
+    #print('The list of choices from the first object is: {}'.format(choicesFromFirstQuestionObject))
+
+    return flaskResponse(json.dumps(quizQuestions, cls=ProjectJSONEncoder), 200,
+                             {'Content-Type': 'application/json'})
 
 
 # @app.errorhandler(404)

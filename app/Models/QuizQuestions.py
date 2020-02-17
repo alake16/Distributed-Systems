@@ -1,15 +1,16 @@
+import json
+
 class QuizQuestions:
-    questions = []
 
-    def __init__(self, questions):
-        self.questions = questions
+    def __init__(self, questionsList):
+        self.questionsList = questionsList
 
-    def getQuestions():
-        return questions
+    def getQuestions(self):
+        return self.questionsList
 
-    def setQuestions(questions):
-        self.questions = questions
+    def setQuestions(self, questionsList):
+        self.questionsList = questionsList
 
     @property
     def json_data(self):
-        return {'questions': self.questions}
+        return {'questions': self.questionsList}         
