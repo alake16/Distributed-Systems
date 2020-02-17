@@ -326,20 +326,34 @@ def createPlotForQuestion(question):
 #/histogram/quiz_name
 @app.route("/<string:quiz_name>/<int:bars_count>/")
 def chart(quiz_name, bars_count):
-
-    #Retrieve all questions for the given quiz name
     quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
+    allQuestions = quizQuestions["questions"]
 
-    plots = [] #will hold all plots (one for each question)
+    data = {"choices": [], "responseCount": [], "costs": []}
+    plots = []
 
-    for question in quizQuestions["questions"]:
-        plot = createPlotForQuestion(question)
-        plots.append(plot)
+    for question in allQuestions:
+        questionChoicesList = question["choices"]
 
-    script, div = components(plots) #Blows up here.
+        for i in range(0, len(questionChoicesList)):
+            data['choices'].append(questionChoicesList[i])
+            data['responseCount'].append(random.randint(1,100))
+            data['costs'].append(random.uniform(1.00, 1000.00))
 
-    #plots = [plot, plot2]
-    #script, div = components(plots)
+            data["choices"] = questionChoicesList
 
-    return render_template("chart.html", quiz_name=quiz_name,
-                           the_div=div, the_script=script)
+            hover = create_hover_tool()
+            plot = create_bar_chart(data, "Student response count", "choices",
+                                    "responseCount", hover)
+
+            script, div = components(plot)
+
+            print('PLOT TO BE PLOTTED: {}'.format(plot))
+
+            plots.append(plot)
+            print('DONEEEE')
+
+    print('plots is of size: {}'.format(len(plots)))
+    script, div = components(plots)
+    return render_template("chart.html", bars_count=bars_count, quiz_name=quiz_name,
+                        the_div=div, the_script=script)
