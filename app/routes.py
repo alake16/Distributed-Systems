@@ -291,37 +291,6 @@ def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
             ]
         }
 '''
-def createPlotForQuestion(question):
-    data = {"days": [], "bugs": [], "costs": []}
-
-    print('CREATING PLOT FOR FOLLOWING QUESTION: {}'.format(question), flush=True)
-
-    allPossibleChoices = question.get("choices")
-
-    print('the extracted list of choices from the dictionary is: {}'.format(allPossibleChoices))
-    #print('The first element in the list is: {}'.format(firstQuestionObject))
-    #print('The list of choices from the first object is: {}'.format(choicesFromFirstQuestionObject))
-
-    bars_count=4
-
-    for i in range(1, bars_count + 1):
-        data['days'].append(i)
-        data['bugs'].append(random.randint(1,100))
-        data['costs'].append(random.uniform(1.00, 1000.00))
-
-    data["days"] = ['A', 'B', 'C', 'D', 'E'] #labels on the x axis
-
-    hover = create_hover_tool()
-
-    plots = []
-
-    plot = create_bar_chart(data, "Student response count", "days",
-                            "bugs", hover)
-
-    plots.append(plot)
-
-    return plots
-
 
 '''
 Recevies an answer choice and the answer's response list.
@@ -353,8 +322,8 @@ def aggregateResponseCountForAnswerChoice(choice, responsesList):
 
 
 #/histogram/quiz_name
-@app.route("/<string:quiz_name>/<int:bars_count>/")
-def chart(quiz_name, bars_count):
+@app.route("/<string:quiz_name>")
+def chart(quiz_name):
     quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
     allQuestions = quizQuestions["questions"]
 
@@ -385,5 +354,5 @@ def chart(quiz_name, bars_count):
 
     print('plots is of size: {}'.format(len(plots)))
     script, div = components(plots)
-    return render_template("chart.html", bars_count=bars_count, quiz_name=quiz_name,
+    return render_template("chart.html", quiz_name=quiz_name,
                         the_div=div, the_script=script)
