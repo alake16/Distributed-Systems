@@ -4,6 +4,7 @@ from flask import Response as flaskResponse
 from app.Models.Questions import Question, MultipleChoiceQuestion, MatchingQuestion, FillInTheBlankQuestion
 from app.Models.Response import Response, MultipleChoiceResponse, FillInTheBlankResponse
 import json
+from app.Models.QuizQuestions import QuizQuestions
 from app.JSONHandler import ProjectJSONEncoder
 
 app = Flask(__name__)
@@ -100,6 +101,13 @@ def recordResponse():
                              {'Content-Type': 'application/json'})
     return f'No Active Question!'
 
+#TODO flesh out logic -- what happens if not found?
+def findQuestionsByQuizName(quizName):
+    print('Looking for quizName: {}'.format(quizName))
+    questions = allQuestionsByQuizName.get(quizName)
+    return questions
+
+
 '''
 Returns all of the questions posed by the instructor.
 
@@ -108,5 +116,9 @@ TODO: These should also eventually be stored in a database.
 '''
 @app.route('/allQuestionsByQuizName', methods=['GET'])
 def retrievCounts():
-    return flaskResponse(json.dumps(allQuestionsByQuizName, cls=ProjectJSONEncoder), 200,
+    quizName = request.args['quizName']
+    allQuestionsForQuiz = findQuestionsByQuizName(quizName)
+    quizQuestions = QuizQuestions(allQuestionsForQuiz)
+
+    return flaskResponse(json.dumps(quizQuestions, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})

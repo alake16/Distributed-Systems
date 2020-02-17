@@ -1,10 +1,13 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Response as flaskResponse
 from app.forms import NewQuizForm, MultipleChoiceQuestionForm, FillInTheBlankQuestionForm, FillInTheBlankAnswerForm, MultipleChoiceAnswerForm, form_factory
 from app.Models.Quiz import Quiz
 from app.Models.Questions import Question, MultipleChoiceQuestion, FillInTheBlankQuestion
 from app.Models.Response import MultipleChoiceResponse, FillInTheBlankResponse
 from app.helpers import fetchAllUntakenQuizNames, loadQuizFromName
 import requests
+import json
+from app.JSONHandler import ProjectJSONEncoder
 
 
 import random
@@ -123,6 +126,20 @@ def takeQuiz():
             response = FillInTheBlankResponse(answer=form.answer.data, user_id=1, nickname="Test", question_id=activeQuestion.object_id)
             requests.post("http://127.0.0.1:5000/recordResponse", json=response.json_data)
     return render_template("takeQuiz.html", title="Take a Quiz", question=activeQuestion)
+
+def retrieveQuestionsByQuizName(quizName):
+    #TODO Clean this url up -- url args should be added via variable or method
+    #TODO Should return a status code, etc
+    returnedResponse = requests.get("http://127.0.0.1:5000/allQuestionsByQuizName?quizName={}".format(quizName))
+    print('the data returned is: {}'.format(returnedResponse.text))
+    return returnedResponse.text
+
+@app.route('/retrieveQuestionsForQuiz')
+def retrieveQuestionsForQuiz():
+    quizName = request.args['quizName']
+    quizQuestions = retrieveQuestionsByQuizName(quizName)
+    return quizQuestions
+
 
 # @app.errorhandler(404)
 # def notfound():
