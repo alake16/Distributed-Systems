@@ -6,9 +6,14 @@
 Welcome to Distributed-Clicker's documentation!
 ===============================================
 
+
+Models
+^^^^^^
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   
+   Models
 
 
 
@@ -18,3 +23,4 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
