@@ -195,9 +195,12 @@ class MultipleChoiceQuestion(Question):
         print('possible choices for the question: {}'.format(self.choices))
         if 'answer' not in response_json:
             raise ValueError("The key choice is not in the representation of this response {}".format(response_json))
-        choice = response_json['answer']
-        if choice not in self.choices:
+        answer = response_json['answer']
+        if answer not in self.choices:
             raise ValueError("Response choice present but not reflected in question choices")
+
+    def get_prompt(self):
+        return self.prompt
 
 
 class MatchingQuestion(Question):

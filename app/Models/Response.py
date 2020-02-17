@@ -92,8 +92,7 @@ class MultipleChoiceResponse(Response):
                 'kind': 'response',
                 'type': self.type,
                 'answer': self.answer,
-                'user_id': self.user_id,
-                'nickname': self.nickname}
+                'user_id': self.user_id, 'nickname': self.nickname}
 
 
 class MatchingResponse(Response):

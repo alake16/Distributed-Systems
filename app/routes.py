@@ -1,10 +1,15 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Response as flaskResponse
 from app.forms import NewQuizForm, MultipleChoiceQuestionForm, FillInTheBlankQuestionForm, FillInTheBlankAnswerForm, MultipleChoiceAnswerForm, form_factory
 from app.Models.Quiz import Quiz
 from app.Models.Questions import Question, MultipleChoiceQuestion, FillInTheBlankQuestion
 from app.Models.Response import MultipleChoiceResponse, FillInTheBlankResponse
 from app.helpers import fetchAllUntakenQuizNames, loadQuizFromName
 import requests
+import json
+from flask import jsonify
+from app.JSONHandler import ProjectJSONEncoder
+from app.Statistics.Metrics import Metrics
 
 
 import random
@@ -16,6 +21,7 @@ from bokeh.charts import Bar
 from bokeh.embed import components
 from bokeh.models.sources import ColumnDataSource
 from flask import Flask, render_template
+from app.Models.QuizQuestions import QuizQuestions
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'you-will-never-guess'
@@ -102,7 +108,8 @@ def activateQuizName(quizName):
         requests.post("http://127.0.0.1:5000/deactivateQuestion")
     activeQuestion = activeQuiz.get_question_number(activeQuestionNumber)
     activeQuestionNumber += 1
-    requests.post("http://127.0.0.1:5000/activateQuestion", json=activeQuestion.json_data)
+    #TODO URL param args should be added dynamically
+    requests.post("http://127.0.0.1:5000/activateQuestion?quizName={}".format(quizName), json=activeQuestion.json_data)
     return render_template("activeQuiz.html", title="Active Quiz", quizName=quizName,
                            question=activeQuestion)
 
@@ -123,6 +130,68 @@ def takeQuiz():
             requests.post("http://127.0.0.1:5000/recordResponse", json=response.json_data)
     return render_template("takeQuiz.html", title="Take a Quiz", question=activeQuestion)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@app.route('/retrieveQuestionsForQuiz')
+def retrieveQuestionsForQuiz():
+    quizName = request.args['quizName']
+    quizQuestions = Metrics.retrieveQuestionsByQuizName(quizName)
+
+    extractedList = quizQuestions.get("questions")
+    firstQuestionObject = extractedList[0]
+    choicesFromFirstQuestionObject = firstQuestionObject.get("choices")
+
+    print('the extracted list from the dictionary is: {}'.format(extractedList))
+    print('The first element in the list is: {}'.format(firstQuestionObject))
+    print('The list of choices from the first object is: {}'.format(choicesFromFirstQuestionObject))
+
+    return flaskResponse(json.dumps(quizQuestions, cls=ProjectJSONEncoder), 200,
+                             {'Content-Type': 'application/json'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # @app.errorhandler(404)
 # def notfound():
 #     """Serve 404 template."""
@@ -134,6 +203,10 @@ def takeQuiz():
 def create_hover_tool():
     # we'll code this function in a moment
     return None
+
+
+
+    
 
 
 def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
@@ -174,24 +247,112 @@ def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
     plot.xaxis.major_label_orientation = 1
     return plot
 
+
+
+
+
+'''
+{
+            "kind": "question",
+            "object_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+            "type": "multiple_choice",
+            "prompt": "Best Pizza Topping is:",
+            "choices": [
+                "Pepperoni",
+                "Sausage",
+                "Pineapple"
+            ],
+            "answer": "Pepperoni",
+            "responses": [
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Sausage",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "Michelle"
+                },
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Pepperoni",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "Michael"
+                },
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Pineapple",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "George"
+                }
+            ]
+        }
+'''
+
+'''
+Recevies an answer choice and the answer's response list.
+returns the number of times the answer choice appeared in
+the response list (the number of times the students answered
+the given question with that answer choice).
+'''
+def aggregateResponseCountForAnswerChoice(choice, responsesList):
+    '''
+    print('RECEIVED The following choice: {}'.format(choice))
+    print('RECEIVED The following responsesList: {}'.format(responsesList))
+    
+    firstElement = responsesList[0]
+    print('FIRST ELEMENT: {}'.format(firstElement))
+
+    firstElementAnswer = firstElement["answer"]
+    print('FIRST ELEMENT ANSWER: {}'.format(firstElementAnswer))'
+    '''
+
+    responseCount = 0
+
+    for response in responsesList:
+        providedAnswer = response["answer"]
+        if providedAnswer == choice:
+            responseCount += 1
+
+    print('RETURNING A RESPONSE COUNT FOR: {}'.format(responseCount))
+    return responseCount
+
+
 #/histogram/quiz_name
-@app.route("/<string:quiz_name>/<int:bars_count>/")
-def chart(quiz_name, bars_count):
-    if bars_count <= 0:
-        bars_count = 1
+@app.route("/<string:quiz_name>")
+def chart(quiz_name):
+    quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
+    allQuestions = quizQuestions["questions"]
 
-    data = {"days": [], "bugs": [], "costs": []}
-    for i in range(1, bars_count + 1):
-        data['days'].append(i)
-        data['bugs'].append(random.randint(1,100))
-        data['costs'].append(random.uniform(1.00, 1000.00))
+    data = {"choices": [], "responseCount": [], "costs": []}
+    plots = []
 
-    data["days"] = ['A', 'B', 'C', 'D', 'E']
+    for question in allQuestions:
+        questionChoicesList = question["choices"]
+        responsesList = question["responses"]
+        for i in range(0, len(questionChoicesList)):
+            data['choices'].append(questionChoicesList[i])
+            responseCount = aggregateResponseCountForAnswerChoice(questionChoicesList[i], responsesList)
+            data['responseCount'].append(responseCount)
+            data['costs'].append(random.uniform(1.00, 1000.00))
 
-    hover = create_hover_tool()
-    plot = create_bar_chart(data, "Student response count", "days",
-                            "bugs", hover)
-    script, div = components(plot)
+            data["choices"] = questionChoicesList
 
-    return render_template("chart.html", bars_count=bars_count, quiz_name=quiz_name,
-                           the_div=div, the_script=script)
+            hover = create_hover_tool()
+            plot = create_bar_chart(data, "Student response count", "choices",
+                                    "responseCount", hover)
+
+            script, div = components(plot)
+
+            print('PLOT TO BE PLOTTED: {}'.format(plot))
+
+            plots.append(plot)
+            print('DONEEEE')
+
+    print('plots is of size: {}'.format(len(plots)))
+    script, div = components(plots)
+    return render_template("chart.html", quiz_name=quiz_name,
+                        the_div=div, the_script=script)
