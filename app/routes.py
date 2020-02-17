@@ -9,6 +9,7 @@ import requests
 import json
 from flask import jsonify
 from app.JSONHandler import ProjectJSONEncoder
+from app.Statistics.Metrics import Metrics
 
 
 import random
@@ -130,30 +131,65 @@ def takeQuiz():
     return render_template("takeQuiz.html", title="Take a Quiz", question=activeQuestion)
 
 
-def retrieveQuestionsByQuizName(quizName):
-    #TODO Clean this url up -- url args should be added via variable or method
-    #TODO Should return a status code, etc
-    returnedResponse = requests.get("http://127.0.0.1:5000/allQuestionsByQuizName?quizName={}".format(quizName))
 
-    print('the data returned is: {}'.format(returnedResponse.json()))
-    return returnedResponse.json()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @app.route('/retrieveQuestionsForQuiz')
 def retrieveQuestionsForQuiz():
     quizName = request.args['quizName']
-    quizQuestions = retrieveQuestionsByQuizName(quizName)
+    quizQuestions = Metrics.retrieveQuestionsByQuizName(quizName)
 
     extractedList = quizQuestions.get("questions")
     firstQuestionObject = extractedList[0]
     choicesFromFirstQuestionObject = firstQuestionObject.get("choices")
 
-    #print('the extracted list from the dictionary is: {}'.format(extractedList))
-    #print('The first element in the list is: {}'.format(firstQuestionObject))
-    #print('The list of choices from the first object is: {}'.format(choicesFromFirstQuestionObject))
+    print('the extracted list from the dictionary is: {}'.format(extractedList))
+    print('The first element in the list is: {}'.format(firstQuestionObject))
+    print('The list of choices from the first object is: {}'.format(choicesFromFirstQuestionObject))
 
     return flaskResponse(json.dumps(quizQuestions, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # @app.errorhandler(404)
