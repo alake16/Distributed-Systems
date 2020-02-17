@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>app.Models package &mdash; Distributed-Clicker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Distributed-Clicker
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">app.Models package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.Models.Questions">app.Models.Questions module</a></li>
+<li><a class="reference internal" href="#module-app.Models.Quiz">app.Models.Quiz module</a></li>
+<li><a class="reference internal" href="#module-app.Models.Response">app.Models.Response module</a></li>
+<li><a class="reference internal" href="#module-app.Models.response_schemas">app.Models.response_schemas module</a></li>
+<li><a class="reference internal" href="#module-app.Models">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Distributed-Clicker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>app.Models package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/app.Models.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="app-models-package">
+<h1>app.Models package<a class="headerlink" href="#app-models-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-app.Models.Questions">
+<span id="app-models-questions-module"></span><h2>app.Models.Questions module<a class="headerlink" href="#module-app.Models.Questions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.Models.Questions.FillInTheBlankQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Questions.</code><code class="sig-name descname">FillInTheBlankQuestion</code><span class="sig-paren">(</span><em class="sig-param">before_prompt: str</em>, <em class="sig-param">after_prompt: str</em>, <em class="sig-param">answer: str</em>, <em class="sig-param">responses: List[Dict] = None</em>, <em class="sig-param">object_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.FillInTheBlankQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.Models.Questions.Question" title="app.Models.Questions.Question"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.Models.Questions.Question</span></code></a></p>
+<p>A question where a user is given a blank in a prompt and is required to fill it out</p>
+<dl class="method">
+<dt id="app.Models.Questions.FillInTheBlankQuestion.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Questions.FillInTheBlankQuestion.json_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function represents all of the public data of a question as a JSON object (Python Dictionary).
+:return: Python dictionary representing the Question.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.FillInTheBlankQuestion.validate_response">
+<code class="sig-name descname">validate_response</code><span class="sig-paren">(</span><em class="sig-param">response: app.Models.Response.Response</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.FillInTheBlankQuestion.validate_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subject to removal or change: Polymorphic method that validates the response object. A defensive method.
+:param response: A response object to be validated
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.Models.Questions.MatchingQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Questions.</code><code class="sig-name descname">MatchingQuestion</code><span class="sig-paren">(</span><em class="sig-param">prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str], answer: Dict[str, str], responses: List[Dict] = None, object_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.MatchingQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.Models.Questions.Question" title="app.Models.Questions.Question"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.Models.Questions.Question</span></code></a></p>
+<p>A question where a user is able to map choices on the left to choices on the right.</p>
+<p>Internally, Responses will be scored by seeing how many key-value pairs
+in a user’s response are equal to the answer’s key_value pairs.</p>
+<p>If the user correctly matched two items they will get 2/3 points for example.
+This will be configurable.</p>
+<dl class="method">
+<dt id="app.Models.Questions.MatchingQuestion.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Questions.MatchingQuestion.json_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function represents all of the public data of a question as a JSON object (Python Dictionary).
+:return: Python dictionary representing the Question.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.MatchingQuestion.validate_response">
+<code class="sig-name descname">validate_response</code><span class="sig-paren">(</span><em class="sig-param">response: app.Models.Response.Response</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.MatchingQuestion.validate_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subject to removal or change: Polymorphic method that validates the response object. A defensive method.
+:param response: A response object to be validated
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.Models.Questions.MultipleChoiceQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Questions.</code><code class="sig-name descname">MultipleChoiceQuestion</code><span class="sig-paren">(</span><em class="sig-param">prompt: str, choices: Dict[str, str], answer: str, responses: List[Dict] = None, object_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.MultipleChoiceQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.Models.Questions.Question" title="app.Models.Questions.Question"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.Models.Questions.Question</span></code></a></p>
+<p>Represents a Multiple Choice Question object.</p>
+<dl class="method">
+<dt id="app.Models.Questions.MultipleChoiceQuestion.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Questions.MultipleChoiceQuestion.json_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function represents all of the public data of a question as a JSON object (Python Dictionary).
+:return: Python dictionary representing the Question.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.MultipleChoiceQuestion.validate_response">
+<code class="sig-name descname">validate_response</code><span class="sig-paren">(</span><em class="sig-param">response: app.Models.Response.Response</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.MultipleChoiceQuestion.validate_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subject to removal or change: Polymorphic method that validates the response object. A defensive method.
+:param response: A response object to be validated
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.Models.Questions.Question">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Questions.</code><code class="sig-name descname">Question</code><span class="sig-paren">(</span><em class="sig-param">object_id=None</em>, <em class="sig-param">responses: List[app.Models.Response.Response] = None</em>, <em class="sig-param">type: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.Question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Represent the abstract base class for a Question.</p>
+<dl class="method">
+<dt id="app.Models.Questions.Question.add_response">
+<code class="sig-name descname">add_response</code><span class="sig-paren">(</span><em class="sig-param">response: app.Models.Response.Response</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.Question.add_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a response to the private instance variable responses.
+:param response: An Object that has a Response type (with the same type as this)
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.Question.create_a_question">
+<em class="property">static </em><code class="sig-name descname">create_a_question</code><span class="sig-paren">(</span><em class="sig-param">question_representation</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.Question.create_a_question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factory method to create a Question Object dynamically at runtime.
+:param question_representation: The JSON object as a dictionary, Question object, or JSON string.
+:return: A Question Object representing the type of question in the json_string</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.Question.get_counts">
+<em class="property">static </em><code class="sig-name descname">get_counts</code><span class="sig-paren">(</span><em class="sig-param">question_object</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.Question.get_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of unique responses to count for that response.
+This method only takes into account the most recent response for each user.</p>
+<p>For example, if three users answered like this:</p>
+<p>Mike: A, Mike: B, Doug: A, Louis: A then the following will result for a multiple choice question:
+get_counts(question_object) -&gt; {A: 2, B: 1}</p>
+<p>Similiarly:
+Mike: ‘Cat’, Mike: ‘Dog’, Doug: ‘Cat’, Louis: ‘Dog’
+get_counts(short_answer_question_object) -&gt; {‘Dog’: 2, ‘Cat’: 1}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>question_object</strong> – An object to get counts for</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dictionary representing the counts for each unique response.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.Question.get_responses">
+<code class="sig-name descname">get_responses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.Question.get_responses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the list of the private responses variable.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.Question.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#app.Models.Questions.Question.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Polymorphic function that returns the type of the question -&gt; multiple_choice, short_answer, matching, fill_in_the_blank
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.Question.json_data">
+<em class="property">abstract property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Questions.Question.json_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function represents all of the public data of a question as a JSON object (Python Dictionary).
+:return: Python dictionary representing the Question.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.Question.validate_response">
+<em class="property">abstract </em><code class="sig-name descname">validate_response</code><span class="sig-paren">(</span><em class="sig-param">response: app.Models.Response.Response</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.Question.validate_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subject to removal or change: Polymorphic method that validates the response object. A defensive method.
+:param response: A response object to be validated
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.Models.Questions.ShortAnswerQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Questions.</code><code class="sig-name descname">ShortAnswerQuestion</code><span class="sig-paren">(</span><em class="sig-param">prompt: str</em>, <em class="sig-param">answer: str</em>, <em class="sig-param">responses: List[Dict] = None</em>, <em class="sig-param">object_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.ShortAnswerQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.Models.Questions.Question" title="app.Models.Questions.Question"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.Models.Questions.Question</span></code></a></p>
+<p>A question where a user is given a prompt and is allowed to answer with text input.</p>
+<dl class="method">
+<dt id="app.Models.Questions.ShortAnswerQuestion.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Questions.ShortAnswerQuestion.json_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function represents all of the public data of a question as a JSON object (Python Dictionary).
+:return: Python dictionary representing the Question.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Questions.ShortAnswerQuestion.validate_response">
+<code class="sig-name descname">validate_response</code><span class="sig-paren">(</span><em class="sig-param">response: app.Models.Response.Response</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.ShortAnswerQuestion.validate_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subject to removal or change: Polymorphic method that validates the response object. A defensive method.
+:param response: A response object to be validated
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.Models.Quiz">
+<span id="app-models-quiz-module"></span><h2>app.Models.Quiz module<a class="headerlink" href="#module-app.Models.Quiz" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.Models.Quiz.Quiz">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Quiz.</code><code class="sig-name descname">Quiz</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">questions: List[app.Models.Questions.Question] = None</em>, <em class="sig-param">object_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Quiz.Quiz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="app.Models.Quiz.Quiz.add_question_to_quiz">
+<code class="sig-name descname">add_question_to_quiz</code><span class="sig-paren">(</span><em class="sig-param">question: app.Models.Questions.Question</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Quiz.Quiz.add_question_to_quiz" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Quiz.Quiz.get_question">
+<code class="sig-name descname">get_question</code><span class="sig-paren">(</span><em class="sig-param">question_id</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Quiz.Quiz.get_question" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Quiz.Quiz.get_question_number">
+<code class="sig-name descname">get_question_number</code><span class="sig-paren">(</span><em class="sig-param">number</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Quiz.Quiz.get_question_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Quiz.Quiz.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Quiz.Quiz.json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Quiz.Quiz.load_quiz">
+<em class="property">static </em><code class="sig-name descname">load_quiz</code><span class="sig-paren">(</span><em class="sig-param">name_of_quiz: str</em>, <em class="sig-param">taken</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Quiz.Quiz.load_quiz" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Quiz.Quiz.load_quiz_from_json">
+<em class="property">static </em><code class="sig-name descname">load_quiz_from_json</code><span class="sig-paren">(</span><em class="sig-param">json_object</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Quiz.Quiz.load_quiz_from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Quiz.Quiz.write_quiz">
+<em class="property">static </em><code class="sig-name descname">write_quiz</code><span class="sig-paren">(</span><em class="sig-param">quiz_object</em>, <em class="sig-param">taken: bool</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Quiz.Quiz.write_quiz" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.Models.Response">
+<span id="app-models-response-module"></span><h2>app.Models.Response module<a class="headerlink" href="#module-app.Models.Response" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.Models.Response.FillInTheBlankResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Response.</code><code class="sig-name descname">FillInTheBlankResponse</code><span class="sig-paren">(</span><em class="sig-param">answer: str</em>, <em class="sig-param">user_id: int</em>, <em class="sig-param">nickname: str</em>, <em class="sig-param">question_id</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Response.FillInTheBlankResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.Models.Response.Response" title="app.Models.Response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.Models.Response.Response</span></code></a></p>
+<dl class="method">
+<dt id="app.Models.Response.FillInTheBlankResponse.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Response.FillInTheBlankResponse.json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.Models.Response.MatchingResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Response.</code><code class="sig-name descname">MatchingResponse</code><span class="sig-paren">(</span><em class="sig-param">answer: Dict[str, str], user_id: int, nickname: str, question_id</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Response.MatchingResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.Models.Response.Response" title="app.Models.Response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.Models.Response.Response</span></code></a></p>
+<dl class="method">
+<dt id="app.Models.Response.MatchingResponse.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Response.MatchingResponse.json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.Models.Response.MultipleChoiceResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Response.</code><code class="sig-name descname">MultipleChoiceResponse</code><span class="sig-paren">(</span><em class="sig-param">answer: str</em>, <em class="sig-param">user_id: int</em>, <em class="sig-param">nickname: str</em>, <em class="sig-param">question_id</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Response.MultipleChoiceResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.Models.Response.Response" title="app.Models.Response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.Models.Response.Response</span></code></a></p>
+<dl class="method">
+<dt id="app.Models.Response.MultipleChoiceResponse.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Response.MultipleChoiceResponse.json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.Models.Response.Response">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Response.</code><code class="sig-name descname">Response</code><span class="sig-paren">(</span><em class="sig-param">user_id: int</em>, <em class="sig-param">nickname: str</em>, <em class="sig-param">type: str</em>, <em class="sig-param">question_id</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Response.Response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Represents a Users response to a Question. Users should have a unique user_id and a nickname
+There is no unique_id since the type of question, user_id, and nickname, along with the answer data of child classes
+will identify the response. The question_id is a variable that ensures a response is always associated with a question.</p>
+<dl class="method">
+<dt id="app.Models.Response.Response.create_a_response">
+<em class="property">static </em><code class="sig-name descname">create_a_response</code><span class="sig-paren">(</span><em class="sig-param">request_for_response_object</em>, <em class="sig-param">question_id: str</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Response.Response.create_a_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Factory method to create a Response Object dynamically at runtime. :param request_for_response_object: Either
+a string representing the response, the dictionary, or the object itself(deep copy’s it). :return: A Response
+Object representing the type of question in the json_string
+:param question_id:
+:param request_for_response_object:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Response.Response.get_type">
+<code class="sig-name descname">get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Response.Response.get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.Models.Response.Response.json_data">
+<em class="property">abstract property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Response.Response.json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.Models.Response.ShortAnswerResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.Models.Response.</code><code class="sig-name descname">ShortAnswerResponse</code><span class="sig-paren">(</span><em class="sig-param">answer: str</em>, <em class="sig-param">user_id: int</em>, <em class="sig-param">nickname: str</em>, <em class="sig-param">question_id</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Response.ShortAnswerResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.Models.Response.Response" title="app.Models.Response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.Models.Response.Response</span></code></a></p>
+<dl class="method">
+<dt id="app.Models.Response.ShortAnswerResponse.json_data">
+<em class="property">property </em><code class="sig-name descname">json_data</code><a class="headerlink" href="#app.Models.Response.ShortAnswerResponse.json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.Models.response_schemas">
+<span id="app-models-response-schemas-module"></span><h2>app.Models.response_schemas module<a class="headerlink" href="#module-app.Models.response_schemas" title="Permalink to this headline">¶</a></h2>
+<p>This module is a work in progress and is subject to change.</p>
+<p>The intention of the response_scehmas module is to ensure that JSON data received over the Network is appropriate.</p>
+<p>Intended changes:
+1) Consolidating shared data into a base response_schema.
+2) Using the required syntax to ensure certain properties are always present.
+3) Auto-generating these schemas using data from Question objects and how they’re represented.</p>
+</div>
+<div class="section" id="module-app.Models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.Models" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Daniel Palacios, Vismark Juarez, Brian Dehlinger, Andrew Lake
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
