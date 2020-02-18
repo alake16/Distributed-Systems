@@ -277,7 +277,7 @@ def chart(quiz_name):
     quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
     allQuestions = quizQuestions["questions"]
 
-    data = {"choices": [], "responseCount": [], "costs": []}
+    data = {"choices": [], "responseCount": []}
     plots = []
 
     for question in allQuestions:
@@ -288,10 +288,7 @@ def chart(quiz_name):
             data['choices'].append(questionChoicesList[i])
             responseCount = aggregateResponseCountForAnswerChoice(questionChoicesList[i], responsesList)
             data['responseCount'].append(responseCount)
-            data['costs'].append(random.uniform(1.00, 1000.00))
-
             data["choices"] = questionChoicesList
-
             hover = create_hover_tool()
 
         questionPrompt = question['prompt']
