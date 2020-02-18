@@ -11,7 +11,6 @@ from flask import jsonify
 from app.JSONHandler import ProjectJSONEncoder
 from app.Statistics.Metrics import Metrics
 
-
 import random
 from bokeh.models import (HoverTool, FactorRange, Plot, LinearAxis, Grid,
                           Range1d)
@@ -131,24 +130,6 @@ def takeQuiz():
     return render_template("takeQuiz.html", title="Take a Quiz", question=activeQuestion)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @app.route('/retrieveQuestionsForQuiz')
 def retrieveQuestionsForQuiz():
     quizName = request.args['quizName']
@@ -166,32 +147,6 @@ def retrieveQuestionsForQuiz():
                              {'Content-Type': 'application/json'})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # @app.errorhandler(404)
 # def notfound():
 #     """Serve 404 template."""
@@ -203,10 +158,6 @@ def retrieveQuestionsForQuiz():
 def create_hover_tool():
     # we'll code this function in a moment
     return None
-
-
-
-    
 
 
 def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
@@ -241,14 +192,11 @@ def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
     plot.min_border_top = 0
     plot.xgrid.grid_line_color = None
     plot.ygrid.grid_line_color = "#999999"
-    plot.yaxis.axis_label = "Student Response Count"
+    plot.yaxis.axis_label = "Student Answer Counts"
     plot.ygrid.grid_line_alpha = 0.1
     plot.xaxis.axis_label = "Question Answer Choices"
     plot.xaxis.major_label_orientation = 1
     return plot
-
-
-
 
 
 '''
@@ -321,7 +269,6 @@ def aggregateResponseCountForAnswerChoice(choice, responsesList):
     return responseCount
 
 
-#/histogram/quiz_name
 @app.route("/<string:quiz_name>")
 def chart(quiz_name):
     quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
@@ -334,8 +281,6 @@ def chart(quiz_name):
         questionChoicesList = question["choices"]
         responsesList = question["responses"]
 
-
-
         for i in range(0, len(questionChoicesList)):
             data['choices'].append(questionChoicesList[i])
             responseCount = aggregateResponseCountForAnswerChoice(questionChoicesList[i], responsesList)
@@ -346,9 +291,8 @@ def chart(quiz_name):
 
             hover = create_hover_tool()
 
-            
-
-        plot = create_bar_chart(data, "Student response count", "choices",
+        questionPrompt = question['prompt']
+        plot = create_bar_chart(data, questionPrompt, "choices",
                                     "responseCount", hover)
         script, div = components(plot)
         print('PLOT TO BE PLOTTED: {}'.format(plot))
@@ -358,4 +302,4 @@ def chart(quiz_name):
     print('plots is of size: {}'.format(len(plots)))
     script, div = components(plots)
     return render_template("chart.html", quiz_name=quiz_name,
-                        the_div=div, the_script=script)
+            the_div=div, the_script=script)
