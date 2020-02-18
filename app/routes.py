@@ -265,10 +265,13 @@ def aggregateResponseCountForAnswerChoice(choice, responsesList):
         if providedAnswer == choice:
             responseCount += 1
 
-    print('RETURNING A RESPONSE COUNT FOR: {}'.format(responseCount))
     return responseCount
 
 
+'''
+Bokah chart implementation was implemented using the following reference:
+Author: Matt Makai | Full Stack Python: https://www.fullstackpython.com/blog/responsive-bar-charts-bokeh-flask-python-3.html
+'''
 @app.route("/<string:quiz_name>")
 def chart(quiz_name):
     quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
@@ -295,9 +298,7 @@ def chart(quiz_name):
         plot = create_bar_chart(data, questionPrompt, "choices",
                                     "responseCount", hover)
         script, div = components(plot)
-        print('PLOT TO BE PLOTTED: {}'.format(plot))
         plots.append(plot)
-        print('DONEEEE')
 
     print('plots is of size: {}'.format(len(plots)))
     script, div = components(plots)
