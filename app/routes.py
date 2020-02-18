@@ -333,6 +333,9 @@ def chart(quiz_name):
     for question in allQuestions:
         questionChoicesList = question["choices"]
         responsesList = question["responses"]
+
+
+
         for i in range(0, len(questionChoicesList)):
             data['choices'].append(questionChoicesList[i])
             responseCount = aggregateResponseCountForAnswerChoice(questionChoicesList[i], responsesList)
@@ -342,15 +345,15 @@ def chart(quiz_name):
             data["choices"] = questionChoicesList
 
             hover = create_hover_tool()
-            plot = create_bar_chart(data, "Student response count", "choices",
+
+            
+
+        plot = create_bar_chart(data, "Student response count", "choices",
                                     "responseCount", hover)
-
-            script, div = components(plot)
-
-            print('PLOT TO BE PLOTTED: {}'.format(plot))
-
-            plots.append(plot)
-            print('DONEEEE')
+        script, div = components(plot)
+        print('PLOT TO BE PLOTTED: {}'.format(plot))
+        plots.append(plot)
+        print('DONEEEE')
 
     print('plots is of size: {}'.format(len(plots)))
     script, div = components(plots)
