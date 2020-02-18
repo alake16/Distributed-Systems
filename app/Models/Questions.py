@@ -7,6 +7,9 @@ from app.Models.Response import Response
 
 
 class Question(ABC):
+    """
+    Represent the abstract base class for a Question.
+    """
 
     def __init__(self, object_id=None, responses: List[Response] = None, type: str = None):
         self.type = type
@@ -19,16 +22,24 @@ class Question(ABC):
     @property
     @abstractmethod
     def json_data(self) -> Dict:
+        """
+        This function represents all of the public data of a question as a JSON object (Python Dictionary).
+        :return: Python dictionary representing the Question.
+        """
         return {}
 
     def get_type(self) -> str:
+        """
+        Polymorphic function that returns the type of the question -> multiple_choice, short_answer, matching, fill_in_the_blank
+        :return:
+        """
         return self.type
 
     @staticmethod
     def create_a_question(question_representation):
         """
         Factory method to create a Question Object dynamically at runtime.
-        :param question_representation: The JSON object as a dictionary.
+        :param question_representation: The JSON object as a dictionary, Question object, or JSON string.
         :return: A Question Object representing the type of question in the json_string
         """
         question_representation = copy.deepcopy(question_representation)
@@ -60,8 +71,9 @@ class Question(ABC):
 
     def add_response(self, response: Response):
         """
-        :param response:
-        :return:
+        Adds a response to the private instance variable responses.
+        :param response: An Object that has a Response type (with the same type as this)
+        :return: None
         """
         if not isinstance(response, Response):
             raise ValueError("Only Response objects are allowed")
@@ -71,6 +83,13 @@ class Question(ABC):
         self._responses.append(response)
 
     def _initialize_responses(self, responses: List[Dict or Response]):
+        """
+        Polymorphic method called in the __init__ method after call to super().__init__
+        that takes a list of responses in either dictionary or Response object reprsentation
+        and calls Response.create_a_response to populate the private instance variable _responses.
+        :param responses:
+        :return:
+        """
         if responses is not None and len(responses) > 0:
             response_objects = [
                 Response.create_a_response(response, self.object_id) if isinstance(response, dict) else response for
@@ -80,12 +99,27 @@ class Question(ABC):
 
     @abstractmethod
     def validate_response(self, response: Response):
+        """
+        Subject to removal or change: Polymorphic method that validates the response object. A defensive method.
+        :param response: A response object to be validated
+        :return:
+        """
         pass
 
+    # TODO Team Decision -> copy.deepcopy or not
     def get_responses(self):
+        """
+        Returns the list of the private responses variable.
+        :return:
+        """
         return self._responses
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
+        """
+        Subject to change/update: A polymorphic method to test equality of questions.
+        :param other: Another object to test for equality.
+        :return: bool
+        """
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         return False
@@ -93,6 +127,23 @@ class Question(ABC):
     # TODO MapReduce Model with Coroutines, Make More Efficient -> will come naturally with Streaming Arch
     @staticmethod
     def get_counts(question_object):
+        """
+        Returns a dictionary of unique responses to count for that response.
+        This method only takes into account the most recent response for each user.
+
+        For example, if three users answered like this:
+
+        Mike: A, Mike: B, Doug: A, Louis: A then the following will result for a multiple choice question:
+        get_counts(question_object) -> {A: 2, B: 1}
+
+        Similiarly:
+        Mike: 'Cat', Mike: 'Dog', Doug: 'Cat', Louis: 'Dog'
+        get_counts(short_answer_question_object) -> {'Dog': 2, 'Cat': 1}
+
+        :param question_object: An object to get counts for
+        :return: Dictionary representing the counts for each unique response.
+        """
+
 
         def user_to_most_recent_responses(stream_of_responses):
             user_to_most_recent_response_dict = {}
@@ -123,7 +174,7 @@ class MultipleChoiceQuestion(Question):
         :param prompt: The prompt for the multiple choice question
         :param choices: Dictionary with the answer choice keys and their prompts
         :param answer: A key in the above dictionary(i.e. a, b, c, d)
-        :param responses: A dictionary that keeps track of the responses on this object(i.e. {A: 0, B: 3, C:2, D:4}
+        :param responses: A response object represented as a dictionary or an actual response object. This will be internally turned into a list of Responses.
         """
         super().__init__(object_id, responses, 'multiple_choice')
         self.prompt = prompt
@@ -154,15 +205,34 @@ class MultipleChoiceQuestion(Question):
 
 class MatchingQuestion(Question):
 
+    """
+    A question where a user is able to map choices on the left to choices on the right.
+
+    Internally, Responses will be scored by seeing how many key-value pairs
+    in a user's response are equal to the answer's key_value pairs.
+
+    If the user correctly matched two items they will get 2/3 points for example.
+    This will be configurable.
+    """
+
     def __init__(self, prompt: str, left_choices: Dict[str, str], right_choices: Dict[str, str],
                  answer: Dict[str, str], responses: List[Dict or Response] = None, object_id=None):
         """
 
-        :param prompt: The prompt for the multiple choice question
-        :param left_choices: The choices on the left for the user to match to the choices on the right.
-        :param right_choices: The choices on the right to be matched by the user to the choices on the right.
-        :param answer_mapping: A mapping consisting of keys that are answer choices on the left with values that are answer choices on the right.
-        :param responses: A list of tuples which themselves are mappings of answer choices on the left to answer choices on the right.
+        :param prompt: The prompt for the multiple choice question :param left_choices: The choices on the left for
+        the user to match to the choices on the right. :param right_choices: The choices on the right to be matched
+        by the user to the choices on the right. :param answer: A mapping consisting of keys that are answer choices
+        on the left with values that are answer choices on the right. :param responses: A list of tuples which
+        themselves are mappings of answer choices on the left to answer choices on the right.
+
+        INTENDED changes: left_choices and right_choices refactored to lists -> ['Dog', 'Cat', 'Mike', 'Doug']
+
+        Internally, it will be ensured that the left_choices and right_choices consist of unique items.
+
+        For example:
+
+        ['Cat', 'Cat'] -> ['Cat']
+
         """
         super().__init__(object_id, responses, 'matching')
         self.prompt = prompt
@@ -200,7 +270,7 @@ class ShortAnswerQuestion(Question):
         """
         :param prompt: The prompt for the question
         :param answer: The answer to the question.
-        :param responses: A list of string responses received on this object to the question.
+        :param responses: A list of Responses received on this object to the question represented as either Response Objects or dictionaries representing those objects.
         """
         super().__init__(object_id, responses, 'short_answer')
         self.prompt = prompt
@@ -229,7 +299,7 @@ class FillInTheBlankQuestion(Question):
         :param before_prompt: The text before the blank
         :param after_prompt: The text after the blank
         :param correct_answer: The correct answer to the question
-        :param responses: A list of text responses to the question
+        :param responses: A list of responses to the question represented as either Response objects or dictionaries representing those objects.
         """
         super().__init__(object_id, responses, 'fill_in_the_blank')
         self.before_prompt = before_prompt

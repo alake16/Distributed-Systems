@@ -1,0 +1,528 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>app.tests package &mdash; Distributed-Clicker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Distributed-Clicker
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="models_guide.html">Models</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Distributed-Clicker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>app.tests package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/app.tests.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="app-tests-package">
+<h1>app.tests package<a class="headerlink" href="#app-tests-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-app.tests.test_JSONHandler">
+<span id="app-tests-test-jsonhandler-module"></span><h2>app.tests.test_JSONHandler module<a class="headerlink" href="#module-app.tests.test_JSONHandler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.tests.test_JSONHandler.TestProjectJSONEncoder">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_JSONHandler.</code><code class="sig-name descname">TestProjectJSONEncoder</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_JSONHandler.TestProjectJSONEncoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="app.tests.test_JSONHandler.TestProjectJSONEncoder.test_json_encoder_does_not_encode_arbitrary_objects">
+<code class="sig-name descname">test_json_encoder_does_not_encode_arbitrary_objects</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_JSONHandler.TestProjectJSONEncoder.test_json_encoder_does_not_encode_arbitrary_objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests to ensure that the encoder doesn’t encode arbitrary objects.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_JSONHandler.TestProjectJSONEncoder.test_json_encoder_encodes_json_data_attribute">
+<code class="sig-name descname">test_json_encoder_encodes_json_data_attribute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_JSONHandler.TestProjectJSONEncoder.test_json_encoder_encodes_json_data_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests that the project JSON encoder properly deals with objects that have json_data attributes
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.tests.test_Questions">
+<span id="app-tests-test-questions-module"></span><h2>app.tests.test_Questions module<a class="headerlink" href="#module-app.tests.test_Questions" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.tests.test_Questions.TestFillInTheBlankQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Questions.</code><code class="sig-name descname">TestFillInTheBlankQuestion</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestFillInTheBlankQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="app.tests.test_Questions.TestFillInTheBlankQuestion.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><em class="sig-param">uuid_mock</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Questions.TestFillInTheBlankQuestion.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestFillInTheBlankQuestion.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestFillInTheBlankQuestion.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestFillInTheBlankQuestion.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestFillInTheBlankQuestion.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestFillInTheBlankQuestion.test_validate_response">
+<code class="sig-name descname">test_validate_response</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestFillInTheBlankQuestion.test_validate_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.tests.test_Questions.TestMatchingQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Questions.</code><code class="sig-name descname">TestMatchingQuestion</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMatchingQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMatchingQuestion.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><em class="sig-param">uuid_mock</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Questions.TestMatchingQuestion.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMatchingQuestion.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMatchingQuestion.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMatchingQuestion.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMatchingQuestion.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMatchingQuestion.test_validate_response">
+<code class="sig-name descname">test_validate_response</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMatchingQuestion.test_validate_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.tests.test_Questions.TestMultipleChoiceQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Questions.</code><code class="sig-name descname">TestMultipleChoiceQuestion</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMultipleChoiceQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMultipleChoiceQuestion.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><em class="sig-param">uuid_mock</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Questions.TestMultipleChoiceQuestion.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMultipleChoiceQuestion.test_get_responses">
+<code class="sig-name descname">test_get_responses</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMultipleChoiceQuestion.test_get_responses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMultipleChoiceQuestion.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMultipleChoiceQuestion.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMultipleChoiceQuestion.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMultipleChoiceQuestion.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestMultipleChoiceQuestion.test_validate_response">
+<code class="sig-name descname">test_validate_response</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestMultipleChoiceQuestion.test_validate_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.tests.test_Questions.TestQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Questions.</code><code class="sig-name descname">TestQuestion</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="app.tests.test_Questions.TestQuestion.helper">
+<code class="sig-name descname">helper</code><span class="sig-paren">(</span><em class="sig-param">question_json</em>, <em class="sig-param">question_class</em>, <em class="sig-param">question_type</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestQuestion.helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method to test static factory method for creating questions.
+:param question_json:
+:param question_class:
+:param question_type:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestQuestion.test_add_response">
+<code class="sig-name descname">test_add_response</code><span class="sig-paren">(</span><em class="sig-param">mock_validate</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestQuestion.test_add_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestQuestion.test_create_a_multiple_choice_question">
+<code class="sig-name descname">test_create_a_multiple_choice_question</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestQuestion.test_create_a_multiple_choice_question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the static factory method of Question and ensures it returns the appropriate objects
+by calling the appropriate constructor with the appropriate arguments once.
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.tests.test_Questions.TestShortAnswerQuestion">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Questions.</code><code class="sig-name descname">TestShortAnswerQuestion</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestShortAnswerQuestion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="app.tests.test_Questions.TestShortAnswerQuestion.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><em class="sig-param">uuid_mock</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Questions.TestShortAnswerQuestion.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestShortAnswerQuestion.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestShortAnswerQuestion.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestShortAnswerQuestion.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestShortAnswerQuestion.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Questions.TestShortAnswerQuestion.test_validate_response">
+<code class="sig-name descname">test_validate_response</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Questions.TestShortAnswerQuestion.test_validate_response" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.tests.test_Quiz">
+<span id="app-tests-test-quiz-module"></span><h2>app.tests.test_Quiz module<a class="headerlink" href="#module-app.tests.test_Quiz" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.tests.test_Quiz.TestQuiz">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Quiz.</code><code class="sig-name descname">TestQuiz</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Quiz.TestQuiz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="app.tests.test_Quiz.TestQuiz.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Quiz.TestQuiz.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Quiz.TestQuiz.test_add_question_to_quiz">
+<code class="sig-name descname">test_add_question_to_quiz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Quiz.TestQuiz.test_add_question_to_quiz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensures that the quiz object can have questions added to it.
+The question is mocked to prevent changes to the question interface affecting the quiz tests.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Quiz.TestQuiz.test_get_question">
+<code class="sig-name descname">test_get_question</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Quiz.TestQuiz.test_get_question" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensures that all questions can be retrieved using quiz.get_question(index_of_question)
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Quiz.TestQuiz.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Quiz.TestQuiz.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensures that the json_data property returns an accurate representation of the Quiz object.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Quiz.TestQuiz.test_load_quiz_from_json">
+<code class="sig-name descname">test_load_quiz_from_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Quiz.TestQuiz.test_load_quiz_from_json" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.tests.test_Response">
+<span id="app-tests-test-response-module"></span><h2>app.tests.test_Response module<a class="headerlink" href="#module-app.tests.test_Response" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="app.tests.test_Response.TestFillInTheBlankResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Response.</code><code class="sig-name descname">TestFillInTheBlankResponse</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestFillInTheBlankResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>These tests ensure that object initilization is done properly(all the relevant data should be reflected in the json_data property).</p>
+<dl class="method">
+<dt id="app.tests.test_Response.TestFillInTheBlankResponse.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><em class="sig-param">uuid_mock</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Response.TestFillInTheBlankResponse.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestFillInTheBlankResponse.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestFillInTheBlankResponse.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestFillInTheBlankResponse.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestFillInTheBlankResponse.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.tests.test_Response.TestMatchingResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Response.</code><code class="sig-name descname">TestMatchingResponse</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestMatchingResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>These tests ensure that object initilization is done properly(all the relevant data should be reflected in the json_data property).</p>
+<dl class="method">
+<dt id="app.tests.test_Response.TestMatchingResponse.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><em class="sig-param">uuid_mock</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Response.TestMatchingResponse.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestMatchingResponse.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestMatchingResponse.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestMatchingResponse.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestMatchingResponse.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.tests.test_Response.TestMultipleChoiceResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Response.</code><code class="sig-name descname">TestMultipleChoiceResponse</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestMultipleChoiceResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>These tests ensure that object initilization is done properly(all the relevant data should be reflected in the json_data property).</p>
+<dl class="method">
+<dt id="app.tests.test_Response.TestMultipleChoiceResponse.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><em class="sig-param">uuid_mock</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Response.TestMultipleChoiceResponse.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestMultipleChoiceResponse.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestMultipleChoiceResponse.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestMultipleChoiceResponse.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestMultipleChoiceResponse.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.tests.test_Response.TestResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Response.</code><code class="sig-name descname">TestResponse</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="app.tests.test_Response.TestResponse.helper">
+<code class="sig-name descname">helper</code><span class="sig-paren">(</span><em class="sig-param">response_json</em>, <em class="sig-param">response_class</em>, <em class="sig-param">response_type</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestResponse.helper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper method to test the factory method for creating responses.
+:param response_json:
+:param response_class:
+:param response_type:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestResponse.test_create_a_response">
+<code class="sig-name descname">test_create_a_response</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestResponse.test_create_a_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ensures that the factory method logic works properly.
+1) create_a_response is being passed the appropriate variables.
+2) Response’s __init__ functions are called with the JSON objects below(using keyword arguments)
+3) Mocking __init__ is used to prevent testing whether initilization logic is correct(left to other tests).
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.tests.test_Response.TestShortAnswerResponse">
+<em class="property">class </em><code class="sig-prename descclassname">app.tests.test_Response.</code><code class="sig-name descname">TestShortAnswerResponse</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestShortAnswerResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>These tests ensure that object initilization is done properly(all the relevant data should be reflected in the json_data property).</p>
+<dl class="method">
+<dt id="app.tests.test_Response.TestShortAnswerResponse.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><em class="sig-param">uuid_mock</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#app.tests.test_Response.TestShortAnswerResponse.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestShortAnswerResponse.test_get_type">
+<code class="sig-name descname">test_get_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestShortAnswerResponse.test_get_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.tests.test_Response.TestShortAnswerResponse.test_json_data">
+<code class="sig-name descname">test_json_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#app.tests.test_Response.TestShortAnswerResponse.test_json_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.tests" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Daniel Palacios, Vismark Juarez, Brian Dehlinger, Andrew Lake
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -13,7 +13,7 @@ class Response(ABC):
     """
     Represents a Users response to a Question. Users should have a unique user_id and a nickname
     There is no unique_id since the type of question, user_id, and nickname, along with the answer data of child classes
-    will identify the response.
+    will identify the response. The question_id is a variable that ensures a response is always associated with a question.
     """
 
     def __init__(self, user_id: int, nickname: str, type: str, question_id):
@@ -88,8 +88,11 @@ class MultipleChoiceResponse(Response):
 
     @property
     def json_data(self):
-        return {'question_id': self.question_id, 'kind': 'response', 'type': self.type, 'answer': self.answer, 'user_id': self.user_id,
-                'nickname': self.nickname}
+        return {'question_id': self.question_id,
+                'kind': 'response',
+                'type': self.type,
+                'answer': self.answer,
+                'user_id': self.user_id, 'nickname': self.nickname}
 
 
 class MatchingResponse(Response):

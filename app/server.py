@@ -23,12 +23,21 @@ allQuestionsByQuizName = {}
 
 @app.route('/')
 def welcome():
+    """ Renders a welcome page for the user."""
     name = request.args.get("name", "World")
     return f'Welcome to Quiz API v1!'
 
 
 @app.route('/activateQuestion', methods=['POST', 'GET'])
 def activateQuestion():
+    """Takes the POST request containing question data and marks that question as active if there is not an active
+    question. Takes the GET request and returns the active question.
+     Subject to change:
+
+     1) activeQuestion may no longer be global
+     2) This may require authentication
+     3) The GET request may be routed to a separate function such as active_question
+     """
     global activeQuestion
     global currentQuizName
     currentQuizName = request.args['quizName']
@@ -55,6 +64,7 @@ def activateQuestion():
 
 @app.route('/fetchResponses', methods=['GET'])
 def fetchResponses():
+    """Returns the list of responses to the active question as JSON."""
     global activeQuestion
     if activeQuestion is not None:
         return flaskResponse(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder),
@@ -64,6 +74,10 @@ def fetchResponses():
 
 @app.route('/deactivateQuestion', methods=['POST'])
 def deactivateQuestion():
+    """
+    Deactivates a question if it is active.
+    :return:
+    """
     global activeQuestion
 
     #If the quizName is found, simply add the currentQuestion to the quiz's list of Questions
@@ -91,6 +105,10 @@ def deactivateQuestion():
 
 @app.route('/recordResponse', methods=['POST'])
 def recordResponse():
+    """
+    Takes the user's POST request and records that as a response on the active question.
+    :return:
+    """
     global activeQuestion
     print('received the following payload: {}'.format(request.json))
     if isinstance(activeQuestion, MultipleChoiceQuestion):
