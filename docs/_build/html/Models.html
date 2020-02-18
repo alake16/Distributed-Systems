@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Models package &mdash; Distributed-Clicker  documentation</title>
+  <title>app.Models package &mdash; Distributed-Clicker  documentation</title>
   
 
   
@@ -78,10 +78,19 @@
               
             
             
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="models_guide.html">Models</a></li>
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">app.Models package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.Models.Questions">app.Models.Questions module</a></li>
+<li><a class="reference internal" href="#module-app.Models.Quiz">app.Models.Quiz module</a></li>
+<li><a class="reference internal" href="#module-app.Models.Response">app.Models.Response module</a></li>
+<li><a class="reference internal" href="#module-app.Models.response_schemas">app.Models.response_schemas module</a></li>
+<li><a class="reference internal" href="#module-app.Models">Module contents</a></li>
 </ul>
-
+</li>
+</ul>
+</div>
             
           
         </div>
@@ -125,13 +134,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Models package</li>
+      <li>app.Models package</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/Models.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/models.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -144,10 +153,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="models-package">
-<h1>Models package<a class="headerlink" href="#models-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="app-models-package">
+<h1>app.Models package<a class="headerlink" href="#app-models-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="module-app.Models.Questions">
-<span id="questions-module"></span><h2>Questions module<a class="headerlink" href="#module-app.Models.Questions" title="Permalink to this headline">¶</a></h2>
+<span id="app-models-questions-module"></span><h2>app.Models.Questions module<a class="headerlink" href="#module-app.Models.Questions" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="app.Models.Questions.FillInTheBlankQuestion">
 <em class="property">class </em><code class="sig-prename descclassname">app.Models.Questions.</code><code class="sig-name descname">FillInTheBlankQuestion</code><span class="sig-paren">(</span><em class="sig-param">before_prompt: str</em>, <em class="sig-param">after_prompt: str</em>, <em class="sig-param">answer: str</em>, <em class="sig-param">responses: List[Dict] = None</em>, <em class="sig-param">object_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Questions.FillInTheBlankQuestion" title="Permalink to this definition">¶</a></dt>
@@ -315,7 +327,7 @@ get_counts(short_answer_question_object) -&gt; {‘Dog’: 2, ‘Cat’: 1}</p>
 
 </div>
 <div class="section" id="module-app.Models.Quiz">
-<span id="quiz-module"></span><h2>Quiz module<a class="headerlink" href="#module-app.Models.Quiz" title="Permalink to this headline">¶</a></h2>
+<span id="app-models-quiz-module"></span><h2>app.Models.Quiz module<a class="headerlink" href="#module-app.Models.Quiz" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="app.Models.Quiz.Quiz">
 <em class="property">class </em><code class="sig-prename descclassname">app.Models.Quiz.</code><code class="sig-name descname">Quiz</code><span class="sig-paren">(</span><em class="sig-param">name: str</em>, <em class="sig-param">questions: List[app.Models.Questions.Question] = None</em>, <em class="sig-param">object_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Quiz.Quiz" title="Permalink to this definition">¶</a></dt>
@@ -359,7 +371,7 @@ get_counts(short_answer_question_object) -&gt; {‘Dog’: 2, ‘Cat’: 1}</p>
 
 </div>
 <div class="section" id="module-app.Models.Response">
-<span id="response-module"></span><h2>Response module<a class="headerlink" href="#module-app.Models.Response" title="Permalink to this headline">¶</a></h2>
+<span id="app-models-response-module"></span><h2>app.Models.Response module<a class="headerlink" href="#module-app.Models.Response" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="app.Models.Response.FillInTheBlankResponse">
 <em class="property">class </em><code class="sig-prename descclassname">app.Models.Response.</code><code class="sig-name descname">FillInTheBlankResponse</code><span class="sig-paren">(</span><em class="sig-param">answer: str</em>, <em class="sig-param">user_id: int</em>, <em class="sig-param">nickname: str</em>, <em class="sig-param">question_id</em><span class="sig-paren">)</span><a class="headerlink" href="#app.Models.Response.FillInTheBlankResponse" title="Permalink to this definition">¶</a></dt>
@@ -435,7 +447,7 @@ Object representing the type of question in the json_string
 
 </div>
 <div class="section" id="module-app.Models.response_schemas">
-<span id="response-schemas-module"></span><h2>response_schemas module<a class="headerlink" href="#module-app.Models.response_schemas" title="Permalink to this headline">¶</a></h2>
+<span id="app-models-response-schemas-module"></span><h2>app.Models.response_schemas module<a class="headerlink" href="#module-app.Models.response_schemas" title="Permalink to this headline">¶</a></h2>
 <p>This module is a work in progress and is subject to change.</p>
 <p>The intention of the response_scehmas module is to ensure that JSON data received over the Network is appropriate.</p>
 <p>Intended changes:

@@ -1,7 +1,10 @@
-Models package
+app.Models package
 ==================
 
-Questions module
+Submodules
+----------
+
+app.Models.Questions module
 ---------------------------
 
 .. automodule:: app.Models.Questions
@@ -9,7 +12,7 @@ Questions module
    :undoc-members:
    :show-inheritance:
 
-Quiz module
+app.Models.Quiz module
 ----------------------
 
 .. automodule:: app.Models.Quiz
@@ -17,7 +20,7 @@ Quiz module
    :undoc-members:
    :show-inheritance:
 
-Response module
+app.Models.Response module
 --------------------------
 
 .. automodule:: app.Models.Response
@@ -25,7 +28,7 @@ Response module
    :undoc-members:
    :show-inheritance:
 
-response\_schemas module
+app.Models.response\_schemas module
 -----------------------------------
 
 .. automodule:: app.Models.response_schemas
