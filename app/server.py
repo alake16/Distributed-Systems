@@ -21,7 +21,6 @@ allQuestionsForCurrentQuiz = []
 
 allQuestionsByQuizName = {}
 
-
 @app.route('/')
 def welcome():
     """ Renders a welcome page for the user."""
@@ -29,7 +28,6 @@ def welcome():
     return f'Welcome to Quiz API v1!'
 
 
-# Starting route to receive responses
 @app.route('/activateQuestion', methods=['POST', 'GET'])
 def activateQuestion():
     """Takes the POST request containing question data and marks that question as active if there is not an active
@@ -46,7 +44,6 @@ def activateQuestion():
     print('quizName should be printed below.')
     print('quizName: {}'.format(currentQuizName))
 
-
     if request.method == 'POST':
         print('received the following payload: {}'.format(request.json))
         if isinstance(activeQuestion, Question):
@@ -54,7 +51,6 @@ def activateQuestion():
         data = request.json
         print('sending the json payload to the Question.create_a_question() method')
         activeQuestion = Question.create_a_question(data)
-
         return flaskResponse(json.dumps(activeQuestion, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
 
@@ -71,9 +67,9 @@ def fetchResponses():
     """Returns the list of responses to the active question as JSON."""
     global activeQuestion
     if activeQuestion is not None:
-        responses = flaskResponse(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder), mimetype='application/json')
-        print(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder))
-    return f'No Active '
+        return flaskResponse(json.dumps(activeQuestion.get_responses(), cls=ProjectJSONEncoder),
+                             mimetype='application/json')
+    return f'No Active Question!'
 
 
 @app.route('/deactivateQuestion', methods=['POST'])
@@ -141,6 +137,7 @@ def retrievCounts():
     quizName = request.args['quizName']
     allQuestionsForQuiz = findQuestionsByQuizName(quizName)
     quizQuestions = QuizQuestions(allQuestionsForQuiz)
+    print('Server returning the following data: {}'.format(json.dumps(quizQuestions, cls=ProjectJSONEncoder)), flush=True)
 
     return flaskResponse(json.dumps(quizQuestions, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
