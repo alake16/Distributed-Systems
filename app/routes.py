@@ -10,6 +10,8 @@ import json
 from flask import jsonify
 from app.JSONHandler import ProjectJSONEncoder
 from app.Statistics.Metrics import Metrics
+import os
+from flask import send_from_directory
 
 import random
 from bokeh.models import (HoverTool, FactorRange, Plot, LinearAxis, Grid,
@@ -128,23 +130,6 @@ def takeQuiz():
             response = FillInTheBlankResponse(answer=form.answer.data, user_id=1, nickname="Test", question_id=activeQuestion.object_id)
             requests.post("http://127.0.0.1:5000/recordResponse", json=response.json_data)
     return render_template("takeQuiz.html", title="Take a Quiz", question=activeQuestion)
-
-
-@app.route('/retrieveQuestionsForQuiz')
-def retrieveQuestionsForQuiz():
-    quizName = request.args['quizName']
-    quizQuestions = Metrics.retrieveQuestionsByQuizName(quizName)
-
-    extractedList = quizQuestions.get("questions")
-    firstQuestionObject = extractedList[0]
-    choicesFromFirstQuestionObject = firstQuestionObject.get("choices")
-
-    print('the extracted list from the dictionary is: {}'.format(extractedList))
-    print('The first element in the list is: {}'.format(firstQuestionObject))
-    print('The list of choices from the first object is: {}'.format(choicesFromFirstQuestionObject))
-
-    return flaskResponse(json.dumps(quizQuestions, cls=ProjectJSONEncoder), 200,
-                             {'Content-Type': 'application/json'})
 
 
 # @app.errorhandler(404)
@@ -291,3 +276,10 @@ def chart(quiz_name):
     script, div = components(plots)
     return render_template("chart.html", quiz_name=quiz_name,
             the_div=div, the_script=script)
+
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')

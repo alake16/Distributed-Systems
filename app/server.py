@@ -142,6 +142,7 @@ def retrievCounts():
     return flaskResponse(json.dumps(quizQuestions, cls=ProjectJSONEncoder), 200,
                              {'Content-Type': 'application/json'})
 
+
 @app.route('/allQuestions')
 def retrieveAllQuestions():
     return flaskResponse(json.dumps(allQuestionsByQuizName, cls=ProjectJSONEncoder), 200,
