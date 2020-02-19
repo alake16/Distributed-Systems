@@ -246,7 +246,7 @@ def aggregateResponseCountForAnswerChoice(choice, responsesList):
 Bokah chart implementation was implemented using the following reference:
 Author: Matt Makai | Full Stack Python: https://www.fullstackpython.com/blog/responsive-bar-charts-bokeh-flask-python-3.html
 '''
-@app.route("/<string:quiz_name>")
+@app.route("/metrics/<string:quiz_name>")
 def chart(quiz_name):
     quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
     allQuestions = quizQuestions["questions"]
