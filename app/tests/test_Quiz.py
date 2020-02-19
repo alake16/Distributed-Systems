@@ -111,18 +111,31 @@ class TestQuiz(unittest.TestCase):
             mock_init.assert_called()
 
     def test_add_question_to_quiz(self):
+        """
+        Ensures that the quiz object can have questions added to it.
+        The question is mocked to prevent changes to the question interface affecting the quiz tests.
+        :return:
+        """
         question = MagicMock(spec=MatchingQuestion)
         quiz = Quiz.load_quiz_from_json(self.quiz_json)
         quiz.add_question_to_quiz(question)
         self.assertIsInstance(quiz.get_question(4), MatchingQuestion)
 
     def test_get_question(self):
+        """
+        Ensures that all questions can be retrieved using quiz.get_question(index_of_question)
+        :return:
+        """
         self.assertIsInstance(self.quiz.get_question(0), MultipleChoiceQuestion)
         self.assertIsInstance(self.quiz.get_question(1), MatchingQuestion)
         self.assertIsInstance(self.quiz.get_question(2), ShortAnswerQuestion)
         self.assertIsInstance(self.quiz.get_question(3), FillInTheBlankQuestion)
 
     def test_json_data(self):
+        """
+        Ensures that the json_data property returns an accurate representation of the Quiz object.
+        :return:
+        """
         self.assertEqual(self.quiz.json_data, self.quiz_json)
 
 

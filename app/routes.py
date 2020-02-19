@@ -1,11 +1,15 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Response as flaskResponse
 from app.forms import NewQuizForm, MultipleChoiceQuestionForm, FillInTheBlankQuestionForm, FillInTheBlankAnswerForm, MultipleChoiceAnswerForm, form_factory
 from app.Models.Quiz import Quiz
 from app.Models.Questions import Question, MultipleChoiceQuestion, FillInTheBlankQuestion
 from app.Models.Response import MultipleChoiceResponse, FillInTheBlankResponse
 from app.helpers import fetchAllUntakenQuizNames, loadQuizFromName
 import requests
-
+import json
+from flask import jsonify
+from app.JSONHandler import ProjectJSONEncoder
+from app.Statistics.Metrics import Metrics
 
 import random
 from bokeh.models import (HoverTool, FactorRange, Plot, LinearAxis, Grid,
@@ -16,6 +20,7 @@ from bokeh.charts import Bar
 from bokeh.embed import components
 from bokeh.models.sources import ColumnDataSource
 from flask import Flask, render_template
+from app.Models.QuizQuestions import QuizQuestions
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'you-will-never-guess'
@@ -102,7 +107,8 @@ def activateQuizName(quizName):
         requests.post("http://127.0.0.1:5000/deactivateQuestion")
     activeQuestion = activeQuiz.get_question_number(activeQuestionNumber)
     activeQuestionNumber += 1
-    requests.post("http://127.0.0.1:5000/activateQuestion", json=activeQuestion.json_data)
+    #TODO URL param args should be added dynamically
+    requests.post("http://127.0.0.1:5000/activateQuestion?quizName={}".format(quizName), json=activeQuestion.json_data)
     return render_template("activeQuiz.html", title="Active Quiz", quizName=quizName,
                            question=activeQuestion)
 
@@ -122,6 +128,24 @@ def takeQuiz():
             response = FillInTheBlankResponse(answer=form.answer.data, user_id=1, nickname="Test", question_id=activeQuestion.object_id)
             requests.post("http://127.0.0.1:5000/recordResponse", json=response.json_data)
     return render_template("takeQuiz.html", title="Take a Quiz", question=activeQuestion)
+
+
+@app.route('/retrieveQuestionsForQuiz')
+def retrieveQuestionsForQuiz():
+    quizName = request.args['quizName']
+    quizQuestions = Metrics.retrieveQuestionsByQuizName(quizName)
+
+    extractedList = quizQuestions.get("questions")
+    firstQuestionObject = extractedList[0]
+    choicesFromFirstQuestionObject = firstQuestionObject.get("choices")
+
+    print('the extracted list from the dictionary is: {}'.format(extractedList))
+    print('The first element in the list is: {}'.format(firstQuestionObject))
+    print('The list of choices from the first object is: {}'.format(choicesFromFirstQuestionObject))
+
+    return flaskResponse(json.dumps(quizQuestions, cls=ProjectJSONEncoder), 200,
+                             {'Content-Type': 'application/json'})
+
 
 # @app.errorhandler(404)
 # def notfound():
@@ -168,30 +192,102 @@ def create_bar_chart(data, title, x_name, y_name, hover_tool=None,
     plot.min_border_top = 0
     plot.xgrid.grid_line_color = None
     plot.ygrid.grid_line_color = "#999999"
-    plot.yaxis.axis_label = "Student Response Count"
+    plot.yaxis.axis_label = "Student Answer Counts"
     plot.ygrid.grid_line_alpha = 0.1
     plot.xaxis.axis_label = "Question Answer Choices"
     plot.xaxis.major_label_orientation = 1
     return plot
 
-#/histogram/quiz_name
-@app.route("/<string:quiz_name>/<int:bars_count>/")
-def chart(quiz_name, bars_count):
-    if bars_count <= 0:
-        bars_count = 1
 
-    data = {"days": [], "bugs": [], "costs": []}
-    for i in range(1, bars_count + 1):
-        data['days'].append(i)
-        data['bugs'].append(random.randint(1,100))
-        data['costs'].append(random.uniform(1.00, 1000.00))
+'''
+{
+            "kind": "question",
+            "object_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+            "type": "multiple_choice",
+            "prompt": "Best Pizza Topping is:",
+            "choices": [
+                "Pepperoni",
+                "Sausage",
+                "Pineapple"
+            ],
+            "answer": "Pepperoni",
+            "responses": [
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Sausage",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "Michelle"
+                },
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Pepperoni",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "Michael"
+                },
+                {
+                    "question_id": "708ae4a1-effa-4e96-b1a3-809541f02fb2",
+                    "kind": "response",
+                    "type": "multiple_choice",
+                    "answer": "Pineapple",
+                    "user_id": "ry539h-75fi-je84o-urijf",
+                    "nickname": "George"
+                }
+            ]
+        }
+'''
 
-    data["days"] = ['A', 'B', 'C', 'D', 'E']
+'''
+Recevies an answer choice and the answer's response list.
+returns the number of times the answer choice appeared in
+the response list (the number of times the students answered
+the given question with that answer choice).
+'''
+def aggregateResponseCountForAnswerChoice(choice, responsesList):
+    responseCount = 0
 
-    hover = create_hover_tool()
-    plot = create_bar_chart(data, "Student response count", "days",
-                            "bugs", hover)
-    script, div = components(plot)
+    for response in responsesList:
+        providedAnswer = response["answer"]
+        if providedAnswer == choice:
+            responseCount += 1
 
-    return render_template("chart.html", bars_count=bars_count, quiz_name=quiz_name,
-                           the_div=div, the_script=script)
+    return responseCount
+
+
+'''
+Bokah chart implementation was implemented using the following reference:
+Author: Matt Makai | Full Stack Python: https://www.fullstackpython.com/blog/responsive-bar-charts-bokeh-flask-python-3.html
+'''
+@app.route("/<string:quiz_name>")
+def chart(quiz_name):
+    quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
+    allQuestions = quizQuestions["questions"]
+
+    plots = []
+
+    for question in allQuestions:
+        data = {"choices": [], "responseCount": []}
+        questionChoicesList = question["choices"]
+        responsesList = question["responses"]
+
+        for i in range(0, len(questionChoicesList)):
+            data['choices'].append(questionChoicesList[i])
+            responseCount = aggregateResponseCountForAnswerChoice(questionChoicesList[i], responsesList)
+            data['responseCount'].append(responseCount)
+            data["choices"] = questionChoicesList # may be redundant -> data['choices'].append(questionChoicesList[i])
+            hover = create_hover_tool()
+
+        questionPrompt = question['prompt']
+        plot = create_bar_chart(data, questionPrompt, "choices",
+                                    "responseCount", hover)
+        script, div = components(plot)
+        print('data responseCount list looks like: {}', data['responseCount'], flush=True)
+        plots.append(plot)
+
+    print('plots is of size: {}'.format(len(plots)))
+    script, div = components(plots)
+    return render_template("chart.html", quiz_name=quiz_name,
+            the_div=div, the_script=script)

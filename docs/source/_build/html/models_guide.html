@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Models &mdash; Distributed-Clicker  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Distributed-Clicker’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Distributed-Clicker
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#questions">Questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#response">Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quiz">Quiz</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Distributed-Clicker</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Models</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/models_guide.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="models">
+<h1>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
+<p>The app.Models package contains all of the data models for the application. These models
+are top level and act to allow dependency inversion. In a dependency graph, these models
+should be isolated from changes in lower-level client code. In all, these models include
+the Quiz model, the Question Model, and the Response Model. Other primitives can be added here.
+To avoid circular imports(and bad design) these models should not refer to client code. For example,
+referring to ProjectJSONEncoder in this module would cause a circular import issue if ProjectJSONEncoder
+also imported this module or client code imported that module.</p>
+<div class="section" id="questions">
+<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<p>The Questions Hierarchy has an abstract base class(subclasses ABC) of Question.
+This class provides some default implementation for various methods such as returning
+the type of question. This method is used to ensure comptability with any dependent code.
+Notably, this is used to ensure that added responses have the same type(multiple_choice == multiple_choice)</p>
+<p>There is a static factory method called create_a_question that allows a user to</p>
+<ol class="arabic simple">
+<li><p>Clone a Question object by passing in a Question object (perhaps to create a defensive copy)</p></li>
+<li><p>Create a question from a Python dict</p></li>
+<li><p>Create a question from a JSON string.</p></li>
+</ol>
+<p>Whatever representation ultimatley, a Question object with the proper type is created using
+keyword arguments. First, it is ensured that there is a type ultimately passed down to allow
+dynamic creation of different types of questions. Client code should use this where different
+types of questions can be created based on type.</p>
+<p>There is also a static get_counts method that takes in a question_object and will
+return a dictionary containing the unique responses given a users most recent arguments.</p>
+<p>There is an abstract property json_data. This allows client code to get a python dictionary
+like this: question_object.json_data. This may be created using the copy.deepcopy method
+to prevent inadvertent modification of the underlying data structure by client code.
+This may also become a mixin of the Question, Quiz, and Response base classes to simplify
+this code.</p>
+<p>The add_response method is implemented in the base class to allow client code to easily add
+responses without worrying about types.</p>
+<p>The get_responses method is currently a conveinence method that shows intention. This will
+probably be made into a property using the property decorator.</p>
+<p>The __eq__ method is currently for testing purposes to ensure unit tests can pass.</p>
+<p>There are currently implementations for Multiple Choice, Short Answer, Fill In The Blank,
+and Matching Questions</p>
+</div>
+<div class="section" id="response">
+<h2>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h2>
+<p>The Response class mirrors the Question hierarchy and it was decided to parallelize these hierarchies
+since Responses can have more data such as user_id, time_of_response, is_verified, and other metadata.</p>
+<p>There is a static factory method that is slightly different from the Questions static factory method.
+The factory method requires a question_id in addition to either JSON string, Response Object, or dict.
+Responses should not exist without having an associated quiz. The validation logic will be expanded in
+a future release to ensure that all responses have associated questions.</p>
+<p>There is a json_data property in all Response classes similar to the Questions object.</p>
+</div>
+<div class="section" id="quiz">
+<h2>Quiz<a class="headerlink" href="#quiz" title="Permalink to this headline">¶</a></h2>
+<p>The Quiz class is a concrete class that has multiple static methods to allow loading quizzes from storage.
+This functionality will likely be extended to allow for the use of a database(relational or document).</p>
+<p>Quizzes have a name, and a list of questions.</p>
+<p>There are methods to allow getting a question based on question_id or based on question_number.
+A future release may allow friendlier names to be used or a full text search based indexed.</p>
+<p>There are static methods for writing quizzes and loading quizzes. These use functionality in the
+StorageHandler but this logic will likely be refactored into the StorageHandler to allow:</p>
+<ol class="arabic simple">
+<li><p>Use of either a database or a file store based on user configuration options</p></li>
+<li><p>Separation of concerns. The Quiz object shouldn’t need to be aware of how it’s stored.</p></li>
+<li><p>Persistence of Quizzes, Questions, and Responses in such a way they can be fetched independently.</p></li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Distributed-Clicker’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Daniel Palacios, Vismark Juarez, Brian Dehlinger, Andrew Lake
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

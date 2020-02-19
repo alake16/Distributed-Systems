@@ -12,6 +12,13 @@ import copy
 class TestQuestion(unittest.TestCase):
 
     def helper(self, question_json, question_class, question_type):
+        """
+        Helper method to test static factory method for creating questions.
+        :param question_json:
+        :param question_class:
+        :param question_type:
+        :return:
+        """
         with patch('app.Models.Questions.' + question_type + '.__init__') as mock_init:
             mock_init.return_value = None
             question = Question.create_a_question(question_json)
