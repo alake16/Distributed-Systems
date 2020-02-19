@@ -247,17 +247,6 @@ the response list (the number of times the students answered
 the given question with that answer choice).
 '''
 def aggregateResponseCountForAnswerChoice(choice, responsesList):
-    '''
-    print('RECEIVED The following choice: {}'.format(choice))
-    print('RECEIVED The following responsesList: {}'.format(responsesList))
-    
-    firstElement = responsesList[0]
-    print('FIRST ELEMENT: {}'.format(firstElement))
-
-    firstElementAnswer = firstElement["answer"]
-    print('FIRST ELEMENT ANSWER: {}'.format(firstElementAnswer))'
-    '''
-
     responseCount = 0
 
     for response in responsesList:
@@ -277,10 +266,10 @@ def chart(quiz_name):
     quizQuestions = Metrics.retrieveQuestionsByQuizName(quiz_name)
     allQuestions = quizQuestions["questions"]
 
-    data = {"choices": [], "responseCount": []}
     plots = []
 
     for question in allQuestions:
+        data = {"choices": [], "responseCount": []}
         questionChoicesList = question["choices"]
         responsesList = question["responses"]
 
@@ -288,13 +277,14 @@ def chart(quiz_name):
             data['choices'].append(questionChoicesList[i])
             responseCount = aggregateResponseCountForAnswerChoice(questionChoicesList[i], responsesList)
             data['responseCount'].append(responseCount)
-            data["choices"] = questionChoicesList
+            data["choices"] = questionChoicesList # may be redundant -> data['choices'].append(questionChoicesList[i])
             hover = create_hover_tool()
 
         questionPrompt = question['prompt']
         plot = create_bar_chart(data, questionPrompt, "choices",
                                     "responseCount", hover)
         script, div = components(plot)
+        print('data responseCount list looks like: {}', data['responseCount'], flush=True)
         plots.append(plot)
 
     print('plots is of size: {}'.format(len(plots)))
