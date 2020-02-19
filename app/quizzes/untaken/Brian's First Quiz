@@ -1,42 +1,42 @@
 {
     "kind": "quiz",
-    "id": "f5348d08-39fc-47c7-9b10-ea71ca120c7a",
+    "object_id": "8afc10ff-97b3-450b-8df4-28752fe9afa8",
     "name": "Brian's First Quiz",
     "questions": [
         {
             "kind": "question",
-            "id": "009f1d3f-bab6-4d3d-844d-432adca0401e",
+            "object_id": "cac85635-15c2-4f50-827d-60b2270c639a",
             "type": "multiple_choice",
             "prompt": "Who is the best?",
-            "choices": {
-                "A": "Mike",
-                "B": "Domingo"
-            },
-            "answer": "A",
+            "choices": [
+                "Mike",
+                "Domingo"
+            ],
+            "answer": "Mike",
             "responses": []
         },
         {
             "kind": "question",
-            "id": "217df531-dd77-42c5-9a53-c21d8decfd37",
+            "object_id": "4bcdc3d2-14e5-4576-88fd-081ac6fc2ef5",
             "type": "matching",
             "prompt": "Match the following questions",
-            "left_choices": {
-                "A": "Mike",
-                "B": "Ike"
-            },
-            "right_choices": {
-                "C": "Ike",
-                "D": "Mike"
-            },
+            "left_choices": [
+                "Mike",
+                "Ike"
+            ],
+            "right_choices": [
+                "Ike",
+                "Mike"
+            ],
             "answer": {
-                "A": "C",
-                "B": "D"
+                "Mike": "Ike",
+                "Ike": "Mike"
             },
             "responses": []
         },
         {
             "kind": "question",
-            "id": "220ef016-468d-47b7-bf5b-c226414d3574",
+            "object_id": "dbab7e2e-4dcf-4e46-ac49-0bdb150349b9",
             "type": "short_answer",
             "prompt": "Who is the best?",
             "answer": "YOU",
@@ -44,7 +44,7 @@
         },
         {
             "kind": "question",
-            "id": "f0914cc5-8a31-48e3-acd5-80206e695dee",
+            "object_id": "9b35f072-426a-40a9-b7bf-5e6c578cef17",
             "type": "fill_in_the_blank",
             "before_prompt": "",
             "after_prompt": "are the best",

@@ -168,7 +168,7 @@ class MultipleChoiceQuestion(Question):
     Represents a Multiple Choice Question object.
     """
 
-    def __init__(self, prompt: str, choices: Dict[str, str], answer: str, responses: List[Dict or Response] = None,
+    def __init__(self, prompt: str, choices: List[str], answer: str, responses: List[Dict or Response] = None,
                  object_id=None):
         """
         :param prompt: The prompt for the multiple choice question
@@ -178,9 +178,11 @@ class MultipleChoiceQuestion(Question):
         """
         super().__init__(object_id, responses, 'multiple_choice')
         self.prompt = prompt
-        self.choices = choices
+        self.choices = list(dict.fromkeys(choices))
         self.answer = answer
         self._initialize_responses(responses)
+        if self.answer not in choices:
+            raise ValueError("The answer must be reflected in the choices")
 
     @property
     def json_data(self) -> Dict:
@@ -204,7 +206,6 @@ class MultipleChoiceQuestion(Question):
 
 
 class MatchingQuestion(Question):
-
     """
     A question where a user is able to map choices on the left to choices on the right.
 
@@ -236,9 +237,14 @@ class MatchingQuestion(Question):
         """
         super().__init__(object_id, responses, 'matching')
         self.prompt = prompt
-        self.left_choices = left_choices
-        self.right_choices = right_choices
+        # Remove duplicates while preserving insertion order(By default uses OrderedDict)
+        self.left_choices = list(dict.fromkeys(left_choices))
+        self.right_choices = list(dict.fromkeys(right_choices))
         self.answer = answer
+        if not all(left_choice in self.left_choices for left_choice in self.answer.values()):
+            raise ValueError("All left choices in the question must be reflected in the answer choices")
+        if not all(correct_answer in self.right_choices for correct_answer in self.answer.values()):
+            raise ValueError("All of the right choices in the answer must be reflected in the question")
         self._initialize_responses(responses)
 
     def validate_response(self, response: Response):
@@ -270,7 +276,7 @@ class ShortAnswerQuestion(Question):
         """
         :param prompt: The prompt for the question
         :param answer: The answer to the question.
-        :param responses: A list of Responses received on this object to the question represented as either Response Objects or dictionaries representing those objects.
+        :param responses: A list of Responses received on this object to the question represented as either Response Objects or dictionaries representing those objects. master
         """
         super().__init__(object_id, responses, 'short_answer')
         self.prompt = prompt
@@ -299,7 +305,7 @@ class FillInTheBlankQuestion(Question):
         :param before_prompt: The text before the blank
         :param after_prompt: The text after the blank
         :param correct_answer: The correct answer to the question
-        :param responses: A list of responses to the question represented as either Response objects or dictionaries representing those objects.
+        :param responses: A list of responses to the question represented as either Response objects or dictionaries representing those objects.aster
         """
         super().__init__(object_id, responses, 'fill_in_the_blank')
         self.before_prompt = before_prompt

@@ -73,6 +73,7 @@ class TestResponse(unittest.TestCase):
             "kind": "response",
             "type": "multiple_choice",
             "answer": "B",
+
             "user_id": "1345125",
             "nickname": "Brian"
         }

@@ -10,19 +10,19 @@ class TestQuiz(unittest.TestCase):
     def setUp(self) -> None:
         self.quiz_json = {
             "kind": "quiz",
-            "object_id": "e49232ba-2434-4d40-9a0a-026a5e304cd2",
+            "object_id": "3945769a-9b6f-4feb-b292-f3e8958a59d3",
             "name": "Brian's First Quiz",
             "questions": [
                 {
                     "kind": "question",
-                    "object_id": "5fd59f54-ba3d-4045-8db6-b7487103e3e1",
+                    "object_id": "751f9e7a-cbcc-41d8-816e-d65f6fdafe23",
                     "type": "multiple_choice",
                     "prompt": "Who is the best?",
-                    "choices": {
-                        "A": "Mike",
-                        "B": "Domingo"
-                    },
-                    "answer": "A",
+                    "choices": [
+                        "Mike",
+                        "Domingo"
+                    ],
+                    "answer": "Mike",
                     "responses": [
                         {
                             'question_id': '5fd59f54-ba3d-4045-8db6-b7487103e3e1',
@@ -36,20 +36,20 @@ class TestQuiz(unittest.TestCase):
                 },
                 {
                     "kind": "question",
-                    "object_id": "d3d46649-4dbb-4d6b-b1fe-5f87f5b42756",
+                    "object_id": "3e77b67d-0f2a-421f-8bde-c1abbc99af99",
                     "type": "matching",
                     "prompt": "Match the following questions",
-                    "left_choices": {
-                        "A": "Mike",
-                        "B": "Ike"
-                    },
-                    "right_choices": {
-                        "C": "Ike",
-                        "D": "Mike"
-                    },
+                    "left_choices": [
+                        "Mike",
+                        "Ike"
+                    ],
+                    "right_choices": [
+                        "Ike",
+                        "Mike"
+                    ],
                     "answer": {
-                        "A": "C",
-                        "B": "D"
+                        "Ike": "Mike",
+                        "Mike": "Ike"
                     },
                     "responses": [
                         {
@@ -67,7 +67,7 @@ class TestQuiz(unittest.TestCase):
                 },
                 {
                     "kind": "question",
-                    "object_id": "e00a3f6d-3ab7-4cb4-8441-6584a785f50d",
+                    "object_id": "e25a2238-544d-4581-917b-f74916b0060f",
                     "type": "short_answer",
                     "prompt": "Who is the best?",
                     "answer": "YOU",
@@ -84,7 +84,7 @@ class TestQuiz(unittest.TestCase):
                 },
                 {
                     "kind": "question",
-                    "object_id": "ab2cc19d-3d31-4ba9-8b90-ae1c8e035884",
+                    "object_id": "cc4b4a25-2390-40f3-bc8c-7efe263d9212",
                     "type": "fill_in_the_blank",
                     "before_prompt": "",
                     "after_prompt": "are the best",
