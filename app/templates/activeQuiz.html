@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>{{ quizName }} Now Active!</h1>
+<h2>Current Question: </h2>
+{% if question.type == "multiple_choice" %}
+<p>Question Prompt: {{ question.prompt }}</p>
+{% for choice in question.choices %}
+<p>{{ choice }}: {{ question.choices[choice] }}</p>
+{% endfor %}
+{% elif question.type == "fill_in_the_blank" %}
+<p>{{ question.before_prompt }} ________ {{ question.after_prompt }}</p>
+{% endif %}
+<form action="{{ url_for('activateQuizName', quizName=quizName) }}">
+    <input type="submit" value="Next Question" />
+</form>
+{% endblock content %}

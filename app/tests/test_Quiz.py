@@ -25,9 +25,10 @@ class TestQuiz(unittest.TestCase):
                     "answer": "Mike",
                     "responses": [
                         {
+                            'question_id': '5fd59f54-ba3d-4045-8db6-b7487103e3e1',
                             "kind": "response",
                             "type": "multiple_choice",
-                            "choice": "Mike",
+                            "answer": "B",
                             "user_id": "1345125",
                             "nickname": "Brian"
                         }
@@ -52,11 +53,12 @@ class TestQuiz(unittest.TestCase):
                     },
                     "responses": [
                         {
+                            'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
                             "kind": "response",
                             "type": "matching",
-                            "answer_mapping": {
-                                "Mike": "Ike",
-                                "Ike": "Mike"
+                            "answer": {
+                                "A": "C",
+                                "B": "D"
                             },
                             "user_id": "1345125",
                             "nickname": "Brian"
@@ -71,9 +73,10 @@ class TestQuiz(unittest.TestCase):
                     "answer": "YOU",
                     "responses": [
                         {
+                            'question_id': "e00a3f6d-3ab7-4cb4-8441-6584a785f50d",
                             "kind": "response",
                             "type": "short_answer",
-                            "short_answer": "YOU",
+                            "answer": "YOU",
                             "user_id": "1345125",
                             "nickname": "Brian"
                         }
@@ -88,9 +91,10 @@ class TestQuiz(unittest.TestCase):
                     "answer": "YOU",
                     "responses": [
                         {
+                            'question_id': "ab2cc19d-3d31-4ba9-8b90-ae1c8e035884",
                             "kind": "response",
                             "type": "fill_in_the_blank",
-                            "blank_answer": "YOU",
+                            "answer": "YOU",
                             "user_id": "1345125",
                             "nickname": "Brian"
                         }
@@ -107,18 +111,31 @@ class TestQuiz(unittest.TestCase):
             mock_init.assert_called()
 
     def test_add_question_to_quiz(self):
+        """
+        Ensures that the quiz object can have questions added to it.
+        The question is mocked to prevent changes to the question interface affecting the quiz tests.
+        :return:
+        """
         question = MagicMock(spec=MatchingQuestion)
         quiz = Quiz.load_quiz_from_json(self.quiz_json)
         quiz.add_question_to_quiz(question)
         self.assertIsInstance(quiz.get_question(4), MatchingQuestion)
 
     def test_get_question(self):
+        """
+        Ensures that all questions can be retrieved using quiz.get_question(index_of_question)
+        :return:
+        """
         self.assertIsInstance(self.quiz.get_question(0), MultipleChoiceQuestion)
         self.assertIsInstance(self.quiz.get_question(1), MatchingQuestion)
         self.assertIsInstance(self.quiz.get_question(2), ShortAnswerQuestion)
         self.assertIsInstance(self.quiz.get_question(3), FillInTheBlankQuestion)
 
     def test_json_data(self):
+        """
+        Ensures that the json_data property returns an accurate representation of the Quiz object.
+        :return:
+        """
         self.assertEqual(self.quiz.json_data, self.quiz_json)
 
 

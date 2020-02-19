@@ -39,6 +39,9 @@ class Quiz:
     def get_question(self, question_id):
         return self.questions[question_id]
 
+    def get_question_number(self, number):
+        return self.questions[number]
+
     @property
     def json_data(self):
         questions = [question.json_data for question in self.questions]
@@ -50,62 +53,20 @@ class Quiz:
         initialize()
         if not taken:
             return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4),
-                                 '../quizzes/untaken/' + quiz_object.name)
+                                 '../quizzes/untaken/' + quiz_object.name + '.json')
         else:
             return write_to_file(json.dumps(quiz_object, cls=ProjectJSONEncoder, indent=4),
-                                 '../quizzes/taken/' + quiz_object.name)
+                                 '../quizzes/taken/' + quiz_object.name + '.json')
 
     @staticmethod
     def load_quiz(name_of_quiz: str, taken):
         initialize()
         if taken:
-            return Quiz.load_quiz_from_json(load_file_as_json('../quizzes/taken/' + name_of_quiz))
+            return Quiz.load_quiz_from_json(load_file_as_json('../quizzes/taken/' + name_of_quiz + '.json'))
         else:
-            return Quiz.load_quiz_from_json(load_file_as_json('../quizzes/untaken/' + name_of_quiz))
+            return Quiz.load_quiz_from_json(load_file_as_json('../quizzes/untaken/' + name_of_quiz + '.json'))
 
     def __eq__(self, other):
         if type(other) is type(self):
             return self.__dict__ == other.__dict__
         return False
-
-
-if __name__ == '__main__':
-    quiz = Quiz("Brian's First Quiz")
-
-    multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?", choices=['Mike', 'Domingo'],
-                                                      answer='Mike')
-    quiz.add_question_to_quiz(multiple_choice_question)
-
-    matching_question = MatchingQuestion(prompt="Match the following questions", left_choices=['Mike', 'Ike'],
-                                         right_choices=['Ike', 'Mike'], answer={'Mike': 'Ike', 'Ike': 'Mike'})
-    quiz.add_question_to_quiz(matching_question)
-
-    short_answer_question = ShortAnswerQuestion(prompt="Who is the best?", answer='YOU')
-    quiz.add_question_to_quiz(short_answer_question)
-
-    fill_in_the_blank_question = FillInTheBlankQuestion(before_prompt="", after_prompt="are the best", answer='YOU')
-    quiz.add_question_to_quiz(fill_in_the_blank_question)
-
-    Quiz.write_quiz(quiz, taken=False)
-
-    quiz = Quiz.load_quiz("Brian's First Quiz", taken=False)
-
-    first_question = quiz.get_question(0)
-    response = MultipleChoiceResponse('Mike', '1345125', 'Brian')
-    first_question.add_response(response)
-    second_question = quiz.get_question(1)
-
-    response_question_two = MatchingResponse({'Mike': None, 'Ike': None}, '1345125', 'Brian')
-    second_question.add_response(response_question_two)
-
-    third_question = quiz.get_question(2)
-    response_question_three = ShortAnswerResponse("YOU", '1345125', 'Brian')
-    third_question.add_response(response_question_three)
-
-    fourth_question = quiz.get_question(3)
-    response_question_four = FillInTheBlankResponse("YOU", '1345125', 'Brian')
-    fourth_question.add_response(response_question_four)
-
-    Quiz.write_quiz(quiz, taken=True)
-    quiz = Quiz.load_quiz("Brian's First Quiz", taken=True)
-    print(json.dumps(quiz, cls=ProjectJSONEncoder))

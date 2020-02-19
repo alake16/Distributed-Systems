@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+{% if question != "No Question Active!" %}
+<h1>{{ quizName }} Now Active!</h1>
+<h2>Current Question: </h2>
+{% if question.type == "multiple_choice" %}
+<p>Question Prompt: {{ question.prompt }}</p>
+{% elif question.type == "fill_in_the_blank" %}
+<p>Before Prompt: {{ question.before_prompt }}</p>
+<p>
+	{{ form.answer.label }}
+	{{ form.answer(size=32) }}
+</p>
+<p>After Prompt: {{ question.after_prompt }}</p>
+<p>
+	{{ form.submit.label }}
+	{{ form.submit(size=32) }}
+</p>
+{% endif %}
+{% else %}
+<h1>No Quiz/Question Active!</h1>
+{% endif %}
+{% endblock content %}

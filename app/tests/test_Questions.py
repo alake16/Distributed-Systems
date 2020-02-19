@@ -12,6 +12,13 @@ import copy
 class TestQuestion(unittest.TestCase):
 
     def helper(self, question_json, question_class, question_type):
+        """
+        Helper method to test static factory method for creating questions.
+        :param question_json:
+        :param question_class:
+        :param question_type:
+        :return:
+        """
         with patch('app.Models.Questions.' + question_type + '.__init__') as mock_init:
             mock_init.return_value = None
             question = Question.create_a_question(question_json)
@@ -46,9 +53,10 @@ class TestQuestion(unittest.TestCase):
             "answer": "Mike",
             "responses": [
                 {
+                    'question_id': 'c777ff3a-270e-447a-ad49-12006e04cb36',
                     "kind": "response",
                     "type": "multiple_choice",
-                    "choice": "Mike",
+                    "answer": "B",
                     "user_id": "1345125",
                     "nickname": "Brian"
                 }
@@ -73,11 +81,12 @@ class TestQuestion(unittest.TestCase):
             },
             "responses": [
                 {
+                    'question_id': 'd3d46649-4dbb-4d6b-b1fe-5f87f5b42756',
                     "kind": "response",
                     "type": "matching",
-                    "answer_mapping": {
-                        "Mike": "Ike",
-                        "Ike": "Mike"
+                    "answer": {
+                        "A": "C",
+                        "B": "D"
                     },
                     "user_id": "1345125",
                     "nickname": "Brian"
@@ -92,9 +101,10 @@ class TestQuestion(unittest.TestCase):
             "answer": "YOU",
             "responses": [
                 {
+                    'question_id': 'e00a3f6d-3ab7-4cb4-8441-6584a785f50d',
                     "kind": "response",
                     "type": "short_answer",
-                    "short_answer": "YOU",
+                    "answer": "YOU",
                     "user_id": "1345125",
                     "nickname": "Brian"
                 }
@@ -109,9 +119,10 @@ class TestQuestion(unittest.TestCase):
             "answer": "YOU",
             "responses": [
                 {
+                    'question_id': 'ab2cc19d-3d31-4ba9-8b90-ae1c8e035884',
                     "kind": "response",
                     "type": "fill_in_the_blank",
-                    "blank_answer": "YOU",
+                    "answer": "YOU",
                     "user_id": "1345125",
                     "nickname": "Brian"
                 }
@@ -133,12 +144,12 @@ class TestQuestion(unittest.TestCase):
                                                           answer='Mike')
         response = MagicMock(spec=MultipleChoiceResponse)
         response.get_type.return_value = 'multiple_choice'
-        response.json_data = {'choice': 'Mike'}
+        response.json_data = {'answer': 'A'}
         multiple_choice_question.add_response(response)
         mock_validate.assert_called()
         response = MagicMock(spec=MultipleChoiceResponse)
         response.get_type.return_value = 'matching'
-        response.json_data = {'choice': 'Mike'}
+        response.json_data = {'answer': 'A'}
         with self.assertRaises(ValueError):
             multiple_choice_question.add_response(response)
 
@@ -150,9 +161,15 @@ class TestMultipleChoiceQuestion(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        response_object = MultipleChoiceResponse(choice='Mike', user_id=1345125, nickname='brian')
+        response_object = MultipleChoiceResponse(answer='A', user_id=1345125, nickname='brian', question_id='be24d525'
+                                                                                                            '-8904'
+                                                                                                            '-4948'
+                                                                                                            '-b47d'
+                                                                                                            '-54248586986d')
         self.responses = [
-            {'kind': 'response', 'type': 'multiple_choice', 'choice': 'Mike', 'user_id': '1345125', 'nickname': 'Brian'},
+            {'question_id': 'be24d525-8904-4948-b47d-54248586986d',
+             'kind': 'response', 'type': 'multiple_choice', 'answer': 'B',
+             'user_id': '1345125', 'nickname': 'Brian'},
             response_object]
         self.multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?",
                                                                choices=['Mike', 'Domingo'],
@@ -167,7 +184,7 @@ class TestMultipleChoiceQuestion(unittest.TestCase):
         self.assertTrue(
             all(isinstance(response, MultipleChoiceResponse) for response in self.answered_question.get_responses()))
         self.assertEqual(self.answered_question.get_responses(),
-                         [Response.create_a_response(response) for response in self.responses])
+                         [Response.create_a_response(response, self.answered_question.object_id) for response in self.responses])
 
     def test_json_data(self):
         self.assertEqual(self.multiple_choice_question.json_data,
@@ -183,9 +200,9 @@ class TestMultipleChoiceQuestion(unittest.TestCase):
     def test_validate_response(self):
         response = MagicMock()
         self.multiple_choice_question = MultipleChoiceQuestion(prompt="Who is the best?",
-                                                               choices=['Mike', 'Domingo'],
-                                                               answer='Mike')
-        response.json_data = {'choice': 'Mike'}
+                                                               choices={"A": 'Mike', "B": 'Domingo'},
+                                                               answer='A')
+        response.json_data = {'answer': 'A'}
         self.multiple_choice_question.validate_response(response)
         invalid_response_one = MagicMock()
         invalid_response_one.json_data = {'choice': 'Alex'}
@@ -203,14 +220,15 @@ class TestMatchingQuestion(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        response_object = MatchingResponse({'Mike': 'Ike', 'Ike': 'Mike'}, '1345125', 'Brian')
+        response_object = MatchingResponse({'A': 'C', 'B': 'D'}, '1345125', 'Brian', question_id='be24d525-8904-4948-b47d-54248586986d')
         self.responses = [
             {
+                'question_id': 'be24d525-8904-4948-b47d-54248586986d',
                 "kind": "response",
                 "type": "matching",
-                "answer_mapping": {
-                    "Mike": "Ike",
-                    "Ike": "Mike"
+                "answer": {
+                    "A": "C",
+                    "B": "D"
                 },
                 "user_id": "1345125",
                 "nickname": "Brian"
@@ -238,16 +256,16 @@ class TestMatchingQuestion(unittest.TestCase):
 
     def test_validate_response(self):
         response = MagicMock()
-        self.question = MatchingQuestion(prompt="Match the following questions", left_choices=['Mike', 'Ike'],
-                                         right_choices=['Ike', 'Mike'], answer={'Mike': 'Ike', 'Ike': 'Mike'})
-        response.json_data = {'answer_mapping': {'Mike': 'Ike', 'Ike': 'Mike'}}
+        self.question = MatchingQuestion(prompt="Match the following questions", left_choices={"A": 'Mike', "B": 'Ike'},
+                                         right_choices={'C': 'Ike', 'D': 'Mike'}, answer={'A': 'C', 'B': 'D'})
+        response.json_data = {'answer': {'A': 'C'}}
         self.question.validate_response(response)
         invalid_response_one = MagicMock()
         invalid_response_one.json_data = {'dog': 'Ike'}
         with self.assertRaises(ValueError):
             self.question.validate_response(invalid_response_one)
         invalid_response_two = MagicMock()
-        invalid_response_two.json_data = {'answer_mapping': {'Mike': 'Bike'}}
+        invalid_response_two.json_data = {'answer': {'F': 'C'}}
         with self.assertRaises(ValueError):
             self.question.validate_response(invalid_response_two)
 
@@ -261,7 +279,7 @@ class TestShortAnswerQuestion(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        response = ShortAnswerResponse("YOU", '1345125', 'Brian')
+        response = ShortAnswerResponse("YOU", '1345125', 'Brian', question_id='be24d525-8904-4948-b47d-54248586986d')
         self.responses = [response]
         self.question = ShortAnswerQuestion(prompt="Who is the best?", answer='YOU')
         self.answered_question = ShortAnswerQuestion("Who is the best?",
@@ -291,7 +309,7 @@ class TestFillInTheBlankQuestion(unittest.TestCase):
                                                                                                    '-4948-b47d'
                                                                                                    '-54248586986e')])
     def setUp(self, uuid_mock) -> None:
-        response = FillInTheBlankResponse("YOU",  '1345125', 'Brian')
+        response = FillInTheBlankResponse("YOU",  '1345125', 'Brian', question_id='be24d525-8904-4948-b47d-54248586986d')
         self.responses = [response]
         self.question = FillInTheBlankQuestion(before_prompt="", after_prompt="are the best", answer='YOU')
         self.answered_question = FillInTheBlankQuestion(before_prompt='', after_prompt="are the best",

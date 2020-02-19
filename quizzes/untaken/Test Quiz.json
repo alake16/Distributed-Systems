@@ -1,0 +1,29 @@
+{
+    "kind": "quiz",
+    "object_id": "6fb47fcb-2f0b-42eb-b969-d355ad0e59d5",
+    "name": "Test Quiz",
+    "questions": [
+        {
+            "kind": "question",
+            "object_id": "8230509a-dca1-4efc-984a-7a6703a8b110",
+            "type": "multiple_choice",
+            "prompt": "test",
+            "choices": {
+                "A": "t",
+                "B": "t",
+                "C": "t"
+            },
+            "answer": "test",
+            "responses": []
+        },
+        {
+            "kind": "question",
+            "object_id": "703c2854-6ed8-4c70-af5b-06c13c64c66c",
+            "type": "fill_in_the_blank",
+            "before_prompt": "dfjakfd",
+            "after_prompt": "adsflkjas",
+            "answer": "aklsdjfas",
+            "responses": []
+        }
+    ]
+}

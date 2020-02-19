@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Adding a New Fill in the Blank Question to {{ quizName }}</h1>
+<form method="POST" action="">
+	{{ form.hidden_tag() }}
+	<p>
+		{{ form.beforePrompt.label }}
+		{{ form.beforePrompt(size=32) }}
+	</p>
+	
+	<p>
+		{{ form.answer.label }}
+		{{ form.answer(size=32) }}
+	</p>
+
+	<p>
+		{{ form.afterPrompt.label }}
+		{{ form.afterPrompt(size=32) }}
+	</p>
+	
+	<p>{{ form.submit() }}</p>
+</form>
+{% endblock content %}

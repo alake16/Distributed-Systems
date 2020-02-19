@@ -1,0 +1,29 @@
+{
+    "kind": "quiz",
+    "object_id": "609db702-caa4-45ee-87dd-2d7cc7c9dcd4",
+    "name": "Food Quiz",
+    "questions": [
+        {
+            "kind": "question",
+            "object_id": "c17a2013-9899-474d-86b2-96636c585428",
+            "type": "multiple_choice",
+            "prompt": "What is the best food?",
+            "choices": {
+                "A": "Pizza",
+                "B": "Burger",
+                "C": "Pasta"
+            },
+            "answer": "A",
+            "responses": []
+        },
+        {
+            "kind": "question",
+            "object_id": "977469aa-a08f-46d8-982f-2b8540fd96cc",
+            "type": "fill_in_the_blank",
+            "before_prompt": "My favorite food is",
+            "after_prompt": "in the summer",
+            "answer": "ice cream",
+            "responses": []
+        }
+    ]
+}

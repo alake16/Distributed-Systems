@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Adding a New Multiple Choice Question to {{ quizName }}</h1>
+<form method="POST" action="">
+	{{ form.hidden_tag() }}
+	<p>
+		{{ form.prompt.label }}
+		{{ form.prompt(size=32) }}
+	</p>
+	
+	<p>
+		{{ form.answer.label }}
+		{{ form.answer(size=32) }}
+	</p>
+
+	<p>
+		{{ form.choiceA.label }}
+		{{ form.choiceA(size=32) }}
+	</p>
+
+	<p>
+		{{ form.choiceB.label }}
+		{{ form.choiceB(size=32) }}
+	</p>
+
+	<p>
+		{{ form.choiceC.label }}
+		{{ form.choiceC(size=32) }}
+	</p>
+
+	<p>
+		{{ form.choiceD.label }}
+		{{ form.choiceD(size=32) }}
+	</p>
+
+	<p>
+		{{ form.choiceE.label }}
+		{{ form.choiceE(size=32) }}
+	</p>
+
+	<p>{{ form.submit() }}</p>
+</form>
+{% endblock content %}
